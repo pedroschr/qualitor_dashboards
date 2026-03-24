@@ -1,6 +1,58 @@
 export default {
-  async fetch(request) {
-    const html = `<!DOCTYPE html>
+  async fetch(request, env) {
+
+    const SENHA   = "Qualitor!@#25";
+    const COOKIE  = "qlt_auth";
+    const TOKEN   = "qualitor2026ok";  // valor do cookie de sessão
+
+    const url     = new URL(request.url);
+    const cookies = request.headers.get("Cookie") || "";
+    const autenticado = cookies.includes(COOKIE + "=" + TOKEN);
+
+    // ── POST /login — verifica a senha ────────────────────────────────────────
+    if (request.method === "POST" && url.pathname === "/login") {
+      const body  = await request.formData();
+      const senha = body.get("senha") || "";
+
+      if (senha === SENHA) {
+        // Senha correta — seta cookie de sessão HttpOnly e redireciona
+        return new Response("", {
+          status: 302,
+          headers: {
+            "Location": "/",
+            "Set-Cookie": `${COOKIE}=${TOKEN}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800`,
+          },
+        });
+      }
+
+      // Senha errada — volta ao login com erro
+      return new Response(loginHTML("Senha incorreta. Tente novamente."), {
+        status: 401,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
+    // ── GET /logout ───────────────────────────────────────────────────────────
+    if (url.pathname === "/logout") {
+      return new Response("", {
+        status: 302,
+        headers: {
+          "Location": "/",
+          "Set-Cookie": `${COOKIE}=; Path=/; Max-Age=0`,
+        },
+      });
+    }
+
+    // ── Não autenticado — exibe tela de login ─────────────────────────────────
+    if (!autenticado) {
+      return new Response(loginHTML(""), {
+        status: 200,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
+    // ── Autenticado — serve o dashboard ───────────────────────────────────────
+    const dashboard = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -1680,11 +1732,101 @@ function switchTab(tab, btn) {
 </body>
 </html>
 `;
-    return new Response(html, {
+    return new Response(dashboard, {
       headers: {
         "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-cache",
+        "Cache-Control": "no-store",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   },
 };
+
+function loginHTML(erro) {
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Restrito</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 52px 44px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.10);
+      text-align: center;
+    }
+    .icon { font-size: 40px; margin-bottom: 18px; }
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #2563eb;
+      margin-bottom: 8px;
+    }
+    h1 { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 6px; }
+    p  { font-size: 13px; color: #6b7280; margin-bottom: 28px; }
+    input[type=password] {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color .2s;
+    }
+    input[type=password]:focus { border-color: #2563eb; }
+    .erro {
+      font-size: 12px;
+      color: #dc2626;
+      margin-bottom: 12px;
+      min-height: 18px;
+    }
+    button {
+      width: 100%;
+      padding: 13px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    button:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🔒</div>
+    <div class="eyebrow">Pipeline de Projetos · 2026</div>
+    <h1>Acesso Restrito</h1>
+    <p>Digite a senha para acessar o dashboard</p>
+    <form method="POST" action="/login">
+      <input type="password" name="senha" placeholder="Senha" autofocus autocomplete="current-password">
+      <div class="erro">${erro}</div>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+</body>
+</html>`;
+}
