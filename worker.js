@@ -1,21 +1,17 @@
 export default {
   async fetch(request, env) {
+    const SENHA  = "Qualitor!@#25";
+    const COOKIE = "qlt_auth";
+    const TOKEN  = "qualitor2026ok";
 
-    const SENHA   = "Qualitor!@#25";
-    const COOKIE  = "qlt_auth";
-    const TOKEN   = "qualitor2026ok";  // valor do cookie de sessão
+    const url        = new URL(request.url);
+    const cookies    = request.headers.get("Cookie") || "";
+    const autenticado= cookies.includes(COOKIE + "=" + TOKEN);
 
-    const url     = new URL(request.url);
-    const cookies = request.headers.get("Cookie") || "";
-    const autenticado = cookies.includes(COOKIE + "=" + TOKEN);
-
-    // ── POST /login — verifica a senha ────────────────────────────────────────
     if (request.method === "POST" && url.pathname === "/login") {
       const body  = await request.formData();
       const senha = body.get("senha") || "";
-
       if (senha === SENHA) {
-        // Senha correta — seta cookie de sessão HttpOnly e redireciona
         return new Response("", {
           status: 302,
           headers: {
@@ -24,26 +20,19 @@ export default {
           },
         });
       }
-
-      // Senha errada — volta ao login com erro
       return new Response(loginHTML("Senha incorreta. Tente novamente."), {
         status: 401,
         headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     }
 
-    // ── GET /logout ───────────────────────────────────────────────────────────
     if (url.pathname === "/logout") {
       return new Response("", {
         status: 302,
-        headers: {
-          "Location": "/",
-          "Set-Cookie": `${COOKIE}=; Path=/; Max-Age=0`,
-        },
+        headers: { "Location": "/", "Set-Cookie": `${COOKIE}=; Path=/; Max-Age=0` },
       });
     }
 
-    // ── Não autenticado — exibe tela de login ─────────────────────────────────
     if (!autenticado) {
       return new Response(loginHTML(""), {
         status: 200,
@@ -51,7 +40,6 @@ export default {
       });
     }
 
-    // ── Autenticado — serve o dashboard ───────────────────────────────────────
     const dashboard = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -737,7 +725,7 @@ function checkPwd() {
 
 <!-- ── Navegação de Abas ── -->
 <nav class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('pipeline', this)">📊 Pipeline Comercial</button>
+  <button class="tab-btn active" onclick="switchTab('pipeline', this)">📊 Pipeline de Projetos</button>
   <button class="tab-btn" onclick="switchTab('gestao', this)">📁 Gestão de Contratos</button>
   <button class="tab-btn" onclick="switchTab('changelog', this)" style="margin-left:auto;font-size:11px;opacity:0.75;">📋 Histórico de Alterações</button>
 </nav>
@@ -975,8 +963,8 @@ function switchTab(tab, btn) {
   <!-- Header -->
   <div class="p26-header">
     <div>
-      <div class="p26-eyebrow">Pipeline Comercial · 2026</div>
-      <h1 class="p26-title">Pipeline<br><span>Comercial</span></h1>
+      <div class="p26-eyebrow">Pipeline de Projetos · 2026</div>
+      <h1 class="p26-title">Pipeline de <br><span>Projetos</span></h1>
     </div>
     <div class="p26-meta">
       Fonte: Relatório de Projetos (3)
@@ -1479,16 +1467,7 @@ function switchTab(tab, btn) {
               border-bottom:1px solid #e5e7eb;">ARR</th>
           </tr>
         </thead>
-        <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:12px 20px;font-size:13px;font-weight:700;color:#111827;">Jan/2026</td>
-      <td style="padding:12px 20px;text-align:center;">
-        <span style="background:#f0fdf4;color:#166534;font-size:12px;font-weight:700;
-          padding:3px 12px;border-radius:99px;">15</span>
-      </td>
-      <td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 340.090,60</td>
-      <td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:600;color:#7c3aed;">R$ 18.254,00</td>
-      <td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:600;color:#0891b2;">R$ 121.033,00</td>
-    </tr></tbody>
+        <tbody><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114406</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SENAC RJ</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 178.043,28</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-113976</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SERVIÇO SOCIAL DO COMÉRCIO</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 51.300,00</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114516</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">AUTTAR - GETNET</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 37.475,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-113114</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SABEMI SEGURADORA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 3.040,00</td></tr></tbody>
         <tfoot>
           <tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
             <td style="padding:12px 20px;font-size:11px;font-weight:700;
@@ -1752,67 +1731,18 @@ function loginHTML(erro) {
   <title>Acesso Restrito</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: #f0f2f5;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 52px 44px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 8px 48px rgba(0,0,0,0.10);
-      text-align: center;
-    }
-    .icon { font-size: 40px; margin-bottom: 18px; }
-    .eyebrow {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: #2563eb;
-      margin-bottom: 8px;
-    }
-    h1 { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 6px; }
-    p  { font-size: 13px; color: #6b7280; margin-bottom: 28px; }
-    input[type=password] {
-      width: 100%;
-      padding: 13px 16px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 10px;
-      font-size: 15px;
-      font-family: 'Nunito', sans-serif;
-      outline: none;
-      margin-bottom: 12px;
-      transition: border-color .2s;
-    }
-    input[type=password]:focus { border-color: #2563eb; }
-    .erro {
-      font-size: 12px;
-      color: #dc2626;
-      margin-bottom: 12px;
-      min-height: 18px;
-    }
-    button {
-      width: 100%;
-      padding: 13px;
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Nunito', sans-serif;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    button:hover { background: #1d4ed8; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito',sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}
+    .icon{font-size:40px;margin-bottom:18px}
+    .eyebrow{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
+    h1{font-size:22px;font-weight:800;color:#111827;margin-bottom:6px}
+    p{font-size:13px;color:#6b7280;margin-bottom:28px}
+    input[type=password]{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px;transition:border-color .2s}
+    input[type=password]:focus{border-color:#2563eb}
+    .erro{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}
+    button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:background .2s}
+    button:hover{background:#1d4ed8}
   </style>
 </head>
 <body>
