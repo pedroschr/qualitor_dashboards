@@ -3,43 +3,33 @@ export default {
     const SENHA  = "Qualitor!@#25";
     const COOKIE = "qlt_auth";
     const TOKEN  = "qualitor2026ok";
-
     const url        = new URL(request.url);
     const cookies    = request.headers.get("Cookie") || "";
     const autenticado= cookies.includes(COOKIE + "=" + TOKEN);
-
     if (request.method === "POST" && url.pathname === "/login") {
       const body  = await request.formData();
       const senha = body.get("senha") || "";
       if (senha === SENHA) {
         return new Response("", {
           status: 302,
-          headers: {
-            "Location": "/",
-            "Set-Cookie": `${COOKIE}=${TOKEN}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800`,
-          },
+          headers: { "Location": "/", "Set-Cookie": `${COOKIE}=${TOKEN}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800` },
         });
       }
       return new Response(loginHTML("Senha incorreta. Tente novamente."), {
-        status: 401,
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        status: 401, headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     }
-
     if (url.pathname === "/logout") {
       return new Response("", {
         status: 302,
         headers: { "Location": "/", "Set-Cookie": `${COOKIE}=; Path=/; Max-Age=0` },
       });
     }
-
     if (!autenticado) {
       return new Response(loginHTML(""), {
-        status: 200,
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        status: 200, headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     }
-
     const dashboard = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1006,212 +996,6 @@ function switchTab(tab, btn) {
 
   </div>
 
-  <!-- Seção 2 — Projetos Fechados -->
-  <div class="p26-section-label" style="margin-top:32px;">Projetos Fechados — 2026</div>
-  <div class="p26-fech-card">
-    <div class="p26-fech-header">
-      <div class="p26-fech-title">Aprovados a partir de Janeiro / 2026</div>
-      <div class="p26-fech-badge">Data de aprovação ≥ jan/2026</div>
-    </div>
-    <div class="p26-fech-grid">
-
-      <div class="p26-fech-item">
-        <div class="p26-fech-label">Quantidade</div>
-        <div class="p26-fech-number">15</div>
-        <div class="p26-fech-sub">projetos faturados</div>
-      </div>
-
-      <div class="p26-fech-item">
-        <div class="p26-fech-label">Valor Total</div>
-        <div class="p26-fech-number large">R$ 340.090,60</div>
-        <div class="p26-fech-sub">soma dos VT dos projetos</div>
-      </div>
-
-      <div class="p26-fech-item">
-        <div class="p26-fech-label">MRR</div>
-        <div class="p26-fech-number large">R$ 18.254,00</div>
-        <div class="p26-fech-sub">receita recorrente mensal</div>
-      </div>
-
-      <div class="p26-fech-item">
-        <div class="p26-fech-label">ARR</div>
-        <div class="p26-fech-number large">R$ 121.033,00</div>
-        <div class="p26-fech-sub">receita para os próximos 12 meses</div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Seção 3 — Detalhe Projetos Fechados -->
-  <div class="p26-section-label" style="margin-top:40px;">Detalhe — Projetos Fechados 2026</div>
-  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
-
-    <!-- Cabeçalho do card -->
-    <div style="display:flex;justify-content:space-between;align-items:center;
-      padding:18px 20px 14px;border-bottom:1px solid var(--border);">
-      <div>
-        <div style="font-size:13px;font-weight:700;color:#111827;">Projetos Aprovados ≥ Jan / 2026</div>
-        <div style="font-size:12px;color:#6b7280;margin-top:2px;">
-          Ordenado por data de aprovação · 15 projetos
-        </div>
-      </div>
-      <div style="display:flex;gap:20px;font-size:11px;font-weight:700;color:#6b7280;">
-        <span>Total VT <strong style="color:#111827;font-size:13px;margin-left:4px;">R$ 340.090,60</strong></span>
-        <span>MRR <strong style="color:#7c3aed;font-size:13px;margin-left:4px;">R$ 18.254,00</strong></span>
-        <span>ARR <strong style="color:#0891b2;font-size:13px;margin-left:4px;">R$ 121.033,00</strong></span>
-      </div>
-    </div>
-
-    <!-- Tabela -->
-    <div style="overflow-x:auto;">
-      <table style="width:100%;border-collapse:collapse;">
-        <thead>
-          <tr style="background:#f8fafc;">
-            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">NP</th>
-            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">Cliente</th>
-            <th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">Aprovação</th>
-            <th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">Valor Total</th>
-            <th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;
-              border-bottom:1px solid #e5e7eb;">MRR</th>
-            <th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;
-              border-bottom:1px solid #e5e7eb;">ARR</th>
-          </tr>
-        </thead>
-        <tbody><tr>
-          <td colspan="5" style="padding:10px 16px 8px;font-size:10px;font-weight:700;
-            text-transform:uppercase;letter-spacing:2px;color:#059669;
-            background:#f0fdf4;border-bottom:1px solid #d1fae5;">Janeiro / 2026</td>
-        </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-115316</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">FRIGELAR</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 300,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-115262</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">INTERCITY</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 76.721,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 76.721,00</td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-115157</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">STEFANINI</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 62.889,60</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 5.240,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114662</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">IRANI PAPEL E EMBALAGEM S.A</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114581</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">SOLVI PARTICIPAÇÕES</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 78.912,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 6.576,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114514</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">TORRA TORRA</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.140,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 1.140,00</td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114454</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">KICALDO</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 760,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 760,00</td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-113067</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">EBM Incorporações S/A</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 47.800,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 1.450,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 30.400,00</td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-112107</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">SABEMI SEGURADORA</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">01/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 9.600,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 800,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114660</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">M.L.GOMES</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">02/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.080,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 6.080,00</td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114632</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">Novvacore Jr & Js - Telecom LTDA</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">02/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 43.056,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 3.588,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-116129</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">Cetrel - Central de Tratamento de Efluentes Líquidos</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">03/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 300,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-116081</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">NETCENTER INFORMATICA</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">03/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.800,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 3.800,00</td>
-    </tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-115812</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">BRASTORAGE - THINK</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">03/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.140,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 1.140,00</td>
-    </tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;">
-      <td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-115715</td>
-      <td style="padding:11px 16px;font-size:13px;font-weight:600;color:#111827;">CORPFLEX INFORMATICA LTDA</td>
-      <td style="padding:11px 16px;text-align:center;font-size:12px;color:#6b7280;white-space:nowrap;">03/01/2026</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 992,00</td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td>
-      <td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 992,00</td>
-    </tr></tbody>
-        <tfoot>
-          <tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
-            <td colspan="3" style="padding:12px 16px;font-size:11px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1px;color:#059669;">
-              Total · 15 projetos
-            </td>
-            <td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:800;color:#111827;">R$ 340.090,60</td>
-            <td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 18.254,00</td>
-            <td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:800;color:#0891b2;">R$ 121.033,00</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-
   <!-- Seção 4 — Projetos por Responsável -->
   <div class="p26-section-label" style="margin-top:40px;">Projetos por Responsável</div>
 
@@ -1419,344 +1203,113 @@ function switchTab(tab, btn) {
   })();
   </script>
 
-  <!-- Seção 5 — Fechados por Mês -->
-  <div class="p26-section-label" style="margin-top:40px;">Fechados por Mês — 2026</div>
-
-  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
-
-    <!-- Cabeçalho -->
-    <div style="display:flex;justify-content:space-between;align-items:center;
-      padding:18px 20px 14px;border-bottom:1px solid var(--border);">
+  <!-- Seção: Em Negociação -->
+  <div class="p26-section-label" style="margin-top:40px;">Em Negociação</div>
+  <div style="background:#fff;border:1px solid #fde68a;border-left:4px solid #d97706;border-radius:14px;overflow:hidden;margin-bottom:0;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px 14px;border-bottom:1px solid #fef9c3;">
       <div>
-        <div style="font-size:13px;font-weight:700;color:#111827;">Volume de Projetos Aprovados por Mês</div>
-        <div style="font-size:12px;color:#6b7280;margin-top:2px;">
-          Filtro: Data de Aprovação ≥ Jan/2026 · acumulado mensal
-        </div>
+        <div style="font-size:13px;font-weight:700;color:#92400e;">Projetos em fase de Negociação</div>
+        <div style="font-size:12px;color:#a16207;margin-top:2px;">Fechamento previsto para Março/2026</div>
       </div>
-      <div style="display:flex;gap:20px;font-size:11px;font-weight:700;color:#6b7280;">
-        <span>Total VT <strong style="color:#111827;font-size:13px;margin-left:4px;">R$ 340.090,60</strong></span>
-        <span>MRR <strong style="color:#7c3aed;font-size:13px;margin-left:4px;">R$ 18.254,00</strong></span>
-        <span>ARR <strong style="color:#0891b2;font-size:13px;margin-left:4px;">R$ 121.033,00</strong></span>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;">4 projetos</span>
+        <span style="background:#fffbeb;color:#d97706;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid #fde68a;">R$ 269.858,28</span>
       </div>
     </div>
-
-    <!-- Gráfico -->
-    <div style="padding:20px 20px 8px;">
-      <canvas id="chartFechMes" height="90"></canvas>
-    </div>
-
-    <!-- Tabela -->
     <div style="overflow-x:auto;">
       <table style="width:100%;border-collapse:collapse;">
         <thead>
-          <tr style="background:#f8fafc;">
-            <th style="padding:10px 20px;text-align:left;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">Mês</th>
-            <th style="padding:10px 20px;text-align:center;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">Projetos</th>
-            <th style="padding:10px 20px;text-align:right;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
-              border-bottom:1px solid #e5e7eb;">Valor Total</th>
-            <th style="padding:10px 20px;text-align:right;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;
-              border-bottom:1px solid #e5e7eb;">MRR</th>
-            <th style="padding:10px 20px;text-align:right;font-size:10px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;
-              border-bottom:1px solid #e5e7eb;">ARR</th>
+          <tr style="background:#fffbeb;">
+            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">NP</th>
+            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Cliente</th>
+            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Responsável</th>
+            <th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Projeção</th>
+            <th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Valor Total</th>
           </tr>
         </thead>
-        <tbody><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114406</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SENAC RJ</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 178.043,28</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-113976</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SERVIÇO SOCIAL DO COMÉRCIO</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 51.300,00</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114516</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">AUTTAR - GETNET</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 37.475,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-113114</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SABEMI SEGURADORA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 3.040,00</td></tr></tbody>
+        <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 16px;font-family:monospace;font-size:11px;font-weight:700;color:#d97706;">NP-114406</td><td style="padding:12px 16px;font-size:13px;font-weight:600;color:#111827;">SENAC RJ</td><td style="padding:12px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:12px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Mar/2026</span></td><td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 178.043,28</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 16px;font-family:monospace;font-size:11px;font-weight:700;color:#d97706;">NP-113976</td><td style="padding:12px 16px;font-size:13px;font-weight:600;color:#111827;">SERVIÇO SOCIAL DO COMÉRCIO</td><td style="padding:12px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:12px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Mar/2026</span></td><td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 51.300,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 16px;font-family:monospace;font-size:11px;font-weight:700;color:#d97706;">NP-114516</td><td style="padding:12px 16px;font-size:13px;font-weight:600;color:#111827;">AUTTAR - GETNET</td><td style="padding:12px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:12px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Mar/2026</span></td><td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 37.475,00</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 16px;font-family:monospace;font-size:11px;font-weight:700;color:#d97706;">NP-113114</td><td style="padding:12px 16px;font-size:13px;font-weight:600;color:#111827;">SABEMI SEGURADORA</td><td style="padding:12px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:12px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Mar/2026</span></td><td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 3.040,00</td></tr></tbody>
         <tfoot>
-          <tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
-            <td style="padding:12px 20px;font-size:11px;font-weight:700;
-              text-transform:uppercase;letter-spacing:1px;color:#059669;">Total</td>
-            <td style="padding:12px 20px;text-align:center;font-size:13px;font-weight:800;color:#059669;">15</td>
-            <td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#111827;">R$ 340.090,60</td>
-            <td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 18.254,00</td>
-            <td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#0891b2;">R$ 121.033,00</td>
+          <tr style="background:#fef9c3;border-top:2px solid #fde68a;">
+            <td colspan="4" style="padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#92400e;">Total · 4 projetos</td>
+            <td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:800;color:#92400e;">R$ 269.858,28</td>
           </tr>
         </tfoot>
       </table>
     </div>
   </div>
 
-  <script>
-  (function() {
-    var ctx = document.getElementById('chartFechMes');
-    if (!ctx) return;
-    var labels = ['Jan/2026'];
-    var vtData  = [340090.6];
-    var mrrData = [18254.0];
-    var arrData = [121033.0];
-    var qtdData = [15];
-    new Chart(ctx, {
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            type: 'bar',
-            label: 'Valor Total',
-            data: vtData,
-            backgroundColor: 'rgba(17,24,39,0.08)',
-            borderColor: '#111827',
-            borderWidth: 1.5,
-            borderRadius: 6,
-            yAxisID: 'yVal',
-            order: 2
-          },
-          {
-            type: 'bar',
-            label: 'MRR',
-            data: mrrData,
-            backgroundColor: 'rgba(124,58,237,0.65)',
-            borderColor: '#7c3aed',
-            borderWidth: 0,
-            borderRadius: 6,
-            yAxisID: 'yVal',
-            order: 3
-          },
-          {
-            type: 'bar',
-            label: 'ARR',
-            data: arrData,
-            backgroundColor: 'rgba(8,145,178,0.65)',
-            borderColor: '#0891b2',
-            borderWidth: 0,
-            borderRadius: 6,
-            yAxisID: 'yVal',
-            order: 4
-          },
-          {
-            type: 'line',
-            label: 'Qtd Projetos',
-            data: qtdData,
-            borderColor: '#059669',
-            backgroundColor: 'rgba(5,150,105,0.08)',
-            borderWidth: 2.5,
-            tension: 0.3,
-            pointRadius: 5,
-            pointBackgroundColor: '#059669',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            fill: true,
-            yAxisID: 'yQtd',
-            order: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: {
-            labels: {
-              color: '#6b7280',
-              font: { family: 'Nunito', size: 11 },
-              boxWidth: 10,
-              padding: 16
-            }
-          },
-          tooltip: {
-            backgroundColor: '#fff',
-            borderColor: 'rgba(0,0,0,.08)',
-            borderWidth: 1,
-            titleColor: '#111827',
-            bodyColor: '#374151',
-            padding: 12,
-            callbacks: {
-              label: function(c) {
-                if (c.dataset.label === 'Qtd Projetos')
-                  return ' ' + c.parsed.y + ' projetos';
-                return ' ' + c.dataset.label + ': R$ ' +
-                  c.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 0});
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { color: '#6b7280', font: { family: 'Nunito', size: 11 } }
-          },
-          yVal: {
-            type: 'linear',
-            position: 'left',
-            grid: { color: 'rgba(0,0,0,.04)' },
-            ticks: {
-              color: '#6b7280',
-              font: { family: 'Nunito', size: 11 },
-              callback: function(v) {
-                return v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'K' : 'R$' + v;
-              }
-            },
-            title: { display: true, text: 'Valor (R$)', color: '#9ca3af', font: { family: 'Nunito', size: 10 } }
-          },
-          yQtd: {
-            type: 'linear',
-            position: 'right',
-            grid: { drawOnChartArea: false },
-            ticks: {
-              color: '#059669',
-              font: { family: 'Nunito', size: 11 },
-              stepSize: 1
-            },
-            title: { display: true, text: 'Qtd', color: '#059669', font: { family: 'Nunito', size: 10 } }
-          }
-        }
-      }
-    });
-  })();
-  </script>
+
+  <!-- Seção 2 — Projetos Fechados -->
+  <div class="p26-section-label" style="margin-top:32px;">Projetos Fechados — 2026</div>
+  <div class="p26-fech-card">
+    <div class="p26-fech-header">
+      <div class="p26-fech-title">Aprovados a partir de Janeiro / 2026</div>
+      <div class="p26-fech-badge">Data de aprovação ≥ jan/2026</div>
+    </div>
+    <div class="p26-fech-grid">
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">Quantidade</div>
+        <div class="p26-fech-number">15</div>
+        <div class="p26-fech-sub">projetos faturados</div>
+      </div>
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">Valor Total</div>
+        <div class="p26-fech-number large">R$ 340.090,60</div>
+        <div class="p26-fech-sub">soma dos VT dos projetos</div>
+      </div>
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">MRR</div>
+        <div class="p26-fech-number large">R$ 18.254,00</div>
+        <div class="p26-fech-sub">receita recorrente mensal</div>
+      </div>
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">ARR</div>
+        <div class="p26-fech-number large">R$ 121.033,00</div>
+        <div class="p26-fech-sub">receita para os próximos 12 meses</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Seção 3 — Detalhe Projetos Fechados -->
+  <div class="p26-section-label" style="margin-top:40px;">Detalhe — Projetos Fechados 2026</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px 14px;border-bottom:1px solid var(--border);">
+      <div><div style="font-size:13px;font-weight:700;color:#111827;">Aprovados ≥ Jan / 2026</div><div style="font-size:12px;color:#6b7280;margin-top:2px;">15 projetos · ordenado por data de aprovação</div></div>
+      <div style="display:flex;gap:10px;"><span style="background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;">15 projetos</span><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid #bbf7d0;">R$ 340.090,60</span></div>
+    </div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Data de Aprovação</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead>
+      <tbody><tr><td colspan="5" style="padding:10px 16px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#059669;background:#f0fdf4;border-bottom:1px solid #d1fae5;">Janeiro / 2026</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115316</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">FRIGELAR</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115262</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">INTERCITY</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 76.721,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115157</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">STEFANINI</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 62.889,60</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114662</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114581</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SOLVI PARTICIPAÇÕES</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 78.912,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114514</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">TORRA TORRA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.140,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114454</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">KICALDO</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 760,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-113067</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">EBM Incorporações S/A</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 47.800,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-112107</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SABEMI SEGURADORA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">01/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 9.600,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114660</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">M.L.GOMES</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">02/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.080,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114632</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">Novvacore Jr & Js - Telecom LTDA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">02/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 43.056,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-116129</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">Cetrel - Central de Tratamento de Efluentes Líquidos</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">03/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-116081</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">NETCENTER INFORMATICA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">03/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.800,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115812</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">BRASTORAGE - THINK</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">03/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.140,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115715</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">CORPFLEX INFORMATICA LTDA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Denise Fagundes</td><td style="padding:10px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;">03/01/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 992,00</td></tr></tbody>
+      <tfoot><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;"><td colspan="4" style="padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;color:#059669;">Total · 15 projetos</td><td style="padding:12px 16px;text-align:right;font-weight:800;color:#059669;">R$ 340.090,60</td></tr></tfoot>
+    </table></div>
+  </div>
+
+<!-- Seção 5 — Fechados por Mês -->
+  <div class="p26-section-label" style="margin-top:40px;">Fechados por Mês — 2026</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px 14px;border-bottom:1px solid var(--border);">
+      <div><div style="font-size:13px;font-weight:700;color:#111827;">Volume por Mês de Aprovação</div><div style="font-size:12px;color:#6b7280;margin-top:2px;">Projetos aprovados ≥ Jan/2026 · agrupado por mês</div></div>
+      <span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid #bbf7d0;">Total: R$ 340.090,60</span>
+    </div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Projetos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead>
+      <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">Jan/2026</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">15</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 340.090,60</td></tr></tbody>
+      <tfoot><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;"><td style="padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;color:#059669;">Total</td><td style="padding:12px 20px;text-align:center;font-size:13px;font-weight:800;color:#059669;">15</td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#059669;">R$ 340.090,60</td></tr></tfoot>
+    </table></div>
+  </div>
 
 </div>
-</div> <!-- fim tab-pipeline -->
-
-<!-- ══ ABA 2: RENOVAÇÃO DE CONTRATOS ══ -->
-<div id="tab-gestao" class="tab-panel">
-<div class="page">
-
-  <header>
-    <div class="header-left">
-      <div class="header-eyebrow">Gestão de Contratos · 2026</div>
-      <h1 class="header-title">Dashboard de<br><span style="color:var(--accent2);">Renovações</span></h1>
-    </div>
-    <div class="header-right">
-      <div class="header-date" id="dateDisplay2"></div>
-      <div class="header-badge"><span class="dot"></span>Dados Atualizados</div>
-    </div>
-  </header>
-
-  <!-- KPIs -->
-  <div class="kpi-row" style="margin-bottom:28px;">
-    <div class="kpi-card" style="--card-accent:var(--accent1)">
-      <div class="kpi-icon">📅</div>
-      <div class="kpi-label">Carteira Jan/2026</div>
-      <div class="kpi-value">143</div>
-      <div class="kpi-sub">R$ 2.414.929,88</div>
-    </div>
-    <div class="kpi-card" style="--card-accent:var(--accent3)">
-      <div class="kpi-icon">📋</div>
-      <div class="kpi-label">Carteira Atual</div>
-      <div class="kpi-value">135</div>
-      <div class="kpi-sub"><span style="color:var(--accent3);font-weight:600;">Mar/2026</span> · excl. cancelados</div>
-    </div>
-    <div class="kpi-card" style="--card-accent:#dc2626">
-      <div class="kpi-icon">❌</div>
-      <div class="kpi-label">Contratos Cancelados</div>
-      <div class="kpi-value">8</div>
-      <div class="kpi-sub"><span style="color:#dc2626;font-weight:600;">5.6%</span> do total da carteira</div>
-    </div>
-    <div class="kpi-card" style="--card-accent:var(--accent3)">
-      <div class="kpi-icon">✅</div>
-      <div class="kpi-label">Renovados</div>
-      <div class="kpi-value">9</div>
-      <div class="kpi-sub"><span style="color:var(--accent3);font-weight:600;">6.7%</span> já concluídos</div>
-    </div>
-  </div>
-
-  <!-- KPIs Financeiros -->
-  <div class="kpi-row" style="margin-bottom:28px;">
-    <div class="kpi-card" style="--card-accent:#64748b">
-      <div class="kpi-icon">📅</div>
-      <div class="kpi-label">Carteira Jan/2026</div>
-      <div class="kpi-value" style="font-size:20px;">R$ 7,34M</div>
-      <div class="kpi-sub">Valor bruto · incl. cancelados · base 2026</div>
-    </div>
-    <div class="kpi-card" style="--card-accent:var(--accent1)">
-      <div class="kpi-icon">💰</div>
-      <div class="kpi-label">Carteira Atual</div>
-      <div class="kpi-value" style="font-size:20px;">R$ 7,16M</div>
-      <div class="kpi-sub">Valor líquido · 135 contratos ativos</div>
-    </div>
-    <div class="kpi-card" style="--card-accent:#dc2626">
-      <div class="kpi-icon">📉</div>
-      <div class="kpi-label">Redução da Carteira</div>
-      <div class="kpi-value" style="font-size:20px;color:#dc2626;">−R$ 178,9K</div>
-      <div class="kpi-sub"><span style="color:#dc2626;font-weight:600;">−2.4%</span> vs início do ano</div>
-    </div>
-    <div class="kpi-card" style="--card-accent:var(--accent4)">
-      <div class="kpi-icon">🎯</div>
-      <div class="kpi-label">Ticket Médio</div>
-      <div class="kpi-value" style="font-size:20px;">R$ 53,1K</div>
-      <div class="kpi-sub">Valor médio por contrato · R$ 53.052,65</div>
-    </div>
-  </div>
-
-  
-  <!-- ⚠ ATRASO -->
-  <div class="card" style="margin-bottom:24px;border-left:4px solid #dc2626;padding-left:24px;">
-    <div class="card-header"><div><div class="card-title" style="color:#dc2626;">⚠ Em Atraso de Renovação</div><div class="card-subtitle">Data Base vencida · pendentes · excl. Processo Financeiro e Renovados</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;"><span style="background:#fee2e2;color:#991b1b;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;">10 contratos</span><span style="background:#fff1f2;color:#dc2626;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;border:1px solid #fecaca;">R$ 376.535,52 em risco</span></div></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;"><div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:10px;color:#dc2626;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Jan/2026</div><div style="font-size:28px;font-weight:800;color:#dc2626;">4</div><div style="font-size:11px;color:#64748b;">R$ 94.492,72</div></div><div style="background:#fff8f3;border:1px solid #fed7aa;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:10px;color:#9a3412;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Fev/2026</div><div style="font-size:28px;font-weight:800;color:#9a3412;">1</div><div style="font-size:11px;color:#64748b;">R$ 2.052,45</div></div><div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:10px;color:#854d0e;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Mar/2026</div><div style="font-size:28px;font-weight:800;color:#854d0e;">5</div><div style="font-size:11px;color:#64748b;">R$ 279.990,35</div></div></div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;border-bottom:1px solid #e5e7eb;">Etapa</th><th style="padding:9px 12px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;border-bottom:1px solid #e5e7eb;">Vencimento</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115077</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">NETCENTER INFORMATICA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Em análise pelo cliente</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 2.254,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115071</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">VERZANI & SANDRINI LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Em análise pelo cliente</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115063</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Trt Da 4ª Região</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Em análise pelo cliente</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 78.738,72</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115057</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">TECCLOUD SERVICOS DE TECNOLOGIA AHU LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Em análise pelo cliente</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 13.500,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115007</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">KICALDO</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Análise de Requisição</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/02/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 2.052,45</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115044</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SCGAS - COMPANHIA DE GAS DE SANTA CATARINA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Análise de Requisição</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.986,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115042</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Sapore</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Talita</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Análise de Requisição</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 170.362,80</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-115040</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Análise de Requisição</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.467,55</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-114982</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Em análise pelo cliente</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 54.090,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-114944</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">ASSOCIACAO HOSPITALAR MOINHOS DE VENTO</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Em análise pelo cliente</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#dc2626;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 45.084,00</td></tr></tbody></table></div>
-  </div>
-  <!-- 🔄 PROCESSO FINANCEIRO -->
-  <div class="card" style="margin-bottom:24px;border-left:4px solid #7c3aed;padding-left:24px;">
-    <div class="card-header"><div><div class="card-title" style="color:#7c3aed;">🔄 Em Processo Financeiro</div><div class="card-subtitle">Contrato em fase de aprovação financeira</div></div><div><span style="background:#f5f3ff;color:#5b21b6;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;">7 contratos</span></div></div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Etapa</th><th style="padding:9px 12px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Vencimento</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-115076</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">FORNO DE MINAS</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 777,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-115066</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">UNIMED VALES DO TAQUARI E RIO PARDO LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/02/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 38.120,85</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-115065</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">UNIMED PORTO ALEGRE</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 127.953,24</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-115022</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">OCYAN</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 110.119,68</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-114998</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">INCORP TECHNOLOGY INFORMATICA LTDA - EPP</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/02/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.388,02</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-114968</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">COTRIBÁ</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.117,32</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-114949</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">AUXILIADORA PREDIAL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Processo Financeiro</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#7c3aed;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 412.288,08</td></tr></tbody></table></div>
-  </div>
-  <!-- ❌ CANCELADOS -->
-  <div class="card" style="margin-bottom:24px;border-left:4px solid #9ca3af;padding-left:24px;">
-    <div class="card-header"><div><div class="card-title" style="color:#374151;">❌ Cancelados no Período</div><div class="card-subtitle">Contratos encerrados na base atual</div></div><div style="display:flex;gap:8px;"><span style="background:#f9fafb;color:#374151;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;">8 contratos</span><span style="background:#f1f5f9;color:#6b7280;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;border:1px solid #e5e7eb;">R$ 178.926,50</span></div></div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Etapa</th><th style="padding:9px 12px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Vencimento</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-116093</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SYNERGIE SISTEMAS LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/10/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 41.899,68</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-116076</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">NOURYON PULP AND PERFORMANCE INDUSTRIA QUIMICA LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.500,16</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-116075</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">ASSOCIAÇÃO ANTÔNIO VEIRA JESUÍTA DO BRASIL (ASAV)</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/01/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 28.993,68</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-115004</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">J&M SOLUÇÕES EM TECNOLOGIA EIRELI (AlliedIT)</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/08/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.189,60</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-114990</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">GTFOODS GROUP</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/03/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 14.240,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-114988</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Grupo Orcali</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/08/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 22.757,52</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-114962</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">CLAMPER</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/07/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.109,28</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#6b7280;">NP-114797</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">RNI - Rodobens Negócios Imobiliários</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Talita</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Contrato Cancelado</td><td style="padding:9px 12px;text-align:center;font-size:11px;font-weight:600;color:#6b7280;">01/12/2026</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.236,58</td></tr></tbody></table></div>
-  </div>
-  <!-- ✅ RENOVADOS -->
-  <div class="card" style="margin-bottom:24px;border-left:4px solid #22c55e;padding-left:24px;">
-    <div class="card-header"><div><div class="card-title" style="color:#059669;">✅ Renovados</div><div class="card-subtitle">Contratos renovados com sucesso no período</div></div><div><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;">11 contratos</span></div></div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Valor Total</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">MRR</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;border-bottom:1px solid #e5e7eb;">ARR</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115073</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">WAY DATA SOLUTION S/A</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 2.930,46</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 2.930,46</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115068</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">USINA SANTA ISABEL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 17.220,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 1.435,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115048</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SEPROL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 8.955,24</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 746,27</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115043</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SAQUE PAGUE</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 60.982,80</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 5.081,90</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115037</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SABEMI SEGURADORA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 23.085,60</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 1.923,80</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115027</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">PLANSERVI ENGENHARIA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 4.909,09</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 4.909,09</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115002</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">INTERSISTEMAS INFORMATICA LTDA - NETLOGIC</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.416,60</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 618,05</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115001</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">INTERCITY</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 41.088,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 3.424,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114967</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">CORTEL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114956</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">CALÇADOS BEIRA RIO</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 9.062,78</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 9.062,78</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114943</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Argenta Participacoes LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr></tbody></table></div><div style="background:#f0fdf4;border-top:2px solid #bbf7d0;padding:10px 16px;display:flex;justify-content:flex-end;gap:24px;font-size:12px;font-weight:700;"><span style="color:#6b7280;">Total VT <strong style="color:#111827;margin-left:6px;">R$ 175.650,57</strong></span><span style="color:#7c3aed;">MRR <strong style="margin-left:6px;">R$ 13.229,02</strong></span><span style="color:#0891b2;">ARR <strong style="margin-left:6px;">R$ 16.902,33</strong></span></div>
-  </div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Valor Total</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">MRR</th><th style="padding:9px 12px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;border-bottom:1px solid #e5e7eb;">ARR</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115073</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">WAY DATA SOLUTION S/A</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 2.930,46</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 2.930,46</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115068</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">USINA SANTA ISABEL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 17.220,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 1.435,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115048</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SEPROL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 8.955,24</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 746,27</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115043</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SAQUE PAGUE</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 60.982,80</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 5.081,90</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115037</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SABEMI SEGURADORA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 23.085,60</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 1.923,80</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115027</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">PLANSERVI ENGENHARIA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 4.909,09</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 4.909,09</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115002</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">INTERSISTEMAS INFORMATICA LTDA - NETLOGIC</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.416,60</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 618,05</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-115001</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">INTERCITY</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 41.088,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">R$ 3.424,00</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">NP-114956</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">CALÇADOS BEIRA RIO</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 9.062,78</td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;"><span style="color:#d1d5db;">—</span></td><td style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">R$ 9.062,78</td></tr></tbody></table></div><div style="background:#f0fdf4;border-top:2px solid #bbf7d0;padding:10px 16px;display:flex;justify-content:flex-end;gap:24px;font-size:12px;font-weight:700;"><span style="color:#6b7280;">Total VT <strong style="color:#111827;margin-left:6px;">R$ 175.650,57</strong></span><span style="color:#7c3aed;">MRR <strong style="margin-left:6px;">R$ 13.229,02</strong></span><span style="color:#0891b2;">ARR <strong style="margin-left:6px;">R$ 16.902,33</strong></span></div>
-  </div><!-- end mainContent -->
-</body>
-</html>
-`;
+</div> <!-- fim tab-pipeline -->`;
     return new Response(dashboard, {
-      headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store",
-        "X-Frame-Options": "DENY",
-        "X-Content-Type-Options": "nosniff",
-      },
+      headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Frame-Options": "DENY" },
     });
   },
 };
-
 function loginHTML(erro) {
-  return `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acesso Restrito</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Nunito',sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}
-    .icon{font-size:40px;margin-bottom:18px}
-    .eyebrow{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
-    h1{font-size:22px;font-weight:800;color:#111827;margin-bottom:6px}
-    p{font-size:13px;color:#6b7280;margin-bottom:28px}
-    input[type=password]{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px;transition:border-color .2s}
-    input[type=password]:focus{border-color:#2563eb}
-    .erro{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}
-    button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:background .2s}
-    button:hover{background:#1d4ed8}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="icon">🔒</div>
-    <div class="eyebrow">Pipeline de Projetos · 2026</div>
-    <h1>Acesso Restrito</h1>
-    <p>Digite a senha para acessar o dashboard</p>
-    <form method="POST" action="/login">
-      <input type="password" name="senha" placeholder="Senha" autofocus autocomplete="current-password">
-      <div class="erro">${erro}</div>
-      <button type="submit">Entrar</button>
-    </form>
-  </div>
-</body>
-</html>`;
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"><style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.card{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}.icon{font-size:40px;margin-bottom:18px}.eyebrow{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2563eb;margin-bottom:8px}h1{font-size:22px;font-weight:800;color:#111827;margin-bottom:6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input[type=password]{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px;transition:border-color .2s}input[type=password]:focus{border-color:#2563eb}.erro{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:background .2s}button:hover{background:#1d4ed8}</style></head><body><div class="card"><div class="icon">🔒</div><div class="eyebrow">Pipeline de Projetos · 2026</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus autocomplete="current-password"><div class="erro">${erro}</div><button type="submit">Entrar</button></form></div></body></html>`;
 }
