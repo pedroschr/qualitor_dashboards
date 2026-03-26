@@ -1341,7 +1341,54 @@ function switchTab(tab, btn) {
     </div>
   </div>
 
-<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:0px 0 14px;">Destaques estratégicos</div><div class="kpi-row"><div class="kpi-card" style="--card-accent:#059669;"><div style="font-size:24px;margin-bottom:10px;">💰</div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);margin-bottom:6px;">Maior MRR recorrente</div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:4px;">R$ 119K</div><div style="font-size:11px;color:var(--muted);line-height:1.4;">Saúde · 14 contratos ativos</div></div><div class="kpi-card" style="--card-accent:#0d9488;"><div style="font-size:24px;margin-bottom:10px;">🎯</div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);margin-bottom:6px;">Melhor conversão</div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:4px;">20.0%</div><div style="font-size:11px;color:var(--muted);line-height:1.4;">Meio Ambiente · 2 de 8 projetos</div></div><div class="kpi-card" style="--card-accent:#7c3aed;"><div style="font-size:24px;margin-bottom:10px;">🔓</div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);margin-bottom:6px;">Potencial de expansão</div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:4px;">14 clientes</div><div style="font-size:11px;color:var(--muted);line-height:1.4;">Tecnologia & TI · só na carteira, sem projeto ativo</div></div><div class="kpi-card" style="--card-accent:#dc2626;"><div style="font-size:24px;margin-bottom:10px;">⚡</div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);margin-bottom:6px;">Base sem expansão</div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:4px;">4 segmentos</div><div style="font-size:11px;color:var(--muted);line-height:1.4;">Saúde, Agronegócio, Educação · 0% conversão no pipeline</div></div></div>
+
+  <!-- Insights estratégicos -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:32px 0 14px;">📌 Insights Estratégicos</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;">
+
+    <!-- 1. Maior MRR -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #059669;border-radius:12px;padding:20px 18px;">
+      <div style="font-size:22px;margin-bottom:10px;">💰</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Maior MRR na carteira</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;">
+        <strong style="color:#059669;">Saúde</strong> lidera com <strong>R$ 119K</strong>/mês em receita recorrente
+        (14 contratos ativos) — maior base financeira entre todos os segmentos.
+      </div>
+    </div>
+
+    <!-- 2. Melhor conversão -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #0d9488;border-radius:12px;padding:20px 18px;">
+      <div style="font-size:22px;margin-bottom:10px;">🎯</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Melhor conversão no pipeline</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;">
+        <strong style="color:#0d9488;">Meio Ambiente</strong> converte <strong>20%</strong> dos projetos ativos
+        em negócios fechados — maior taxa de sucesso comercial da Qualitor atualmente.
+      </div>
+    </div>
+
+    <!-- 3. Potencial de expansão -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #7c3aed;border-radius:12px;padding:20px 18px;">
+      <div style="font-size:22px;margin-bottom:10px;">🔓</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Clientes exclusivos da carteira</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;">
+        <strong style="color:#7c3aed;">Tecnologia & TI</strong> tem <strong>14 clientes</strong> só na carteira
+        sem projetos ativos — oportunidade imediata de cross-sell e expansão de receita.
+      </div>
+    </div>
+
+    <!-- 4. Base instalada sem expansão -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #dc2626;border-radius:12px;padding:20px 18px;">
+      <div style="font-size:22px;margin-bottom:10px;">⚡</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Base instalada sem expansão</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;">
+        <strong>Saúde</strong>, <strong>Agronegócio</strong> e <strong>Educação</strong> têm receita recorrente
+        ativa mas <strong style="color:#dc2626;">0% de conversão</strong> no pipeline —
+        base instalada que não está sendo explorada comercialmente.
+      </div>
+    </div>
+
+  </div>
+
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:32px 0 14px;">Ranking por segmento · Pipeline × Carteira</div><div class="card">
   <div class="card-header"><div><div class="card-title">Onde estamos jogando hoje?</div><div class="card-subtitle">Clique em qualquer linha para ver os projetos e contratos · Conv. = Fechados ÷ Ativos · Só Carteira = clientes sem projeto ativo</div></div></div>
   <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
