@@ -1298,42 +1298,6 @@ function switchTab(tab, btn) {
   })();
   </script>
 
-  <!-- Seção: Em Negociação -->
-  <div class="p26-section-label" style="margin-top:40px;">Em Negociação</div>
-  <div style="background:#fff;border:1px solid #fde68a;border-left:4px solid #d97706;border-radius:14px;overflow:hidden;margin-bottom:0;">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px 14px;border-bottom:1px solid #fef9c3;">
-      <div>
-        <div style="font-size:13px;font-weight:700;color:#92400e;">Projetos em fase de Negociação</div>
-        <div style="font-size:12px;color:#a16207;margin-top:2px;">Fechamento previsto para Março/2026</div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;">4 projetos</span>
-        <span style="background:#fffbeb;color:#d97706;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid #fde68a;">R$ 269.858,28</span>
-      </div>
-    </div>
-    <div style="overflow-x:auto;">
-      <table style="width:100%;border-collapse:collapse;">
-        <thead>
-          <tr style="background:#fffbeb;">
-            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">NP</th>
-            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Cliente</th>
-            <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Responsável</th>
-            <th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Projeção</th>
-            <th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a16207;border-bottom:1px solid #fde68a;">Valor Total</th>
-          </tr>
-        </thead>
-        <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114406</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SENAC RJ</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 178.043,28</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-114516</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">AUTTAR - GETNET</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Anderson Bamberg</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 37.475,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">NP-113114</td><td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">SABEMI SEGURADORA</td><td style="padding:10px 16px;font-size:12px;color:#6b7280;">Pedro Schreck</td><td style="padding:10px 16px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;">Mar/2026</span></td><td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 3.040,00</td></tr></tbody>
-        <tfoot>
-          <tr style="background:#fef9c3;border-top:2px solid #fde68a;">
-            <td colspan="4" style="padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#92400e;">Total · 4 projetos</td>
-            <td style="padding:12px 16px;text-align:right;font-size:13px;font-weight:800;color:#92400e;">R$ 269.858,28</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-
-
   </div>
 </div> <!-- fim tab-pipeline -->
 <div id="tab-gestao" class="tab-panel">
