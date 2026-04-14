@@ -938,8 +938,8 @@ function switchTab(tab, btn) {
       <h1 class="p26-title">Pipeline de <br><span>Projetos</span></h1>
     </div>
     <div class="p26-meta">
-      Fonte: Relatório de Projetos · S2M4
-      <strong>Atualizado em 07 / 04 / 2026</strong>
+      Fonte: Relatório de Projetos · S3M4
+      <strong>Atualizado em 14 / 04 / 2026</strong>
     </div>
   </div>
 
