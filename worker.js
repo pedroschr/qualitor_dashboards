@@ -713,13 +713,6 @@ function switchTab(tab, btn) {
 <div id="tab-pipeline" class="tab-panel active">
 
 <style>
-  .p26-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 48px 32px 80px;
-    font-family: 'Nunito', sans-serif;
-  }
-
   /* ── Header ─────────────────────────────── */
   .p26-header {
     display: flex;
@@ -774,14 +767,14 @@ function switchTab(tab, btn) {
   .p26-kpi-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 14px;
+    gap: 16px;
+    margin-bottom: 28px;
   }
   .p26-kpi {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px 22px 20px;
+    border-radius: 12px;
+    padding: 28px;
     position: relative;
     overflow: hidden;
     transition: transform .15s ease, box-shadow .15s ease;
@@ -828,7 +821,7 @@ function switchTab(tab, btn) {
   .p26-fech-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 12px;
     padding: 28px 28px 24px;
     position: relative;
     overflow: hidden;
@@ -925,11 +918,10 @@ function switchTab(tab, btn) {
   @media (max-width: 480px) {
     .p26-kpi-row   { grid-template-columns: 1fr; }
     .p26-fech-grid { grid-template-columns: 1fr; }
-    .p26-page { padding: 28px 16px 60px; }
   }
 </style>
 
-<div class="p26-page">
+<div class="page">
 
   <!-- Header -->
   <div class="p26-header">
