@@ -714,7 +714,7 @@ function switchTab(tab, btn) {
 
 <style>
   .p26-page {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 48px 32px 80px;
     font-family: 'Nunito', sans-serif;
@@ -1379,7 +1379,7 @@ fim tab-gestao -->
   </header>
 
 <!-- Intro metodologia -->
-  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px 32px;margin-bottom:32px;">
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px;margin-bottom:32px;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
       <!-- Texto -->
       <div>
