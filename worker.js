@@ -640,7 +640,7 @@ export default {
 <div id="passwordScreen" style="
   position:fixed;inset:0;z-index:9999;
   background:#f5f6f8;
-  display:flex;align-items:center;justify-content:center;
+  display:none;align-items:center;justify-content:center;
   font-family:'Nunito',sans-serif;
 ">
   <div style="
@@ -691,7 +691,7 @@ function checkPwd() {
   }
 }
 </script>
-<div id="mainContent" style="display:none;">
+<div id="mainContent" style="display:block;">
 
 <!-- ── Navegação de Abas ── -->
 <nav class="tab-nav">
