@@ -1820,6 +1820,8 @@ window.cxSort=function(th){
 </script>
 </div>
 
+<!-- fim tab-cx -->
+
 <div id="tab-changelog" class="tab-panel">
 <div class="page">
   <header>
