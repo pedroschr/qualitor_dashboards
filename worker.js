@@ -1352,6 +1352,7 @@ function switchTab(tab, btn) {
 </div>
 
 </div><!-- fecha .page -->
+</div><!-- fecha tab-gestao -->
 fim tab-gestao -->
 
 
@@ -1533,7 +1534,9 @@ window.wtpTab=function(tab){
 window.wtpClose=function(){document.getElementById("wtp-drilldown").style.display="none";};
 })();
 </script>
-</div> <!-- fim tab-wtp -->
+</div><!-- fecha .page -->
+</div><!-- fecha tab-wtp -->
+<!-- fim tab-wtp -->
 
 
 
@@ -1834,6 +1837,9 @@ window.cxSort=function(th){
 </div>
 </div> <!-- fim tab-changelog -->
 
+</div><!-- fecha mainContent -->
+</body>
+</html>
 `;
     return new Response(d,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
   },
