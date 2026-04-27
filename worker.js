@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+export default {
+  async fetch(r,env){
+    const S="Qualitor!@#25",C="qlt_auth",T="qualitor2026ok";
+    const u=new URL(r.url),ck=r.headers.get("Cookie")||"";
+    const ok=ck.includes(C+"="+T);
+    if(r.method==="POST"&&u.pathname==="/login"){
+      const b=await r.formData(),p=b.get("senha")||"";
+      if(p===S)return new Response("",{status:302,headers:{"Location":"/","Set-Cookie":C+"="+T+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800"}});
+      return new Response(login("Senha incorreta."),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
+    }
+    if(u.pathname==="/logout")return new Response("",{status:302,headers:{"Location":"/","Set-Cookie":C+"=; Path=/; Max-Age=0"}});
+    if(!ok)return new Response(login(""),{status:200,headers:{"Content-Type":"text/html; charset=utf-8"}});
+    const d=`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -625,9 +637,60 @@
 <body>
 
 <!-- ── Tela de senha ── -->
+<div id="passwordScreen" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#f5f6f8;
+  display:none;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;
+">
+  <div style="
+    background:#fff;border-radius:16px;
+    padding:48px 40px;width:100%;max-width:380px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.10);
+    text-align:center;
+  ">
+    <div style="font-size:36px;margin-bottom:16px;">🔒</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#2563eb;margin-bottom:8px;">Pipeline de Projetos · 2026</div>
+    <h2 style="font-size:22px;font-weight:800;color:#111827;margin-bottom:6px;">Acesso Restrito</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:28px;">Digite a senha para visualizar o dashboard</p>
+    <input id="pwdInput" type="password" placeholder="Senha"
+      style="
+        width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;
+        border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;
+        outline:none;margin-bottom:12px;box-sizing:border-box;
+        transition:border-color .2s;
+      "
+      onkeydown="if(event.key==='Enter') checkPwd()"
+      onfocus="this.style.borderColor='#2563eb'"
+      onblur="this.style.borderColor='#e5e7eb'"
+    />
+    <div id="pwdError" style="font-size:12px;color:#dc2626;margin-bottom:12px;min-height:16px;"></div>
+    <button onclick="checkPwd()" style="
+      width:100%;padding:13px;background:#2563eb;color:#fff;
+      border:none;border-radius:10px;font-size:15px;font-weight:700;
+      font-family:'Nunito',sans-serif;cursor:pointer;
+      transition:background .2s;
+    "
+    onmouseover="this.style.background='#1d4ed8'"
+    onmouseout="this.style.background='#2563eb'"
+    >Entrar</button>
+  </div>
+</div>
 
-
-
+<script>
+function checkPwd() {
+  const input = document.getElementById('pwdInput').value;
+  if (input === 'Qualitor!@#25') {
+    document.getElementById('passwordScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'block';
+  } else {
+    document.getElementById('pwdError').textContent = 'Senha incorreta. Tente novamente.';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdInput').focus();
+  }
+}
+</script>
 <div id="mainContent" style="display:block;">
 
 <!-- ── Navegação de Abas ── -->
@@ -1255,25 +1318,25 @@ function switchTab(tab, btn) {
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #374151;border-radius:12px;padding:18px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📅 Carteira Jan/2026</div>
-      <div style="font-size:34px;font-weight:900;color:#d1d5db;line-height:1;">143</div>
+      <div style="font-size:34px;font-weight:900;color:#111827;line-height:1;">143</div>
       <div style="font-size:12px;color:#6b7280;margin-top:6px;">R$ 7.380.801,45</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid var(--accent1);border-radius:12px;padding:18px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📋 Carteira Atual</div>
-      <div style="font-size:34px;font-weight:900;color:#d1d5db;line-height:1;">135</div>
+      <div style="font-size:34px;font-weight:900;color:#2563eb;line-height:1;">135</div>
       <div style="font-size:12px;color:#6b7280;margin-top:6px;">R$ 7.201.874,95</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #dc2626;border-radius:12px;padding:18px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">✖ Contratos Cancelados</div>
-      <div style="font-size:34px;font-weight:900;color:#d1d5db;line-height:1;">8</div>
+      <div style="font-size:34px;font-weight:900;color:#dc2626;line-height:1;">8</div>
       <div style="font-size:12px;color:#b91c1c;margin-top:6px;font-weight:600;">5.4% do total</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #059669;border-radius:12px;padding:18px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">✅ Renovados</div>
-      <div style="font-size:34px;font-weight:900;color:#d1d5db;line-height:1;">15</div>
+      <div style="font-size:34px;font-weight:900;color:#059669;line-height:1;">15</div>
       <div style="font-size:12px;color:#065f46;margin-top:6px;font-weight:600;">11,1% da carteira atual</div>
     </div>
 
@@ -1284,25 +1347,25 @@ function switchTab(tab, btn) {
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📅 Carteira Jan/2026</div>
-      <div style="font-size:26px;font-weight:900;color:#d1d5db;line-height:1;">R$ 7.380.801,45</div>
+      <div style="font-size:26px;font-weight:900;color:#111827;line-height:1;">R$ 7.380.801,45</div>
       <div style="font-size:11px;color:#6b7280;margin-top:4px;">Valor bruto · incl. cancelados</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">💰 Carteira Atual</div>
-      <div style="font-size:26px;font-weight:900;color:#d1d5db;line-height:1;">—</div>
-      <div style="font-size:11px;color:#d1d5db;margin-top:4px;">Valor líquido · contratos ativos</div>
+      <div style="font-size:26px;font-weight:900;color:#2563eb;line-height:1;">R$ 7.201.874,95</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:4px;">Valor líquido · 135 contratos ativos</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📉 Redução da Carteira</div>
-      <div style="font-size:26px;font-weight:900;color:#d1d5db;line-height:1;">−R$ 178.926,50</div>
+      <div style="font-size:26px;font-weight:900;color:#dc2626;line-height:1;">−R$ 178.926,50</div>
       <div style="font-size:11px;color:#dc2626;margin-top:4px;font-weight:600;">2.4% vs início do ano</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">🎯 Ticket Médio</div>
-      <div style="font-size:26px;font-weight:900;color:#d1d5db;line-height:1;">R$ 53.347,22</div>
+      <div style="font-size:26px;font-weight:900;color:#374151;line-height:1;">R$ 53.347,22</div>
       <div style="font-size:11px;color:#6b7280;margin-top:4px;">por contrato ativo</div>
     </div>
 
@@ -1351,8 +1414,15 @@ function switchTab(tab, btn) {
     <div style="overflow-x:auto;border:1px solid #fecaca;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:700px;"><thead><tr style="background:#fef2f2;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês Cancelamento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116093</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SYNERGIE SISTEMAS LTDA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 41.899,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 3.491,64</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116076</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">NOURYON PULP AND PERFORMANCE INDUSTRIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.500,16</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.541,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116075</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ASSOC. ANTÔNIO VEIRA JESUÍTA DO BRASIL</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 28.993,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.416,14</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114990</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GTFOODS GROUP</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 14.240,00</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">—</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 14.240,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114962</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CLAMPER</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.109,28</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 592,44</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114988</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Grupo Orcali</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 22.757,52</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 1.896,46</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">115004</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">J&amp;M SOLUÇÕES EM TECNOLOGIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.189,60</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 265,80</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-114797</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RNI - Rodobens Negócios Imobiliários</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Talita</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">—</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.236,58</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.242,10</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 3.331,38</td></tr><tr style="background:#fff7ed;"><td colspan="7" style="padding:7px 14px;font-size:11px;color:#92400e;">⚠️ <strong>RNI - Rodobens:</strong> data de cancelamento não preenchida na coluna U</td></tr><tr style="background:#fef2f2;border-top:2px solid #fecaca;"><td colspan="4" style="padding:9px 14px;font-size:11px;font-weight:800;text-transform:uppercase;color:#dc2626;">Total · 8 contratos cancelados</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#111827;">R$ 178.926,50</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 13.446,26</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#0891b2;">R$ 17.571,38</td></tr></tbody></table></div>
   </div>
 
-  <div class="p26-meta">
-    Fonte: — &nbsp;<strong>Aguardando atualização</strong>
+  <div 
+  <!-- Análise de Requisição -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">📉 Contratos Reduzidos — 8 contratos</div>
+    <div style="overflow-x:auto;border:1px solid #fde68a;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:600px;"><thead><tr style="background:#fef9c3;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês Redução</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ ARR</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-116405</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A.</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Abr/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 573,00</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 6.876,00</td></tr><tr style="background:#fefce8;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-116162</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">HT SOLUTIONS</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Mar/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 1.657,71</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-115927</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">BULLLA SA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 839,72</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fefce8;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-115894</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">IGUATEMI EMP. DE SHOPPING CENTERS S/A</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 1.825,60</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-115405</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">IMPORTADORA BAGE S/A</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 183,76</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 2.021,41</td></tr><tr style="background:#fefce8;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-115344</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">STEFANINI</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 165,00</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-114744</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GOURMET SPORTS HOSPITALITY</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 5.704,00</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fefce8;border-bottom:1px solid #fde68a;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#92400e;">NP-114665</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">J&amp;M SOLUÇÕES EM TECNOLOGIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fef9c3;color:#92400e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 265,80</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef9c3;border-top:2px solid #fde68a;"><td colspan="4" style="padding:9px 14px;font-size:11px;font-weight:800;text-transform:uppercase;color:#92400e;">Total · 8 reduções contratuais</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 11.214,59</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#0891b2;">R$ 8.897,41</td></tr></tbody></table></div>
+  </div>
+
+  <class="p26-meta">
+    Fonte: Renovação de Contratos · <strong>Atualizado em 20 / 04 / 2026</strong>
   </div>
 
 </div><!-- .page -->
@@ -1843,3 +1913,8 @@ window.cxSort=function(th){
 </div><!-- fecha mainContent -->
 </body>
 </html>
+`;
+    return new Response(d,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
+  },
+};
+function login(e){return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style></head><body><div class="c"><div style="font-size:40px;margin-bottom:18px">🔒</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus><div class="er">${e}</div><button>Entrar</button></form></div></body></html>`;}
