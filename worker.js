@@ -1,16 +1,361 @@
 export default {
-  async fetch(r,env){
-    const S="Qualitor!@#25",C="qlt_auth",T="qualitor2026ok";
-    const u=new URL(r.url),ck=r.headers.get("Cookie")||"";
-    const ok=ck.includes(C+"="+T);
-    if(r.method==="POST"&&u.pathname==="/login"){
-      const b=await r.formData(),p=b.get("senha")||"";
-      if(p===S)return new Response("",{status:302,headers:{"Location":"/","Set-Cookie":C+"="+T+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800"}});
-      return new Response(login("Senha incorreta."),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
+  async fetch(request, env) {
+    const url  = new URL(request.url);
+    const path = url.pathname;
+    const ck   = request.headers.get("Cookie") || "";
+
+    // ── Credenciais ────────────────────────────────────────────────────────────
+    const S_USER  = "Qualitor!@#25";     // senha usuário comum
+    const S_ADMIN = "QltAdmin!2026";     // senha admin
+    const C_AUTH  = "qlt_auth";
+    const C_ADMIN = "qlt_admin";
+    const T_AUTH  = "qualitor2026ok";
+    const T_ADMIN = "qualitor_admin_ok";
+
+    // ── Status ─────────────────────────────────────────────────────────────────
+    const isAuth  = ck.includes(C_AUTH  + "=" + T_AUTH);
+    const isAdmin = ck.includes(C_ADMIN + "=" + T_ADMIN);
+
+    // ── Login ──────────────────────────────────────────────────────────────────
+    if (request.method === "POST" && path === "/login") {
+      const body  = await request.formData();
+      const senha = body.get("senha") || "";
+
+      if (senha === S_ADMIN) {
+        // Admin: seta os dois cookies
+        const headers = new Headers();
+        headers.append("Location", "/");
+        headers.append("Set-Cookie",
+          C_AUTH  + "=" + T_AUTH  + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
+        headers.append("Set-Cookie",
+          C_ADMIN + "=" + T_ADMIN + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
+        return new Response("", { status: 302, headers });
+      }
+
+      if (senha === S_USER) {
+        return new Response("", {
+          status: 302,
+          headers: {
+            "Location": "/",
+            "Set-Cookie": C_AUTH + "=" + T_AUTH + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800"
+          }
+        });
+      }
+
+      return new Response(loginPage("Senha incorreta."), {
+        status: 401,
+        headers: { "Content-Type": "text/html; charset=utf-8" }
+      });
     }
-    if(u.pathname==="/logout")return new Response("",{status:302,headers:{"Location":"/","Set-Cookie":C+"=; Path=/; Max-Age=0"}});
-    if(!ok)return new Response(login(""),{status:200,headers:{"Content-Type":"text/html; charset=utf-8"}});
-    const d=`<!DOCTYPE html>
+
+    // ── Logout ─────────────────────────────────────────────────────────────────
+    if (path === "/logout") {
+      const headers = new Headers();
+      headers.append("Location", "/");
+      headers.append("Set-Cookie", C_AUTH  + "=; Path=/; Max-Age=0");
+      headers.append("Set-Cookie", C_ADMIN + "=; Path=/; Max-Age=0");
+      return new Response("", { status: 302, headers });
+    }
+
+    // ── Rota: Envio de Email ───────────────────────────────────────────────────
+    if (request.method === "POST" && path === "/send-resumo") {
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ ok: false, error: "Acesso negado" }), {
+          status: 403,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      // Destinatários — edite esta lista com os emails do grupo
+      const destinatarios = ['pedro@qualitor.com.br'];
+
+      // API Key do Resend — adicione no Cloudflare Dashboard:
+      // Workers & Pages → qualitor-dashboards → Settings → Variables → RESEND_API_KEY
+      const RESEND_KEY = (env && env.RESEND_API_KEY) ? env.RESEND_API_KEY : "SUA_API_KEY_AQUI";
+
+      const hoje = new Date().toLocaleDateString("pt-BR", {
+        day: "2-digit", month: "long", year: "numeric"
+      });
+
+      // Substituir a data no email
+      const emailHtml = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo Executivo Qualitor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         background: #f0f2f5; color: #111827; }
+  .wrap  { max-width: 680px; margin: 0 auto; padding: 32px 16px; }
+  .card  { background: #fff; border-radius: 16px; overflow: hidden;
+           box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  .header{ background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+           padding: 36px 40px; }
+  .header h1 { color: #fff; font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .header p  { color: #bfdbfe; font-size: 13px; }
+  .body  { padding: 32px 40px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+                   letter-spacing: 1.5px; color: #9ca3af; margin: 28px 0 14px; }
+  .section-title:first-child { margin-top: 0; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .kpi-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px 18px; }
+  .kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase;
+               letter-spacing: 1.2px; color: #9ca3af; margin-bottom: 6px; }
+  .kpi-val   { font-size: 20px; font-weight: 900; line-height: 1; }
+  .kpi-sub   { font-size: 11px; color: #6b7280; margin-top: 4px; }
+  .kpi-card.blue  { background: #eff6ff; border-color: #bfdbfe; }
+  .kpi-card.red   { background: #fef2f2; border-color: #fecaca; }
+  .kpi-card.green { background: #f0fdf4; border-color: #bbf7d0; }
+  .kpi-card.amber { background: #fffbeb; border-color: #fde68a; }
+  .kpi-card.purple{ background: #f5f3ff; border-color: #e9d5ff; }
+  .kpi-card.cyan  { background: #ecfeff; border-color: #a5f3fc; }
+  .blue-val  { color: #2563eb; }
+  .red-val   { color: #dc2626; }
+  .green-val { color: #059669; }
+  .amber-val { color: #d97706; }
+  .purple-val{ color: #7c3aed; }
+  .cyan-val  { color: #0891b2; }
+  .gray-val  { color: #374151; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: left; background: #f8fafc; font-size: 10px;
+       font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+       color: #9ca3af; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+  th.r { text-align: right; }
+  td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; }
+  td.r { text-align: right; font-weight: 700; }
+  tr:last-child td { border-bottom: none; }
+  tr.total { background: #f8fafc; font-weight: 800; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 99px;
+           font-size: 11px; font-weight: 700; }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+  .footer { background: #f8fafc; border-top: 1px solid #e5e7eb;
+            padding: 20px 40px; font-size: 11px; color: #9ca3af; text-align: center; }
+  .divider { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+  .pos { color: #059669; font-weight: 700; }
+  .neg { color: #dc2626; font-weight: 700; }
+  .amb { color: #d97706; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Resumo Executivo · Qualitor</h1>
+    <p>Atualizado em 27/04/2026 &nbsp;·&nbsp; Gerado automaticamente via BI Qualitor</p>
+  </div>
+
+  <div class="body">
+
+    <!-- ── Carteira Atual ── -->
+    <div class="section-title">💼 Carteira de Contratos</div>
+    <div class="kpi-grid">
+      <div class="kpi-card blue">
+        <div class="kpi-label">Carteira Atual</div>
+        <div class="kpi-val blue-val">R$&nbsp;7.201.874,95</div>
+        <div class="kpi-sub">135 contratos ativos</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Carteira Jan/2026</div>
+        <div class="kpi-val gray-val">R$&nbsp;7.380.801,45</div>
+        <div class="kpi-sub">Valor bruto inicial</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-label">Redução de Carteira</div>
+        <div class="kpi-val red-val">−R$&nbsp;178.926,50</div>
+        <div class="kpi-sub" style="color:#b91c1c;font-weight:600;">2,4% vs início do ano</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ── MRR ── -->
+    <div class="section-title">📈 MRR — Receita Recorrente Mensal</div>
+    <div class="kpi-grid" style="margin-bottom:18px;">
+      <div class="kpi-card">
+        <div class="kpi-label">MRR Baseline (Jan/26)</div>
+        <div class="kpi-val gray-val">R$&nbsp;535.256,90</div>
+        <div class="kpi-sub">Renovação de Contratos</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">MRR Ajustado (Abr/26)</div>
+        <div class="kpi-val blue-val">R$&nbsp;533.578,18</div>
+        <div class="kpi-sub" style="color:#1d4ed8;font-weight:600;">Após aprovações e cancelamentos</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-label">Variação Total MRR</div>
+        <div class="kpi-val red-val">−R$&nbsp;1.678,72</div>
+        <div class="kpi-sub" style="color:#b91c1c;font-weight:600;">−0,31% vs baseline</div>
+      </div>
+    </div>
+
+    <!-- Tabela evolução MRR -->
+    <table style="border:1px solid #bfdbfe;border-radius:10px;overflow:hidden;">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th class="r">+ Aprovado</th>
+          <th class="r">− Cancel.</th>
+          <th class="r">− Redução</th>
+          <th class="r">MRR Ajustado</th>
+          <th class="r">Δ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#ffffff;">
+          <td><strong>Jan/26/26</strong></td>
+          <td class="r"><span class="pos">+R$&nbsp;14.366,00</span></td>
+          <td class="r"><span class="neg">−R$&nbsp;9.041,90</span></td>
+          <td class="r"><span class="amb">−R$&nbsp;6.318,56</span></td>
+          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;534.262,44</td>
+          <td class="r"><span class="neg">R$&nbsp;994,46</span></td>
+        </tr>
+        <tr style="background:#f8fafc;">
+          <td><strong>Fev/26/26</strong></td>
+          <td class="r"><span class="pos">+R$&nbsp;3.704,12</span></td>
+          <td class="r"><span class="neg">−R$&nbsp;4.404,35</span></td>
+          <td class="r"><span class="amb">−R$&nbsp;2.665,32</span></td>
+          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;530.896,89</td>
+          <td class="r"><span class="neg">R$&nbsp;3.365,55</span></td>
+        </tr>
+        <tr style="background:#ffffff;">
+          <td><strong>Mar/26/26</strong></td>
+          <td class="r"><span class="pos">+R$&nbsp;1.000,00</span></td>
+          <td class="r"><span style="color:#d1d5db;">—</span></td>
+          <td class="r"><span class="amb">−R$&nbsp;1.657,71</span></td>
+          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;530.239,18</td>
+          <td class="r"><span class="neg">R$&nbsp;657,71</span></td>
+        </tr>
+        <tr style="background:#f8fafc;">
+          <td><strong>Abr/26/26</strong></td>
+          <td class="r"><span class="pos">+R$&nbsp;3.912,00</span></td>
+          <td class="r"><span style="color:#d1d5db;">—</span></td>
+          <td class="r"><span class="amb">−R$&nbsp;573,00</span></td>
+          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;533.578,18</td>
+          <td class="r"><span class="pos">+R$&nbsp;3.339,00</span></td>
+        </tr>
+        <tr style="background:#ffffff;">
+          <td><strong>Mai/26/26</strong></td>
+          <td class="r"><span style="color:#d1d5db;">—</span></td>
+          <td class="r"><span style="color:#d1d5db;">—</span></td>
+          <td class="r"><span style="color:#d1d5db;">—</span></td>
+          <td class="r" style="color:#9ca3af;font-weight:700;">R$&nbsp;533.578,18</td>
+          <td class="r"><span style="color:#d1d5db;">—</span></td>
+        </tr>
+        <tr class="total" style="background:#eff6ff;border-top:2px solid #bfdbfe;">
+          <td style="color:#2563eb;">Abr/26 (atual)</td>
+          <td class="r" colspan="3" style="font-size:11px;color:#6b7280;">baseline: R$&nbsp;535.256,90</td>
+          <td class="r" style="color:#2563eb;">R$&nbsp;533.578,18</td>
+          <td class="r neg">−R$&nbsp;1.678,72</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- ── Projetos Fechados ── -->
+    <div class="section-title">✅ Projetos Fechados — 2026</div>
+    <div class="kpi-grid" style="margin-bottom:18px;">
+      <div class="kpi-card green">
+        <div class="kpi-label">Projetos Fechados</div>
+        <div class="kpi-val green-val">24</div>
+        <div class="kpi-sub" style="color:#065f46;font-weight:600;">R$&nbsp;457.086,60 aprovados</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">MRR Aprovados</div>
+        <div class="kpi-val purple-val">R$&nbsp;22.982,12</div>
+        <div class="kpi-sub">receita recorrente mensal</div>
+      </div>
+      <div class="kpi-card cyan">
+        <div class="kpi-label">ARR Aprovados</div>
+        <div class="kpi-val cyan-val">R$&nbsp;206.157,00</div>
+        <div class="kpi-sub">receita anual</div>
+      </div>
+    </div>
+
+    <table style="border:1px solid #bbf7d0;border-radius:10px;overflow:hidden;">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th class="r">Projetos</th>
+          <th class="r">Valor Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>jan/26</strong></td><td class="r"><span class="badge badge-green">8</span></td><td class="r">R$&nbsp;280.282,60</td></tr>
+        <tr style="background:#f8fafc;"><td><strong>fev/26</strong></td><td class="r"><span class="badge badge-green">5</span></td><td class="r">R$&nbsp;51.416,00</td></tr>
+        <tr><td><strong>mar/26</strong></td><td class="r"><span class="badge badge-green">9</span></td><td class="r">R$&nbsp;98.416,00</td></tr>
+        <tr style="background:#f8fafc;"><td><strong>abr/26</strong></td><td class="r"><span class="badge badge-green">1</span></td><td class="r">R$&nbsp;23.472,00</td></tr>
+        <tr><td><strong>mai/26</strong></td><td class="r"><span class="badge badge-green">1</span></td><td class="r">R$&nbsp;3.500,00</td></tr>
+        <tr class="total" style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
+          <td style="color:#059669;">Total</td>
+          <td class="r" style="color:#059669;">24</td>
+          <td class="r" style="color:#059669;">R$&nbsp;457.086,60</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div><!-- .body -->
+
+  <div class="footer">
+    BI Qualitor &nbsp;·&nbsp; Gerado automaticamente em 27/04/2026<br>
+    Este email foi enviado via dashboard administrativo. <a href="https://qualitor-dashboards.flat-fog-caf5.workers.dev" style="color:#2563eb;">Acessar dashboard</a>
+  </div>
+
+</div><!-- .card -->
+</div><!-- .wrap -->
+</body>
+</html>`.replace(/27\/04\/2026/g, hoje).replace(/27\/04\/2026/g, hoje);
+
+      try {
+        const resp = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + RESEND_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            from: "Pedro Schreck | Qualitor <onboarding@resend.dev>",   // sandbox ─ troque por pedro.schreck@qualitor.com.br após verificar domínio em resend.com/domains   // troque pelo seu domínio verificado
+            to: destinatarios.length > 0 ? destinatarios : ['pedro@qualitor.com.br'],
+            subject: "Resumo Executivo · Qualitor BI · " + hoje,
+            html: emailHtml
+          })
+        });
+
+        const result = await resp.json();
+        if (resp.ok) {
+          return new Response(JSON.stringify({ ok: true, id: result.id }), {
+            headers: { "Content-Type": "application/json" }
+          });
+        } else {
+          return new Response(JSON.stringify({ ok: false, error: result.message || "Erro Resend" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+      } catch (err) {
+        return new Response(JSON.stringify({ ok: false, error: err.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+    }
+
+    // ── Acesso não autenticado ─────────────────────────────────────────────────
+    if (!isAuth) {
+      return new Response(loginPage(""), {
+        status: 200,
+        headers: { "Content-Type": "text/html; charset=utf-8" }
+      });
+    }
+
+    // ── Servir dashboard ───────────────────────────────────────────────────────
+    // Injetar __ADMIN__ no HTML para o JS do dashboard saber se é admin
+    let html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -851,6 +1196,17 @@ function switchTab(tab, btn) {
         </table>
       </div>
     </div>
+  </div>
+
+
+  <!-- Botão admin — visível somente quando window.__ADMIN__ === true -->
+  <div id="btn-send-resumo" style="display:none;margin-bottom:20px;text-align:right;">
+    <button onclick="enviarResumo()"
+      style="background:#2563eb;color:#fff;border:none;border-radius:10px;
+             padding:12px 24px;font-size:13px;font-weight:700;cursor:pointer;
+             display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(37,99,235,.3);">
+      ✉️ Enviar Resumo Executivo por Email
+    </button>
   </div>
 
   <div class="p26-meta">
@@ -2060,10 +2416,74 @@ window.cxSort=function(th){
 </div> <!-- fim tab-changelog -->
 
 </div><!-- fecha mainContent -->
+
+<script>
+// ── Admin mode detection ──────────────────────────────────────────────────────
+(function(){
+  if(typeof window.__ADMIN__ !== 'undefined' && window.__ADMIN__){
+    var btn = document.getElementById('btn-send-resumo');
+    if(btn) btn.style.display = 'block';
+  }
+})();
+
+// ── Enviar Resumo Executivo ───────────────────────────────────────────────────
+function enviarResumo(){
+  if(!confirm('Enviar Resumo Executivo por email para a lista de destinatários?')) return;
+
+  var btn = document.querySelector('#btn-send-resumo button');
+  var orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Enviando...';
+  btn.disabled  = true;
+
+  fetch('/send-resumo', { method: 'POST', credentials: 'include' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){
+        btn.innerHTML = '✅ Email enviado!';
+        btn.style.background = '#059669';
+        setTimeout(function(){ btn.innerHTML = orig; btn.style.background = '#2563eb'; btn.disabled = false; }, 3000);
+      } else {
+        alert('Erro ao enviar: ' + (data.error || 'desconhecido'));
+        btn.innerHTML = orig; btn.disabled = false;
+      }
+    })
+    .catch(function(err){
+      alert('Erro de rede: ' + err.message);
+      btn.innerHTML = orig; btn.disabled = false;
+    });
+}
+</script>
 </body>
 </html>
 `;
-    return new Response(d,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
-  },
+    if (isAdmin) {
+      html = html.replace("window.__ADMIN__ !== 'undefined'", "true !== 'undefined'");
+    }
+
+    return new Response(html, {
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-Frame-Options": "DENY"
+      }
+    });
+  }
 };
-function login(e){return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style></head><body><div class="c"><div style="font-size:40px;margin-bottom:18px">🔒</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus><div class="er">${e}</div><button>Entrar</button></form></div></body></html>`;}
+
+function loginPage(erro) {
+  return `<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Acesso Restrito</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style>
+</head><body><div class="c">
+<div style="font-size:40px;margin-bottom:18px">🔒</div>
+<h1>Acesso Restrito</h1>
+<p>Digite a senha para acessar o dashboard</p>
+<form method="POST" action="/login">
+<input type="password" name="senha" placeholder="Senha" autofocus>
+<div class="er">${erro}</div>
+<button>Entrar</button>
+</form></div></body></html>`;
+}
