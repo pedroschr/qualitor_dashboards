@@ -3,52 +3,31 @@ export default {
     const url  = new URL(request.url);
     const path = url.pathname;
     const ck   = request.headers.get("Cookie") || "";
-
-    // ── Credenciais ────────────────────────────────────────────────────────────
-    const S_USER  = "Qualitor!@#25";     // senha usuário comum
-    const S_ADMIN = "QltAdmin!2026";     // senha admin
+    const S_USER  = "Qualitor!@#25";
+    const S_ADMIN = "QltAdmin!2026";
     const C_AUTH  = "qlt_auth";
     const C_ADMIN = "qlt_admin";
     const T_AUTH  = "qualitor2026ok";
     const T_ADMIN = "qualitor_admin_ok";
-
-    // ── Status ─────────────────────────────────────────────────────────────────
     const isAuth  = ck.includes(C_AUTH  + "=" + T_AUTH);
     const isAdmin = ck.includes(C_ADMIN + "=" + T_ADMIN);
 
-    // ── Login ──────────────────────────────────────────────────────────────────
     if (request.method === "POST" && path === "/login") {
       const body  = await request.formData();
       const senha = body.get("senha") || "";
-
       if (senha === S_ADMIN) {
-        // Admin: seta os dois cookies
         const headers = new Headers();
         headers.append("Location", "/");
-        headers.append("Set-Cookie",
-          C_AUTH  + "=" + T_AUTH  + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
-        headers.append("Set-Cookie",
-          C_ADMIN + "=" + T_ADMIN + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
+        headers.append("Set-Cookie", C_AUTH  + "=" + T_AUTH  + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
+        headers.append("Set-Cookie", C_ADMIN + "=" + T_ADMIN + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
         return new Response("", { status: 302, headers });
       }
-
       if (senha === S_USER) {
-        return new Response("", {
-          status: 302,
-          headers: {
-            "Location": "/",
-            "Set-Cookie": C_AUTH + "=" + T_AUTH + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800"
-          }
-        });
+        return new Response("", { status: 302, headers: { "Location": "/", "Set-Cookie": C_AUTH + "=" + T_AUTH + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800" } });
       }
-
-      return new Response(loginPage("Senha incorreta."), {
-        status: 401,
-        headers: { "Content-Type": "text/html; charset=utf-8" }
-      });
+      return new Response(loginPage("Senha incorreta."), { status: 401, headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
-    // ── Logout ─────────────────────────────────────────────────────────────────
     if (path === "/logout") {
       const headers = new Headers();
       headers.append("Location", "/");
@@ -57,304 +36,31 @@ export default {
       return new Response("", { status: 302, headers });
     }
 
-    // ── Rota: Envio de Email ───────────────────────────────────────────────────
     if (request.method === "POST" && path === "/send-resumo") {
-      if (!isAdmin) {
-        return new Response(JSON.stringify({ ok: false, error: "Acesso negado" }), {
-          status: 403,
-          headers: { "Content-Type": "application/json" }
-        });
-      }
-
-      // Destinatários — edite esta lista com os emails do grupo
+      if (!isAdmin) return new Response(JSON.stringify({ ok: false, error: "Acesso negado" }), { status: 403, headers: { "Content-Type": "application/json" } });
       const destinatarios = ['pedro@qualitor.com.br'];
-
-      // API Key do Resend — adicione no Cloudflare Dashboard:
-      // Workers & Pages → qualitor-dashboards → Settings → Variables → RESEND_API_KEY
-      const RESEND_KEY = (env && env.RESEND_API_KEY) ? env.RESEND_API_KEY : "SUA_API_KEY_AQUI";
-
-      const hoje = new Date().toLocaleDateString("pt-BR", {
-        day: "2-digit", month: "long", year: "numeric"
-      });
-
-      // Substituir a data no email
-      const emailHtml = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resumo Executivo Qualitor</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-         background: #f0f2f5; color: #111827; }
-  .wrap  { max-width: 680px; margin: 0 auto; padding: 32px 16px; }
-  .card  { background: #fff; border-radius: 16px; overflow: hidden;
-           box-shadow: 0 4px 24px rgba(0,0,0,.08); }
-  .header{ background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-           padding: 36px 40px; }
-  .header h1 { color: #fff; font-size: 26px; font-weight: 800; margin-bottom: 4px; }
-  .header p  { color: #bfdbfe; font-size: 13px; }
-  .body  { padding: 32px 40px; }
-  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
-                   letter-spacing: 1.5px; color: #9ca3af; margin: 28px 0 14px; }
-  .section-title:first-child { margin-top: 0; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .kpi-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px 18px; }
-  .kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase;
-               letter-spacing: 1.2px; color: #9ca3af; margin-bottom: 6px; }
-  .kpi-val   { font-size: 20px; font-weight: 900; line-height: 1; }
-  .kpi-sub   { font-size: 11px; color: #6b7280; margin-top: 4px; }
-  .kpi-card.blue  { background: #eff6ff; border-color: #bfdbfe; }
-  .kpi-card.red   { background: #fef2f2; border-color: #fecaca; }
-  .kpi-card.green { background: #f0fdf4; border-color: #bbf7d0; }
-  .kpi-card.amber { background: #fffbeb; border-color: #fde68a; }
-  .kpi-card.purple{ background: #f5f3ff; border-color: #e9d5ff; }
-  .kpi-card.cyan  { background: #ecfeff; border-color: #a5f3fc; }
-  .blue-val  { color: #2563eb; }
-  .red-val   { color: #dc2626; }
-  .green-val { color: #059669; }
-  .amber-val { color: #d97706; }
-  .purple-val{ color: #7c3aed; }
-  .cyan-val  { color: #0891b2; }
-  .gray-val  { color: #374151; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { padding: 8px 12px; text-align: left; background: #f8fafc; font-size: 10px;
-       font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
-       color: #9ca3af; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
-  th.r { text-align: right; }
-  td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; }
-  td.r { text-align: right; font-weight: 700; }
-  tr:last-child td { border-bottom: none; }
-  tr.total { background: #f8fafc; font-weight: 800; }
-  .badge { display: inline-block; padding: 2px 10px; border-radius: 99px;
-           font-size: 11px; font-weight: 700; }
-  .badge-green  { background: #dcfce7; color: #166534; }
-  .badge-blue   { background: #dbeafe; color: #1d4ed8; }
-  .footer { background: #f8fafc; border-top: 1px solid #e5e7eb;
-            padding: 20px 40px; font-size: 11px; color: #9ca3af; text-align: center; }
-  .divider { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
-  .pos { color: #059669; font-weight: 700; }
-  .neg { color: #dc2626; font-weight: 700; }
-  .amb { color: #d97706; font-weight: 700; }
-</style>
-</head>
-<body>
-<div class="wrap">
-<div class="card">
-
-  <!-- Header -->
-  <div class="header">
-    <h1>Resumo Executivo · Qualitor</h1>
-    <p>Atualizado em 27/04/2026 &nbsp;·&nbsp; Gerado automaticamente via BI Qualitor</p>
-  </div>
-
-  <div class="body">
-
-    <!-- ── Carteira Atual ── -->
-    <div class="section-title">💼 Carteira de Contratos</div>
-    <div class="kpi-grid">
-      <div class="kpi-card blue">
-        <div class="kpi-label">Carteira Atual</div>
-        <div class="kpi-val blue-val">R$&nbsp;7.014.067,94</div>
-        <div class="kpi-sub">135 contratos ativos</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Carteira Jan/2026</div>
-        <div class="kpi-val gray-val">R$&nbsp;7.380.801,45</div>
-        <div class="kpi-sub">Valor bruto inicial</div>
-      </div>
-      <div class="kpi-card red">
-        <div class="kpi-label">Redução de Carteira</div>
-        <div class="kpi-val red-val">−R$&nbsp;366.733,51</div>
-        <div class="kpi-sub" style="color:#b91c1c;font-weight:600;">2,4% vs início do ano</div>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- ── MRR ── -->
-    <div class="section-title">📈 MRR — Receita Recorrente Mensal</div>
-    <div class="kpi-grid" style="margin-bottom:18px;">
-      <div class="kpi-card">
-        <div class="kpi-label">MRR Baseline (Jan/26)</div>
-        <div class="kpi-val gray-val">R$&nbsp;535.256,90</div>
-        <div class="kpi-sub">Renovação de Contratos</div>
-      </div>
-      <div class="kpi-card blue">
-        <div class="kpi-label">MRR Ajustado (Abr/26)</div>
-        <div class="kpi-val blue-val">R$&nbsp;533.578,18</div>
-        <div class="kpi-sub" style="color:#1d4ed8;font-weight:600;">Após aprovações e cancelamentos</div>
-      </div>
-      <div class="kpi-card red">
-        <div class="kpi-label">Variação Total MRR</div>
-        <div class="kpi-val red-val">−R$&nbsp;1.678,72</div>
-        <div class="kpi-sub" style="color:#b91c1c;font-weight:600;">−0,31% vs baseline</div>
-      </div>
-    </div>
-
-    <!-- Tabela evolução MRR -->
-    <table style="border:1px solid #bfdbfe;border-radius:10px;overflow:hidden;">
-      <thead>
-        <tr>
-          <th>Mês</th>
-          <th class="r">+ Aprovado</th>
-          <th class="r">− Cancel.</th>
-          <th class="r">− Redução</th>
-          <th class="r">MRR Ajustado</th>
-          <th class="r">Δ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background:#ffffff;">
-          <td><strong>Jan/26/26</strong></td>
-          <td class="r"><span class="pos">+R$&nbsp;14.366,00</span></td>
-          <td class="r"><span class="neg">−R$&nbsp;9.041,90</span></td>
-          <td class="r"><span class="amb">−R$&nbsp;6.318,56</span></td>
-          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;534.262,44</td>
-          <td class="r"><span class="neg">R$&nbsp;994,46</span></td>
-        </tr>
-        <tr style="background:#f8fafc;">
-          <td><strong>Fev/26/26</strong></td>
-          <td class="r"><span class="pos">+R$&nbsp;3.704,12</span></td>
-          <td class="r"><span class="neg">−R$&nbsp;4.404,35</span></td>
-          <td class="r"><span class="amb">−R$&nbsp;2.665,32</span></td>
-          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;530.896,89</td>
-          <td class="r"><span class="neg">R$&nbsp;3.365,55</span></td>
-        </tr>
-        <tr style="background:#ffffff;">
-          <td><strong>Mar/26/26</strong></td>
-          <td class="r"><span class="pos">+R$&nbsp;1.000,00</span></td>
-          <td class="r"><span style="color:#d1d5db;">—</span></td>
-          <td class="r"><span class="amb">−R$&nbsp;1.657,71</span></td>
-          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;530.239,18</td>
-          <td class="r"><span class="neg">R$&nbsp;657,71</span></td>
-        </tr>
-        <tr style="background:#f8fafc;">
-          <td><strong>Abr/26/26</strong></td>
-          <td class="r"><span class="pos">+R$&nbsp;3.912,00</span></td>
-          <td class="r"><span style="color:#d1d5db;">—</span></td>
-          <td class="r"><span class="amb">−R$&nbsp;573,00</span></td>
-          <td class="r" style="color:#2563eb;font-weight:700;">R$&nbsp;533.578,18</td>
-          <td class="r"><span class="pos">+R$&nbsp;3.339,00</span></td>
-        </tr>
-        <tr style="background:#ffffff;">
-          <td><strong>Mai/26/26</strong></td>
-          <td class="r"><span style="color:#d1d5db;">—</span></td>
-          <td class="r"><span style="color:#d1d5db;">—</span></td>
-          <td class="r"><span style="color:#d1d5db;">—</span></td>
-          <td class="r" style="color:#9ca3af;font-weight:700;">R$&nbsp;533.578,18</td>
-          <td class="r"><span style="color:#d1d5db;">—</span></td>
-        </tr>
-        <tr class="total" style="background:#eff6ff;border-top:2px solid #bfdbfe;">
-          <td style="color:#2563eb;">Abr/26 (atual)</td>
-          <td class="r" colspan="3" style="font-size:11px;color:#6b7280;">baseline: R$&nbsp;535.256,90</td>
-          <td class="r" style="color:#2563eb;">R$&nbsp;533.578,18</td>
-          <td class="r neg">−R$&nbsp;1.678,72</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <hr class="divider">
-
-    <!-- ── Projetos Fechados ── -->
-    <div class="section-title">✅ Projetos Fechados — 2026</div>
-    <div class="kpi-grid" style="margin-bottom:18px;">
-      <div class="kpi-card green">
-        <div class="kpi-label">Projetos Fechados</div>
-        <div class="kpi-val green-val">24</div>
-        <div class="kpi-sub" style="color:#065f46;font-weight:600;">R$&nbsp;457.086,60 aprovados</div>
-      </div>
-      <div class="kpi-card purple">
-        <div class="kpi-label">MRR Aprovados</div>
-        <div class="kpi-val purple-val">R$&nbsp;22.982,12</div>
-        <div class="kpi-sub">receita recorrente mensal</div>
-      </div>
-      <div class="kpi-card cyan">
-        <div class="kpi-label">ARR Aprovados</div>
-        <div class="kpi-val cyan-val">R$&nbsp;206.157,00</div>
-        <div class="kpi-sub">receita anual</div>
-      </div>
-    </div>
-
-    <table style="border:1px solid #bbf7d0;border-radius:10px;overflow:hidden;">
-      <thead>
-        <tr>
-          <th>Mês</th>
-          <th class="r">Projetos</th>
-          <th class="r">Valor Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>jan/26</strong></td><td class="r"><span class="badge badge-green">8</span></td><td class="r">R$&nbsp;280.282,60</td></tr>
-        <tr style="background:#f8fafc;"><td><strong>fev/26</strong></td><td class="r"><span class="badge badge-green">5</span></td><td class="r">R$&nbsp;51.416,00</td></tr>
-        <tr><td><strong>mar/26</strong></td><td class="r"><span class="badge badge-green">9</span></td><td class="r">R$&nbsp;98.416,00</td></tr>
-        <tr style="background:#f8fafc;"><td><strong>abr/26</strong></td><td class="r"><span class="badge badge-green">1</span></td><td class="r">R$&nbsp;23.472,00</td></tr>
-        <tr><td><strong>mai/26</strong></td><td class="r"><span class="badge badge-green">1</span></td><td class="r">R$&nbsp;3.500,00</td></tr>
-        <tr class="total" style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
-          <td style="color:#059669;">Total</td>
-          <td class="r" style="color:#059669;">24</td>
-          <td class="r" style="color:#059669;">R$&nbsp;457.086,60</td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div><!-- .body -->
-
-  <div class="footer">
-    BI Qualitor &nbsp;·&nbsp; Gerado automaticamente em 27/04/2026<br>
-    Este email foi enviado via dashboard administrativo. <a href="https://qualitor-dashboards.flat-fog-caf5.workers.dev" style="color:#2563eb;">Acessar dashboard</a>
-  </div>
-
-</div><!-- .card -->
-</div><!-- .wrap -->
-</body>
-</html>`.replace(/27\/04\/2026/g, hoje).replace(/27\/04\/2026/g, hoje);
-
+      const RESEND_KEY = (env && env.RESEND_API_KEY) ? env.RESEND_API_KEY : "";
+      const hoje = new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
       try {
         const resp = await fetch("https://api.resend.com/emails", {
           method: "POST",
-          headers: {
-            "Authorization": "Bearer " + RESEND_KEY,
-            "Content-Type": "application/json"
-          },
+          headers: { "Authorization": "Bearer " + RESEND_KEY, "Content-Type": "application/json" },
           body: JSON.stringify({
-            from: "Pedro Schreck | Qualitor <onboarding@resend.dev>",   // sandbox ─ troque por pedro.schreck@qualitor.com.br após verificar domínio em resend.com/domains   // troque pelo seu domínio verificado
-            to: destinatarios.length > 0 ? destinatarios : ['pedro@qualitor.com.br'],
+            from: "Pedro Schreck | Qualitor <onboarding@resend.dev>",
+            to: destinatarios,
             subject: "Resumo Executivo · Qualitor BI · " + hoje,
-            html: emailHtml
+            html: "<h1>Resumo Executivo</h1><p>Acesse o dashboard para ver o resumo completo.</p><a href='https://qualitor-dashboards.flat-fog-caf5.workers.dev'>Acessar Dashboard</a>"
           })
         });
-
         const result = await resp.json();
-        if (resp.ok) {
-          return new Response(JSON.stringify({ ok: true, id: result.id }), {
-            headers: { "Content-Type": "application/json" }
-          });
-        } else {
-          return new Response(JSON.stringify({ ok: false, error: result.message || "Erro Resend" }), {
-            status: 500,
-            headers: { "Content-Type": "application/json" }
-          });
-        }
+        if (resp.ok) return new Response(JSON.stringify({ ok: true, id: result.id }), { headers: { "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ ok: false, error: result.message }), { status: 500, headers: { "Content-Type": "application/json" } });
       } catch (err) {
-        return new Response(JSON.stringify({ ok: false, error: err.message }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" }
-        });
+        return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
       }
     }
 
-    // ── Acesso não autenticado ─────────────────────────────────────────────────
-    if (!isAuth) {
-      return new Response(loginPage(""), {
-        status: 200,
-        headers: { "Content-Type": "text/html; charset=utf-8" }
-      });
-    }
-
-    // ── Servir dashboard ───────────────────────────────────────────────────────
-    // Injetar __ADMIN__ no HTML para o JS do dashboard saber se é admin
+    if (!isAuth) return new Response(loginPage(""), { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } });
     let html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1436,8 +1142,8 @@ function switchTab(tab, btn) {
       <h1 class="p26-title">Pipeline de <br><span>Projetos</span></h1>
     </div>
     <div class="p26-meta">
-      Fonte: Relatório de Projetos · S5M4
-      <strong>Atualizado em 27 / 04 / 2026</strong>
+      Fonte: Relatório de Projetos · S1M5
+      <strong>Atualizado em 05 / 05 / 2026</strong>
     </div>
   </div>
 
@@ -1448,14 +1154,14 @@ function switchTab(tab, btn) {
     <!-- Ativos -->
     <div class="p26-kpi" style="--kpi-accent:#2563eb">
       <div class="p26-kpi-label">Projetos Ativos</div>
-      <div class="p26-kpi-number">141</div>
+      <div class="p26-kpi-number">147</div>
       <div class="p26-kpi-sub">Exclui <strong>Cancelados</strong> e Encerrados</div>
     </div>
 
     <!-- Enviados -->
     <div class="p26-kpi" style="--kpi-accent:#7c3aed">
       <div class="p26-kpi-label">Proj. Enviados</div>
-      <div class="p26-kpi-number">62</div>
+      <div class="p26-kpi-number">63</div>
       <div class="p26-kpi-sub">Etapa <strong>Projeto Enviado</strong></div>
     </div>
 
@@ -1469,7 +1175,7 @@ function switchTab(tab, btn) {
     <!-- Valor Total -->
     <div class="p26-kpi" style="--kpi-accent:#0891b2">
       <div class="p26-kpi-label">Valor Total Enviados</div>
-      <div class="p26-kpi-number" style="font-size:30px;letter-spacing:-1px;">R$ 2,21M</div>
+      <div class="p26-kpi-number" style="font-size:30px;letter-spacing:-1px;">R$ 2,17M</div>
       <div class="p26-kpi-sub">Etapa <strong>Projeto Enviado</strong></div>
     </div>
 
@@ -1540,7 +1246,7 @@ function switchTab(tab, btn) {
     </div>
     <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
       <thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Projetos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead>
-      <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">abr/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">1</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 23.472,00</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">fev/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">5</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 51.416,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">jan/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">8</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 280.282,60</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">mai/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">1</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 3.500,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">mar/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">9</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 98.416,00</td></tr><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;"><td style="padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;color:#059669;">Total</td><td style="padding:12px 20px;text-align:center;font-size:13px;font-weight:800;color:#059669;">24</td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#059669;">R$ 457.086,60</td></tr></tbody>
+      <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">jan/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">8</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 280.282,60</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">fev/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">5</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 51.416,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">mar/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">9</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 98.416,00</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">abr/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">1</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 23.472,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">mai/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">1</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 3.500,00</td></tr><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;"><td style="padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;color:#059669;">Total</td><td style="padding:12px 20px;text-align:center;font-size:13px;font-weight:800;color:#059669;">24</td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#059669;">R$ 457.086,60</td></tr></tbody>
     </table></div>
   </div>
 
@@ -1561,12 +1267,12 @@ function switchTab(tab, btn) {
     <div style="padding:10px 20px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7c3aed;background:#faf5ff;border-bottom:1px solid #ede9fe;">▲ Entraram no Processo Financeiro · R$ 115.644,00</div>
     <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
       <thead><tr style="background:#faf5ff;"><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
-      <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116462</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Argenta Participacoes LTDA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 20.540,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116022</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 16.720,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-113676</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Gourmet Sports Hospitality Serviços de Alimentação</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 11.004,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116464</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Argenta Participacoes LTDA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.320,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-112382</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">TORRA TORRA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.080,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116595</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Cetrel - Central de Tratamento de Efluentes Líquid</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 5.122,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116667</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116388</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116700</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.200,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116531</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.200,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-114514</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">TORRA TORRA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.140,00</td></tr><tr style="background:#f5f3ff;border-top:2px solid #e9d5ff;"><td colspan="3" style="padding:9px 14px;font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;">Total · 11 projetos</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 76.526,00</td></tr></tbody>
+      <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116462</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Argenta Participacoes LTDA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 20.540,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116022</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 16.720,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-113676</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Gourmet Sports Hospitality Serviços de Alimentação</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 11.004,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116464</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Argenta Participacoes LTDA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.320,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-112382</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">TORRA TORRA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 6.080,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116595</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Cetrel - Central de Tratamento de Efluentes Líquid</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 5.122,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116763</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">Cetrel - Central de Tratamento de Efluentes Líquid</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 4.800,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116667</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116388</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.600,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116700</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.200,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-116531</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.200,00</td></tr><tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;"><td style="padding:8px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#7c3aed;">NP-114514</td><td style="padding:8px 14px;font-size:12px;font-weight:600;color:#111827;">TORRA TORRA</td><td style="padding:8px 14px;font-size:11px;color:#6b7280;">Denise</td><td style="padding:8px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 1.140,00</td></tr><tr style="background:#f5f3ff;border-top:2px solid #e9d5ff;"><td colspan="3" style="padding:9px 14px;font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;">Total · 12 projetos</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 81.326,00</td></tr></tbody>
     </table></div>
     <div style="padding:10px 20px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#059669;background:#f0fdf4;border-top:1px solid #d1fae5;border-bottom:1px solid #d1fae5;">▼ Saíram do Processo Financeiro · 1 projeto</div>
     <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
       <thead><tr style="background:#f0fdf4;"><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Movimento</th><th style="padding:9px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
-      <tbody><tr style="background:#f9fafb;"><td colspan="5" style="padding:16px 14px;text-align:center;font-size:12px;color:#9ca3af;">Nenhuma movimentação de Processo Financeiro nesta semana (S4M4 → S5M4)</td></tr></tbody>
+      <tbody><tr style="background:#f9fafb;"><td colspan="5" style="padding:16px 14px;text-align:center;font-size:12px;color:#9ca3af;">Nenhuma movimentação de Processo Financeiro nesta semana (S5M4 → S1M5)</td></tr></tbody>
     </table></div>
   </div>
 
@@ -1607,7 +1313,7 @@ function switchTab(tab, btn) {
             letter-spacing:1.5px;color:#2563eb;margin-bottom:3px;">Pedro</div>
           <div style="font-size:13px;font-weight:600;color:#374151;">Pedro Schreck</div>
         </div>
-        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">50</div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">51</div>
       </div>
       <div style="height:4px;background:#f1f5f9;border-radius:2px;margin-bottom:8px;">
         <div style="height:4px;width:33.1%;background:#2563eb;border-radius:2px;transition:width .6s .1s ease;"></div>
@@ -1624,7 +1330,7 @@ function switchTab(tab, btn) {
             letter-spacing:1.5px;color:#7c3aed;margin-bottom:3px;">Anderson</div>
           <div style="font-size:13px;font-weight:600;color:#374151;">Anderson Bamberg</div>
         </div>
-        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">47</div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">49</div>
       </div>
       <div style="height:4px;background:#f1f5f9;border-radius:2px;margin-bottom:8px;">
         <div style="height:4px;width:35.2%;background:#7c3aed;border-radius:2px;transition:width .6s .1s ease;"></div>
@@ -1658,7 +1364,7 @@ function switchTab(tab, btn) {
             letter-spacing:1.5px;color:#d97706;margin-bottom:3px;">Ines</div>
           <div style="font-size:13px;font-weight:600;color:#374151;">Ines C. Nunes Diogo</div>
         </div>
-        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">7</div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">8</div>
           <div style="font-size:13px;font-weight:600;color:#374151;">Ines Cristine Nunes Diogo</div>
         </div>
         <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">7</div>
@@ -1711,7 +1417,7 @@ function switchTab(tab, btn) {
 
   <script>
   (function() {
-    var respData = {"Pedro Schreck": {"qtd": 49, "pct": 34.5, "projetos": [{"np": "NP-113753", "cliente": "COOPERATIVA AGRO-INDUSTRIAL HOLAMBRA", "etapa": "Projeto Enviado", "vt": 343404.0, "abertura": "20/10/2025", "dias": 182}, {"np": "NP-112013", "cliente": "FRIGELAR", "etapa": "Projeto Enviado", "vt": 280000.0, "abertura": "22/07/2025", "dias": 272}, {"np": "NP-115351", "cliente": "AUXILIADORA PREDIAL", "etapa": "Projeto Enviado", "vt": 266832.0, "abertura": "23/01/2026", "dias": 87}, {"np": "NP-114406", "cliente": "SENAC RJ", "etapa": "Negociação", "vt": 178043.28, "abertura": "02/12/2025", "dias": 139}, {"np": "NP-113068", "cliente": "CERVEJARIA PETRÓPOLIS", "etapa": "Projeto Enviado", "vt": 110400.0, "abertura": "09/09/2025", "dias": 223}, {"np": "NP-113992", "cliente": "SECRETARIA DA FAZENDA DO ESTADO DO ALAGO", "etapa": "Projeto Enviado", "vt": 73700.0, "abertura": "04/11/2025", "dias": 167}, {"np": "NP-113582", "cliente": "SAFEWEB", "etapa": "Projeto Enviado", "vt": 30636.0, "abertura": "08/10/2025", "dias": 194}, {"np": "NP-113859", "cliente": "FRIGELAR", "etapa": "Projeto Enviado", "vt": 24000.0, "abertura": "24/10/2025", "dias": 178}, {"np": "NP-114383", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Enviado", "vt": 21600.0, "abertura": "01/12/2025", "dias": 140}, {"np": "NP-115323", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Projeto Enviado", "vt": 20900.0, "abertura": "21/01/2026", "dias": 89}, {"np": "NP-113847", "cliente": "FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX", "etapa": "Projeto Enviado", "vt": 19760.0, "abertura": "23/10/2025", "dias": 179}, {"np": "NP-115870", "cliente": "WAY DATA SOLUTION S/A", "etapa": "Projeto Enviado", "vt": 17700.0, "abertura": "24/02/2026", "dias": 55}, {"np": "NP-115314", "cliente": "GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPRE", "etapa": "Projeto Enviado", "vt": 17670.0, "abertura": "21/01/2026", "dias": 89}, {"np": "NP-113798", "cliente": "SAO JOAO FARMACIAS", "etapa": "Projeto Enviado", "vt": 15048.0, "abertura": "21/10/2025", "dias": 181}, {"np": "NP-115363", "cliente": "SENAC RJ", "etapa": "Projeto Enviado", "vt": 13680.0, "abertura": "26/01/2026", "dias": 84}, {"np": "NP-111880", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 13600.0, "abertura": "15/07/2025", "dias": 279}, {"np": "NP-116484", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 11900.0, "abertura": "06/04/2026", "dias": 14}, {"np": "NP-113096", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Enviado", "vt": 10640.0, "abertura": "10/09/2025", "dias": 222}, {"np": "NP-112683", "cliente": "HOSPITAL MAE DE DEUS (AESC)", "etapa": "Elaboração de Caderno Técnico", "vt": 10500.0, "abertura": "25/08/2025", "dias": 238}, {"np": "NP-115830", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 9500.0, "abertura": "23/02/2026", "dias": 56}, {"np": "NP-116363", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 9120.0, "abertura": "27/03/2026", "dias": 24}, {"np": "NP-116364", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 7600.0, "abertura": "27/03/2026", "dias": 24}, {"np": "NP-114397", "cliente": "UNIMED PORTO ALEGRE", "etapa": "Projeto Enviado", "vt": 6840.0, "abertura": "02/12/2025", "dias": 139}, {"np": "NP-113826", "cliente": "Argenta Participacoes LTDA", "etapa": "Qualificação Concluída", "vt": 6800.0, "abertura": "22/10/2025", "dias": 180}, {"np": "NP-113762", "cliente": "TORRA TORRA", "etapa": "Projeto Enviado", "vt": 4960.0, "abertura": "20/10/2025", "dias": 182}, {"np": "NP-113740", "cliente": "GOVERNANÇA BRASIL", "etapa": "Projeto Enviado", "vt": 3800.0, "abertura": "17/10/2025", "dias": 185}, {"np": "NP-113114", "cliente": "SABEMI SEGURADORA", "etapa": "Negociação", "vt": 3040.0, "abertura": "12/09/2025", "dias": 220}, {"np": "NP-113639", "cliente": "INTERSISTEMAS INFORMATICA LTDA - NETLOGI", "etapa": "Projeto Enviado", "vt": 3007.0, "abertura": "13/10/2025", "dias": 189}, {"np": "NP-116598", "cliente": "LOJAS LEBES", "etapa": "Projeto Enviado", "vt": 2214.3, "abertura": "14/04/2026", "dias": 6}, {"np": "NP-113058", "cliente": "CASTROLANDA", "etapa": "Projeto Enviado", "vt": 1800.0, "abertura": "09/09/2025", "dias": 223}, {"np": "NP-114416", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 1360.0, "abertura": "02/12/2025", "dias": 139}, {"np": "NP-115495", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Projeto Enviado", "vt": 1200.0, "abertura": "03/02/2026", "dias": 76}, {"np": "NP-113660", "cliente": "AUXILIADORA PREDIAL", "etapa": "Projeto Enviado", "vt": 950.0, "abertura": "13/10/2025", "dias": 189}, {"np": "NP-116649", "cliente": "Argenta Participacoes LTDA", "etapa": "Qualificação", "vt": 0.0, "abertura": "17/04/2026", "dias": 3}, {"np": "NP-116538", "cliente": "GOVERNANÇA BRASIL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "08/04/2026", "dias": 12}, {"np": "NP-116298", "cliente": "SENAC RJ", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "23/03/2026", "dias": 28}, {"np": "NP-116258", "cliente": "Unimed Central de Serviços - RS", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "20/03/2026", "dias": 31}, {"np": "NP-116159", "cliente": "REDE BRASIL GESTÃO DE ATIVOS", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "13/03/2026", "dias": 38}, {"np": "NP-116052", "cliente": "AREZZO INDUSTRIA E COMERCIO LTDA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "06/03/2026", "dias": 45}, {"np": "NP-115797", "cliente": "ALPARGATAS", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "19/02/2026", "dias": 60}, {"np": "NP-115755", "cliente": "SAQUE PAGUE", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "18/02/2026", "dias": 61}, {"np": "NP-115657", "cliente": "GOVERNANÇA BRASIL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "10/02/2026", "dias": 69}, {"np": "NP-115283", "cliente": "STEFANINI", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "20/01/2026", "dias": 90}, {"np": "NP-114404", "cliente": "BRASTORAGE - THINK", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "02/12/2025", "dias": 139}, {"np": "NP-113706", "cliente": "Trt Da 4ª Região", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "15/10/2025", "dias": 187}, {"np": "NP-113581", "cliente": "Trt Da 4ª Região", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "08/10/2025", "dias": 194}, {"np": "NP-113530", "cliente": "AUXILIADORA PREDIAL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "06/10/2025", "dias": 196}, {"np": "NP-113414", "cliente": "IRANI PAPEL E EMBALAGEM S.A", "etapa": "Elaboração de Caderno Técnico", "vt": 0.0, "abertura": "29/09/2025", "dias": 203}, {"np": "NP-111949", "cliente": "Qualitor S.A.", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "17/07/2025", "dias": 277}]}, "Anderson Bamberg": {"qtd": 52, "pct": 36.6, "projetos": [{"np": "NP-115250", "cliente": "RRP ENERGIA", "etapa": "Projeto Enviado", "vt": 67387.0, "abertura": "16/01/2026", "dias": 94}, {"np": "NP-115265", "cliente": "Solucap Sistemas", "etapa": "Projeto Enviado", "vt": 58200.0, "abertura": "19/01/2026", "dias": 91}, {"np": "NP-114516", "cliente": "AUTTAR - GETNET", "etapa": "Negociação", "vt": 37475.0, "abertura": "10/12/2025", "dias": 131}, {"np": "NP-114418", "cliente": "RAPIDONET SISTEMAS", "etapa": "Projeto Enviado", "vt": 36000.0, "abertura": "02/12/2025", "dias": 139}, {"np": "NP-115925", "cliente": "KleyHertz Farmacêutica", "etapa": "Projeto Enviado", "vt": 35520.0, "abertura": "26/02/2026", "dias": 53}, {"np": "NP-112404", "cliente": "NETCENTER INFORMATICA", "etapa": "Projeto Enviado", "vt": 32780.0, "abertura": "12/08/2025", "dias": 251}, {"np": "NP-113350", "cliente": "Associação Leopoldina Juvenil (ALJ)", "etapa": "Projeto Enviado", "vt": 26000.0, "abertura": "25/09/2025", "dias": 207}, {"np": "NP-113547", "cliente": "TIMAC AGRO", "etapa": "Projeto Enviado", "vt": 24192.0, "abertura": "07/10/2025", "dias": 195}, {"np": "NP-114700", "cliente": "Planem Engenharia", "etapa": "Projeto Enviado", "vt": 16100.0, "abertura": "24/12/2025", "dias": 117}, {"np": "NP-112132", "cliente": "DATACOM", "etapa": "Projeto Enviado", "vt": 16044.0, "abertura": "28/07/2025", "dias": 266}, {"np": "NP-115119", "cliente": "RBS - Televisão Gaúcha SA", "etapa": "Projeto Enviado", "vt": 15792.0, "abertura": "08/01/2026", "dias": 102}, {"np": "NP-114550", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 15200.0, "abertura": "12/12/2025", "dias": 129}, {"np": "NP-113863", "cliente": "ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL", "etapa": "Projeto Enviado", "vt": 12872.0, "abertura": "24/10/2025", "dias": 178}, {"np": "NP-112211", "cliente": "GOLDEN TECHNOLOGIA", "etapa": "Projeto Enviado", "vt": 12436.77, "abertura": "30/07/2025", "dias": 264}, {"np": "NP-114241", "cliente": "PANATLANTICA", "etapa": "Projeto Enviado", "vt": 11400.0, "abertura": "20/11/2025", "dias": 151}, {"np": "NP-114308", "cliente": "SPRINGER CARRIER (MIDEA)", "etapa": "Projeto Enviado", "vt": 10776.0, "abertura": "26/11/2025", "dias": 145}, {"np": "NP-111866", "cliente": "VIAÇÃO OURO E PRATA S.A", "etapa": "Projeto Enviado", "vt": 8880.0, "abertura": "15/07/2025", "dias": 279}, {"np": "NP-115120", "cliente": "RBS - Televisão Gaúcha SA", "etapa": "Projeto Enviado", "vt": 7600.0, "abertura": "08/01/2026", "dias": 102}, {"np": "NP-114405", "cliente": "S3CURITY", "etapa": "Projeto Enviado", "vt": 7600.0, "abertura": "02/12/2025", "dias": 139}, {"np": "NP-113270", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Projeto Enviado", "vt": 6300.0, "abertura": "22/09/2025", "dias": 210}, {"np": "NP-114151", "cliente": "SERVIX", "etapa": "Elaboração de Projeto", "vt": 6144.0, "abertura": "13/11/2025", "dias": 158}, {"np": "NP-114513", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 5700.0, "abertura": "10/12/2025", "dias": 131}, {"np": "NP-113199", "cliente": "S3CURITY", "etapa": "Projeto Enviado", "vt": 5700.0, "abertura": "17/09/2025", "dias": 215}, {"np": "NP-114210", "cliente": "KleyHertz Farmacêutica", "etapa": "Projeto Enviado", "vt": 3600.0, "abertura": "18/11/2025", "dias": 153}, {"np": "NP-114061", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 1520.0, "abertura": "07/11/2025", "dias": 164}, {"np": "NP-116385", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Projeto Enviado", "vt": 1200.0, "abertura": "30/03/2026", "dias": 21}, {"np": "NP-114776", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Projeto Enviado", "vt": 1140.0, "abertura": "05/01/2026", "dias": 105}, {"np": "NP-114249", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Projeto Enviado", "vt": 760.0, "abertura": "21/11/2025", "dias": 150}, {"np": "NP-116600", "cliente": "Enops Engenharia S.A.", "etapa": "Qualificação", "vt": 0.0, "abertura": "14/04/2026", "dias": 6}, {"np": "NP-116428", "cliente": "Costão do Santinho Resort & SPA.", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "01/04/2026", "dias": 19}, {"np": "NP-116426", "cliente": "Attus", "etapa": "Qualificação", "vt": 0.0, "abertura": "01/04/2026", "dias": 19}, {"np": "NP-116425", "cliente": "VaBene Confeitaria e Sorveteria", "etapa": "Qualificação", "vt": 0.0, "abertura": "01/04/2026", "dias": 19}, {"np": "NP-116424", "cliente": "AFECC - Hospital Santa Rita de Cássia", "etapa": "Qualificação", "vt": 0.0, "abertura": "01/04/2026", "dias": 19}, {"np": "NP-116420", "cliente": "Essencis MG", "etapa": "Qualificação", "vt": 0.0, "abertura": "31/03/2026", "dias": 20}, {"np": "NP-116205", "cliente": "SOFIA PET", "etapa": "Qualificação", "vt": 0.0, "abertura": "17/03/2026", "dias": 34}, {"np": "NP-116087", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "10/03/2026", "dias": 41}, {"np": "NP-115818", "cliente": "KleyHertz Farmacêutica", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "20/02/2026", "dias": 59}, {"np": "NP-115788", "cliente": "USINA SAO JOSE DA ESTIVA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "18/02/2026", "dias": 61}, {"np": "NP-115719", "cliente": "UNIVALI", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "13/02/2026", "dias": 66}, {"np": "NP-115600", "cliente": "ZILOR ENERGIA E ALIMENTOS", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "06/02/2026", "dias": 73}, {"np": "NP-115517", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "03/02/2026", "dias": 76}, {"np": "NP-115404", "cliente": "Solo Network", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "28/01/2026", "dias": 82}, {"np": "NP-115335", "cliente": "CPA", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "22/01/2026", "dias": 88}, {"np": "NP-115261", "cliente": "LUXCEL MAXLOG", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "17/01/2026", "dias": 93}, {"np": "NP-115242", "cliente": "Brasdiesel SA Comercial e Importadora", "etapa": "Qualificação", "vt": 0.0, "abertura": "15/01/2026", "dias": 95}, {"np": "NP-115156", "cliente": "TORRA TORRA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "12/01/2026", "dias": 98}, {"np": "NP-114676", "cliente": "Ditel", "etapa": "Qualificação", "vt": 0.0, "abertura": "22/12/2025", "dias": 119}, {"np": "NP-114592", "cliente": "ATP", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "16/12/2025", "dias": 125}, {"np": "NP-113462", "cliente": "RBS - Televisão Gaúcha SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "02/10/2025", "dias": 200}, {"np": "NP-113438", "cliente": "LG SISTEMAS", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "01/10/2025", "dias": 201}, {"np": "NP-113281", "cliente": "LUXCEL MAXLOG", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "22/09/2025", "dias": 210}, {"np": "NP-111926", "cliente": "VIAÇÃO OURO E PRATA S.A", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "16/07/2025", "dias": 278}]}, "Talita Rodrigues": {"qtd": 25, "pct": 17.6, "projetos": [{"np": "NP-113970", "cliente": "Data Engenharia", "etapa": "Projeto Enviado", "vt": 172116.0, "abertura": "03/11/2025", "dias": 168}, {"np": "NP-114712", "cliente": "Associação dos Engenheiros da Sabesp", "etapa": "Projeto Enviado", "vt": 142404.0, "abertura": "26/12/2025", "dias": 115}, {"np": "NP-113545", "cliente": "AUTOGLASS", "etapa": "Projeto Enviado", "vt": 70160.0, "abertura": "06/10/2025", "dias": 196}, {"np": "NP-113663", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 38400.0, "abertura": "13/10/2025", "dias": 189}, {"np": "NP-115606", "cliente": "BULLLA SA", "etapa": "Projeto Aprovado", "vt": 30020.0, "abertura": "09/02/2026", "dias": 70}, {"np": "NP-115724", "cliente": "BULLLA SA", "etapa": "Projeto Aprovado", "vt": 16720.0, "abertura": "13/02/2026", "dias": 66}, {"np": "NP-112412", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Elaboração de Projeto", "vt": 16500.0, "abertura": "13/08/2025", "dias": 250}, {"np": "NP-111979", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Projeto Enviado", "vt": 6720.0, "abertura": "18/07/2025", "dias": 276}, {"np": "NP-116446", "cliente": "HOSPITAL CARE", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "01/04/2026", "dias": 19}, {"np": "NP-116413", "cliente": "Sapore", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "31/03/2026", "dias": 20}, {"np": "NP-116078", "cliente": "Essencis Soluções Ambientais", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "09/03/2026", "dias": 42}, {"np": "NP-116069", "cliente": "Cetrel - Central de Tratamento de Efluen", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "09/03/2026", "dias": 42}, {"np": "NP-115993", "cliente": "Sapore", "etapa": "Qualificação", "vt": 0.0, "abertura": "04/03/2026", "dias": 47}, {"np": "NP-115992", "cliente": "SOLVI PARTICIPAÇÕES", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "04/03/2026", "dias": 47}, {"np": "NP-115951", "cliente": "SOLVI PARTICIPAÇÕES", "etapa": "Qualificação", "vt": 0.0, "abertura": "02/03/2026", "dias": 49}, {"np": "NP-115697", "cliente": "BULLLA SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "12/02/2026", "dias": 67}, {"np": "NP-115271", "cliente": "ABBC - Associação Brasileira de Bancos", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "19/01/2026", "dias": 91}, {"np": "NP-115259", "cliente": "Packing Group", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "16/01/2026", "dias": 94}, {"np": "NP-114669", "cliente": "Associação Educadora e Beneficente", "etapa": "Qualificação", "vt": 0.0, "abertura": "22/12/2025", "dias": 119}, {"np": "NP-113967", "cliente": "BOMBRIL S.A", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "03/11/2025", "dias": 168}, {"np": "NP-113665", "cliente": "LIFE EMPRESARIAL SAÚDE LTDA", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "13/10/2025", "dias": 189}, {"np": "NP-113604", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "09/10/2025", "dias": 193}, {"np": "NP-113488", "cliente": "BULLLA SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "02/10/2025", "dias": 200}, {"np": "NP-113285", "cliente": "BULLLA SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "22/09/2025", "dias": 210}, {"np": "NP-111919", "cliente": "LIFE EMPRESARIAL SAÚDE LTDA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "16/07/2025", "dias": 278}]}, "Ines Cristine Nunes Diogo": {"qtd": 7, "pct": 4.9, "projetos": [{"np": "NP-114520", "cliente": "Nutrire Indústria de Alimentos", "etapa": "Projeto Enviado", "vt": 23087.0, "abertura": "11/12/2025", "dias": 130}, {"np": "NP-116422", "cliente": "Agrex do Brasil", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "31/03/2026", "dias": 20}, {"np": "NP-115823", "cliente": "GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPRE", "etapa": "Qualificação", "vt": 0.0, "abertura": "20/02/2026", "dias": 59}, {"np": "115730", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Qualificação", "vt": 0.0, "abertura": "13/02/2026", "dias": 66}, {"np": "NP-115397", "cliente": "CASTROLANDA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "28/01/2026", "dias": 82}, {"np": "NP-114780", "cliente": "CASTROLANDA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "05/01/2026", "dias": 105}, {"np": "NP-114475", "cliente": "HOSPITAL MAE DE DEUS (AESC)", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "08/12/2025", "dias": 133}]}};
+    var respData = {"Pedro Schreck": {"qtd": 51, "pct": 34.7, "projetos": [{"np": "NP-113753", "cliente": "COOPERATIVA AGRO-INDUSTRIAL HOLAMBRA", "etapa": "Projeto Enviado", "vt": 343404.0, "abertura": "20/10/2025", "dias": 196}, {"np": "NP-112013", "cliente": "FRIGELAR", "etapa": "Projeto Enviado", "vt": 280000.0, "abertura": "22/07/2025", "dias": 286}, {"np": "NP-115351", "cliente": "AUXILIADORA PREDIAL", "etapa": "Projeto Enviado", "vt": 266832.0, "abertura": "23/01/2026", "dias": 101}, {"np": "NP-114406", "cliente": "SENAC RJ", "etapa": "Negociação", "vt": 178043.28, "abertura": "02/12/2025", "dias": 153}, {"np": "NP-113068", "cliente": "CERVEJARIA PETRÓPOLIS", "etapa": "Projeto Enviado", "vt": 110400.0, "abertura": "09/09/2025", "dias": 237}, {"np": "NP-113992", "cliente": "SECRETARIA DA FAZENDA DO ESTADO DO ALAGO", "etapa": "Projeto Enviado", "vt": 73700.0, "abertura": "04/11/2025", "dias": 181}, {"np": "NP-113582", "cliente": "SAFEWEB", "etapa": "Projeto Enviado", "vt": 30636.0, "abertura": "08/10/2025", "dias": 208}, {"np": "NP-113859", "cliente": "FRIGELAR", "etapa": "Projeto Enviado", "vt": 24000.0, "abertura": "24/10/2025", "dias": 192}, {"np": "NP-114383", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Enviado", "vt": 21600.0, "abertura": "01/12/2025", "dias": 154}, {"np": "NP-115323", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Projeto Enviado", "vt": 20900.0, "abertura": "21/01/2026", "dias": 103}, {"np": "NP-113847", "cliente": "FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX", "etapa": "Projeto Enviado", "vt": 19760.0, "abertura": "23/10/2025", "dias": 193}, {"np": "NP-115870", "cliente": "WAY DATA SOLUTION S/A", "etapa": "Projeto Enviado", "vt": 17700.0, "abertura": "24/02/2026", "dias": 69}, {"np": "NP-115314", "cliente": "GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPRE", "etapa": "Projeto Enviado", "vt": 17670.0, "abertura": "21/01/2026", "dias": 103}, {"np": "NP-113798", "cliente": "SAO JOAO FARMACIAS", "etapa": "Projeto Enviado", "vt": 15048.0, "abertura": "21/10/2025", "dias": 195}, {"np": "NP-115363", "cliente": "SENAC RJ", "etapa": "Projeto Enviado", "vt": 13680.0, "abertura": "26/01/2026", "dias": 98}, {"np": "NP-111880", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 13600.0, "abertura": "15/07/2025", "dias": 293}, {"np": "NP-116484", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 11900.0, "abertura": "06/04/2026", "dias": 28}, {"np": "NP-113096", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Enviado", "vt": 10640.0, "abertura": "10/09/2025", "dias": 236}, {"np": "NP-112683", "cliente": "HOSPITAL MAE DE DEUS (AESC)", "etapa": "Elaboração de Caderno Técnico", "vt": 10500.0, "abertura": "25/08/2025", "dias": 252}, {"np": "NP-115830", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 9500.0, "abertura": "23/02/2026", "dias": 70}, {"np": "NP-116363", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 9120.0, "abertura": "27/03/2026", "dias": 38}, {"np": "NP-116364", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 7600.0, "abertura": "27/03/2026", "dias": 38}, {"np": "NP-114397", "cliente": "UNIMED PORTO ALEGRE", "etapa": "Projeto Enviado", "vt": 6840.0, "abertura": "02/12/2025", "dias": 153}, {"np": "NP-113762", "cliente": "TORRA TORRA", "etapa": "Projeto Enviado", "vt": 4960.0, "abertura": "20/10/2025", "dias": 196}, {"np": "NP-113740", "cliente": "GOVERNANÇA BRASIL", "etapa": "Projeto Enviado", "vt": 3800.0, "abertura": "17/10/2025", "dias": 199}, {"np": "NP-113114", "cliente": "SABEMI SEGURADORA", "etapa": "Negociação", "vt": 3040.0, "abertura": "12/09/2025", "dias": 234}, {"np": "NP-113639", "cliente": "INTERSISTEMAS INFORMATICA LTDA - NETLOGI", "etapa": "Projeto Enviado", "vt": 3007.0, "abertura": "13/10/2025", "dias": 203}, {"np": "NP-116598", "cliente": "LOJAS LEBES", "etapa": "Projeto Enviado", "vt": 2214.3, "abertura": "14/04/2026", "dias": 20}, {"np": "NP-113058", "cliente": "CASTROLANDA", "etapa": "Projeto Enviado", "vt": 1800.0, "abertura": "09/09/2025", "dias": 237}, {"np": "NP-114416", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 1360.0, "abertura": "02/12/2025", "dias": 153}, {"np": "NP-115495", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Projeto Enviado", "vt": 1200.0, "abertura": "03/02/2026", "dias": 90}, {"np": "NP-113660", "cliente": "AUXILIADORA PREDIAL", "etapa": "Projeto Enviado", "vt": 950.0, "abertura": "13/10/2025", "dias": 203}, {"np": "NP-116751", "cliente": "AGCO DO BRASIL COM. E IND. LTDA", "etapa": "Qualificação", "vt": 0.0, "abertura": "28/04/2026", "dias": 6}, {"np": "NP-116725", "cliente": "IRANI PAPEL E EMBALAGEM S.A", "etapa": "Qualificação", "vt": 0.0, "abertura": "24/04/2026", "dias": 10}, {"np": "NP-116707", "cliente": "GOVERNANÇA BRASIL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "23/04/2026", "dias": 11}, {"np": "NP-116693", "cliente": "Argenta Participacoes LTDA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "23/04/2026", "dias": 11}, {"np": "NP-116538", "cliente": "GOVERNANÇA BRASIL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "08/04/2026", "dias": 26}, {"np": "NP-116298", "cliente": "SENAC RJ", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "23/03/2026", "dias": 42}, {"np": "NP-116258", "cliente": "Unimed Central de Serviços - RS", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "20/03/2026", "dias": 45}, {"np": "NP-116159", "cliente": "REDE BRASIL GESTÃO DE ATIVOS", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "13/03/2026", "dias": 52}, {"np": "NP-116052", "cliente": "AREZZO INDUSTRIA E COMERCIO LTDA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "06/03/2026", "dias": 59}, {"np": "NP-115797", "cliente": "ALPARGATAS", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "19/02/2026", "dias": 74}, {"np": "NP-115755", "cliente": "SAQUE PAGUE", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "18/02/2026", "dias": 75}, {"np": "NP-115657", "cliente": "GOVERNANÇA BRASIL", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "10/02/2026", "dias": 83}, {"np": "NP-115283", "cliente": "STEFANINI", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "20/01/2026", "dias": 104}, {"np": "NP-114404", "cliente": "BRASTORAGE - THINK", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "02/12/2025", "dias": 153}, {"np": "NP-113706", "cliente": "Trt Da 4ª Região", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "15/10/2025", "dias": 201}, {"np": "NP-113581", "cliente": "Trt Da 4ª Região", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "08/10/2025", "dias": 208}, {"np": "NP-113530", "cliente": "AUXILIADORA PREDIAL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "06/10/2025", "dias": 210}, {"np": "NP-113414", "cliente": "IRANI PAPEL E EMBALAGEM S.A", "etapa": "Elaboração de Caderno Técnico", "vt": 0.0, "abertura": "29/09/2025", "dias": 217}, {"np": "NP-111949", "cliente": "Qualitor S.A.", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "17/07/2025", "dias": 291}]}, "Anderson Bamberg": {"qtd": 49, "pct": 33.3, "projetos": [{"np": "NP-115250", "cliente": "RRP ENERGIA", "etapa": "Projeto Enviado", "vt": 67387.0, "abertura": "16/01/2026", "dias": 108}, {"np": "NP-115265", "cliente": "Solucap Sistemas", "etapa": "Projeto Enviado", "vt": 58200.0, "abertura": "19/01/2026", "dias": 105}, {"np": "NP-114516", "cliente": "AUTTAR - GETNET", "etapa": "Negociação", "vt": 37475.0, "abertura": "10/12/2025", "dias": 145}, {"np": "NP-114418", "cliente": "RAPIDONET SISTEMAS", "etapa": "Elaboração de Projeto", "vt": 36000.0, "abertura": "02/12/2025", "dias": 153}, {"np": "NP-115925", "cliente": "KleyHertz Farmacêutica", "etapa": "Projeto Enviado", "vt": 35520.0, "abertura": "26/02/2026", "dias": 67}, {"np": "NP-112404", "cliente": "NETCENTER INFORMATICA", "etapa": "Projeto Enviado", "vt": 32780.0, "abertura": "12/08/2025", "dias": 265}, {"np": "NP-113350", "cliente": "Associação Leopoldina Juvenil (ALJ)", "etapa": "Projeto Enviado", "vt": 26000.0, "abertura": "25/09/2025", "dias": 221}, {"np": "NP-113547", "cliente": "TIMAC AGRO", "etapa": "Projeto Enviado", "vt": 24192.0, "abertura": "07/10/2025", "dias": 209}, {"np": "NP-114700", "cliente": "Planem Engenharia", "etapa": "Projeto Enviado", "vt": 16100.0, "abertura": "24/12/2025", "dias": 131}, {"np": "NP-112132", "cliente": "DATACOM", "etapa": "Projeto Enviado", "vt": 16044.0, "abertura": "28/07/2025", "dias": 280}, {"np": "NP-114550", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 15200.0, "abertura": "12/12/2025", "dias": 143}, {"np": "NP-113863", "cliente": "ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL", "etapa": "Projeto Enviado", "vt": 12872.0, "abertura": "24/10/2025", "dias": 192}, {"np": "NP-112211", "cliente": "GOLDEN TECHNOLOGIA", "etapa": "Projeto Enviado", "vt": 12436.77, "abertura": "30/07/2025", "dias": 278}, {"np": "NP-114241", "cliente": "PANATLANTICA", "etapa": "Projeto Enviado", "vt": 11400.0, "abertura": "20/11/2025", "dias": 165}, {"np": "NP-114308", "cliente": "SPRINGER CARRIER (MIDEA)", "etapa": "Projeto Enviado", "vt": 10776.0, "abertura": "26/11/2025", "dias": 159}, {"np": "NP-111866", "cliente": "VIAÇÃO OURO E PRATA S.A", "etapa": "Projeto Enviado", "vt": 8880.0, "abertura": "15/07/2025", "dias": 293}, {"np": "NP-114405", "cliente": "S3CURITY", "etapa": "Projeto Enviado", "vt": 7600.0, "abertura": "02/12/2025", "dias": 153}, {"np": "NP-113270", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Projeto Enviado", "vt": 6300.0, "abertura": "22/09/2025", "dias": 224}, {"np": "NP-114151", "cliente": "SERVIX", "etapa": "Elaboração de Projeto", "vt": 6144.0, "abertura": "13/11/2025", "dias": 172}, {"np": "NP-114513", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 5700.0, "abertura": "10/12/2025", "dias": 145}, {"np": "NP-113199", "cliente": "S3CURITY", "etapa": "Projeto Enviado", "vt": 5700.0, "abertura": "17/09/2025", "dias": 229}, {"np": "NP-114061", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 1520.0, "abertura": "07/11/2025", "dias": 178}, {"np": "NP-116385", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Projeto Enviado", "vt": 1200.0, "abertura": "30/03/2026", "dias": 35}, {"np": "NP-114776", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Projeto Enviado", "vt": 1140.0, "abertura": "05/01/2026", "dias": 119}, {"np": "NP-114249", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Projeto Enviado", "vt": 760.0, "abertura": "21/11/2025", "dias": 164}, {"np": "NP-116759", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "29/04/2026", "dias": 5}, {"np": "NP-116758", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "29/04/2026", "dias": 5}, {"np": "NP-116728", "cliente": "Novus Automation", "etapa": "Qualificação", "vt": 0.0, "abertura": "27/04/2026", "dias": 7}, {"np": "NP-116600", "cliente": "Enops Engenharia S.A.", "etapa": "Qualificação", "vt": 0.0, "abertura": "14/04/2026", "dias": 20}, {"np": "NP-116428", "cliente": "Costão do Santinho Resort & SPA.", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "01/04/2026", "dias": 33}, {"np": "NP-116426", "cliente": "Attus", "etapa": "Qualificação", "vt": 0.0, "abertura": "01/04/2026", "dias": 33}, {"np": "NP-116425", "cliente": "VaBene Confeitaria e Sorveteria", "etapa": "Qualificação", "vt": 0.0, "abertura": "01/04/2026", "dias": 33}, {"np": "NP-116424", "cliente": "AFECC - Hospital Santa Rita de Cássia", "etapa": "Qualificação", "vt": 0.0, "abertura": "01/04/2026", "dias": 33}, {"np": "NP-116420", "cliente": "Essencis MG", "etapa": "Qualificação", "vt": 0.0, "abertura": "31/03/2026", "dias": 34}, {"np": "NP-116205", "cliente": "SOFIA PET", "etapa": "Qualificação", "vt": 0.0, "abertura": "17/03/2026", "dias": 48}, {"np": "NP-115788", "cliente": "USINA SAO JOSE DA ESTIVA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "18/02/2026", "dias": 75}, {"np": "NP-115719", "cliente": "UNIVALI", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "13/02/2026", "dias": 80}, {"np": "NP-115600", "cliente": "ZILOR ENERGIA E ALIMENTOS", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "06/02/2026", "dias": 87}, {"np": "NP-115517", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "03/02/2026", "dias": 90}, {"np": "NP-115404", "cliente": "Solo Network", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "28/01/2026", "dias": 96}, {"np": "NP-115335", "cliente": "CPA", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "22/01/2026", "dias": 102}, {"np": "NP-115261", "cliente": "LUXCEL MAXLOG", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "17/01/2026", "dias": 107}, {"np": "NP-115242", "cliente": "Brasdiesel SA Comercial e Importadora", "etapa": "Qualificação", "vt": 0.0, "abertura": "15/01/2026", "dias": 109}, {"np": "NP-115156", "cliente": "TORRA TORRA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "12/01/2026", "dias": 112}, {"np": "NP-114676", "cliente": "Ditel", "etapa": "Qualificação", "vt": 0.0, "abertura": "22/12/2025", "dias": 133}, {"np": "NP-113438", "cliente": "LG SISTEMAS", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "01/10/2025", "dias": 215}, {"np": "NP-113281", "cliente": "LUXCEL MAXLOG", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "22/09/2025", "dias": 224}, {"np": "NP-113065", "cliente": "BRNEO INOVAÇÕES EMPRESARIAL", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "09/09/2025", "dias": 237}, {"np": "NP-111926", "cliente": "VIAÇÃO OURO E PRATA S.A", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "16/07/2025", "dias": 292}]}, "Talita Rodrigues": {"qtd": 25, "pct": 17.0, "projetos": [{"np": "NP-113970", "cliente": "Data Engenharia", "etapa": "Projeto Enviado", "vt": 172116.0, "abertura": "03/11/2025", "dias": 182}, {"np": "NP-114712", "cliente": "Associação dos Engenheiros da Sabesp", "etapa": "Projeto Enviado", "vt": 142404.0, "abertura": "26/12/2025", "dias": 129}, {"np": "NP-113545", "cliente": "AUTOGLASS", "etapa": "Projeto Enviado", "vt": 70160.0, "abertura": "06/10/2025", "dias": 210}, {"np": "NP-113663", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 38400.0, "abertura": "13/10/2025", "dias": 203}, {"np": "NP-115606", "cliente": "BULLLA SA", "etapa": "Projeto Aprovado", "vt": 30020.0, "abertura": "09/02/2026", "dias": 84}, {"np": "NP-115724", "cliente": "BULLLA SA", "etapa": "Projeto Aprovado", "vt": 16720.0, "abertura": "13/02/2026", "dias": 80}, {"np": "NP-112412", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Elaboração de Projeto", "vt": 16500.0, "abertura": "13/08/2025", "dias": 264}, {"np": "NP-111979", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Projeto Enviado", "vt": 6720.0, "abertura": "18/07/2025", "dias": 290}, {"np": "NP-116446", "cliente": "HOSPITAL CARE", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "01/04/2026", "dias": 33}, {"np": "NP-116413", "cliente": "Sapore", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "31/03/2026", "dias": 34}, {"np": "NP-116078", "cliente": "Essencis Soluções Ambientais", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "09/03/2026", "dias": 56}, {"np": "NP-116069", "cliente": "Cetrel - Central de Tratamento de Efluen", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "09/03/2026", "dias": 56}, {"np": "NP-115993", "cliente": "Sapore", "etapa": "Qualificação", "vt": 0.0, "abertura": "04/03/2026", "dias": 61}, {"np": "NP-115992", "cliente": "SOLVI PARTICIPAÇÕES", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "04/03/2026", "dias": 61}, {"np": "NP-115951", "cliente": "SOLVI PARTICIPAÇÕES", "etapa": "Qualificação", "vt": 0.0, "abertura": "02/03/2026", "dias": 63}, {"np": "NP-115697", "cliente": "BULLLA SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "12/02/2026", "dias": 81}, {"np": "NP-115271", "cliente": "ABBC - Associação Brasileira de Bancos", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "19/01/2026", "dias": 105}, {"np": "NP-115259", "cliente": "Packing Group", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "16/01/2026", "dias": 108}, {"np": "NP-114669", "cliente": "Associação Educadora e Beneficente", "etapa": "Qualificação", "vt": 0.0, "abertura": "22/12/2025", "dias": 133}, {"np": "NP-113967", "cliente": "BOMBRIL S.A", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "03/11/2025", "dias": 182}, {"np": "NP-113665", "cliente": "LIFE EMPRESARIAL SAÚDE LTDA", "etapa": "Qualificação Concluída", "vt": 0.0, "abertura": "13/10/2025", "dias": 203}, {"np": "NP-113604", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "09/10/2025", "dias": 207}, {"np": "NP-113488", "cliente": "BULLLA SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "02/10/2025", "dias": 214}, {"np": "NP-113285", "cliente": "BULLLA SA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "22/09/2025", "dias": 224}, {"np": "NP-111919", "cliente": "LIFE EMPRESARIAL SAÚDE LTDA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "16/07/2025", "dias": 292}]}, "Ines Cristine Nunes Diogo": {"qtd": 8, "pct": 5.4, "projetos": [{"np": "NP-114520", "cliente": "Nutrire Indústria de Alimentos", "etapa": "Projeto Enviado", "vt": 23087.0, "abertura": "11/12/2025", "dias": 144}, {"np": "NP-116738", "cliente": "CMTR", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "27/04/2026", "dias": 7}, {"np": "NP-116422", "cliente": "Agrex do Brasil", "etapa": "Projeto Enviado", "vt": 0.0, "abertura": "31/03/2026", "dias": 34}, {"np": "NP-115823", "cliente": "GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPRE", "etapa": "Qualificação", "vt": 0.0, "abertura": "20/02/2026", "dias": 73}, {"np": "115730", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Qualificação", "vt": 0.0, "abertura": "13/02/2026", "dias": 80}, {"np": "NP-115397", "cliente": "CASTROLANDA", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "28/01/2026", "dias": 96}, {"np": "NP-114780", "cliente": "CASTROLANDA", "etapa": "Estimativa de Esforço", "vt": 0.0, "abertura": "05/01/2026", "dias": 119}, {"np": "NP-114475", "cliente": "HOSPITAL MAE DE DEUS (AESC)", "etapa": "Elaboração de Projeto", "vt": 0.0, "abertura": "08/12/2025", "dias": 147}]}};
     var etapaColors = {
       "Projeto Enviado":               ["#dbeafe","#1e40af"],
       "Negociação":                    ["#fef3c7","#92400e"],
@@ -1830,7 +1536,7 @@ function switchTab(tab, btn) {
     <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid var(--accent1);border-radius:12px;padding:18px 20px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📋 Carteira Atual</div>
       <div style="font-size:34px;font-weight:900;color:#2563eb;line-height:1;">135</div>
-      <div style="font-size:12px;color:#6b7280;margin-top:6px;">R$ 7.014.067,94</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">R$ 7.201.874,95</div>
     </div>
 
     <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #dc2626;border-radius:12px;padding:18px 20px;">
@@ -1916,7 +1622,7 @@ function switchTab(tab, btn) {
   <!-- Cancelados -->
   <div style="margin-bottom:24px;">
     <div class="p26-section-label">🔴 Contratos Cancelados</div>
-    <div style="overflow-x:auto;border:1px solid #fecaca;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:700px;"><thead><tr style="background:#fef2f2;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês Cancelamento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116093</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SYNERGIE SISTEMAS LTDA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 41.899,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 3.491,64</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116076</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">NOURYON PULP AND PERFORMANCE INDUSTRIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.500,16</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.541,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116075</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ASSOC. ANTÔNIO VEIRA JESUÍTA DO BRASIL</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 28.993,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.416,14</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114990</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GTFOODS GROUP</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 14.240,00</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">—</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 14.240,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114962</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CLAMPER</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.109,28</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 592,44</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114988</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Grupo Orcali</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 22.757,52</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 1.896,46</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">115004</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">J&amp;M SOLUÇÕES EM TECNOLOGIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.189,60</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 265,80</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-114797</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RNI - Rodobens Negócios Imobiliários</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Talita</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">—</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.236,58</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.242,10</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 3.331,38</td></tr><tr style="background:#fff7ed;"><td colspan="7" style="padding:7px 14px;font-size:11px;color:#92400e;">⚠️ <strong>RNI - Rodobens:</strong> data de cancelamento não preenchida na coluna U</td></tr><tr style="background:#fef2f2;border-top:2px solid #fecaca;"><td colspan="4" style="padding:9px 14px;font-size:11px;font-weight:800;text-transform:uppercase;color:#dc2626;">Total · 8 contratos cancelados</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#111827;">R$ 366.733,51</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 13.446,26</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#0891b2;">R$ 17.571,38</td></tr></tbody></table></div>
+    <div style="overflow-x:auto;border:1px solid #fecaca;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:700px;"><thead><tr style="background:#fef2f2;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês Cancelamento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116093</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SYNERGIE SISTEMAS LTDA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 41.899,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 3.491,64</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116076</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">NOURYON PULP AND PERFORMANCE INDUSTRIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.500,16</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.541,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-116075</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ASSOC. ANTÔNIO VEIRA JESUÍTA DO BRASIL</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 28.993,68</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.416,14</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114990</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GTFOODS GROUP</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 14.240,00</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">—</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 14.240,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114962</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CLAMPER</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Jan/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 7.109,28</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 592,44</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">114988</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Grupo Orcali</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Anderson</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 22.757,52</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 1.896,46</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#ffffff;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">115004</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">J&amp;M SOLUÇÕES EM TECNOLOGIA</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Pedro</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">Fev/26/26</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 3.189,60</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 265,80</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">—</td></tr><tr style="background:#fef2f2;border-bottom:1px solid #fecaca;"><td style="padding:9px 14px;font-family:monospace;font-size:11px;font-weight:600;color:#dc2626;">NP-114797</td><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RNI - Rodobens Negócios Imobiliários</td><td style="padding:9px 14px;font-size:11px;color:#6b7280;">Talita</td><td style="padding:9px 14px;text-align:center;"><span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">—</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#111827;">R$ 30.236,58</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#7c3aed;">R$ 2.242,10</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;color:#0891b2;">R$ 3.331,38</td></tr><tr style="background:#fff7ed;"><td colspan="7" style="padding:7px 14px;font-size:11px;color:#92400e;">⚠️ <strong>RNI - Rodobens:</strong> data de cancelamento não preenchida na coluna U</td></tr><tr style="background:#fef2f2;border-top:2px solid #fecaca;"><td colspan="4" style="padding:9px 14px;font-size:11px;font-weight:800;text-transform:uppercase;color:#dc2626;">Total · 8 contratos cancelados</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#111827;">R$ 178.926,50</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#7c3aed;">R$ 13.446,26</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:800;color:#0891b2;">R$ 17.571,38</td></tr></tbody></table></div>
   </div>
 
   <div 
@@ -2456,34 +2162,10 @@ function enviarResumo(){
 </body>
 </html>
 `;
-    if (isAdmin) {
-      html = html.replace("window.__ADMIN__ !== 'undefined'", "true !== 'undefined'");
-    }
-
-    return new Response(html, {
-      headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store",
-        "X-Frame-Options": "DENY"
-      }
-    });
+    if (isAdmin) { html = html.replace("typeof window.__ADMIN__ !== 'undefined'", "true !== 'undefined'"); }
+    return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Frame-Options": "DENY" } });
   }
 };
-
 function loginPage(erro) {
-  return `<!DOCTYPE html><html lang="pt-BR"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Acesso Restrito</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
-<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style>
-</head><body><div class="c">
-<div style="font-size:40px;margin-bottom:18px">🔒</div>
-<h1>Acesso Restrito</h1>
-<p>Digite a senha para acessar o dashboard</p>
-<form method="POST" action="/login">
-<input type="password" name="senha" placeholder="Senha" autofocus>
-<div class="er">${erro}</div>
-<button>Entrar</button>
-</form></div></body></html>`;
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style></head><body><div class="c"><div style="font-size:40px;margin-bottom:18px">🔒</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus><div class="er">${erro}</div><button>Entrar</button></form></div></body></html>`;
 }
