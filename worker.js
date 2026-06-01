@@ -736,7 +736,7 @@ function switchTab(tab, btn) {
     <div class="header-right">
       <div class="header-badge">
         <span class="dot" style="background:var(--accent1);"></span>
-        Base: S4M5 + S2M5 Redução · Atualizado em 01 / 06 / 2026
+        Base: S1M6 + S2M5 Redução · Atualizado em 01 / 06 / 2026
       </div>
     </div>
   </header>
@@ -770,7 +770,7 @@ function switchTab(tab, btn) {
     <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px 24px;">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:10px;">📊 MRR Baseline (Jan/2026)</div>
       <div style="font-size:32px;font-weight:900;color:#374151;line-height:1;">R$ 559.717,79</div>
-      <div style="font-size:12px;color:#6b7280;margin-top:6px;">S4M5 · aba atual</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">S1M6 · aba atual</div>
     </div>
 
     <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px 24px;">
