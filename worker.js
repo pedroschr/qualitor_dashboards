@@ -736,7 +736,7 @@ function switchTab(tab, btn) {
     <div class="header-right">
       <div class="header-badge">
         <span class="dot" style="background:var(--accent1);"></span>
-        Base: S4M5 + S2M5 Redução · Atualizado em 26 / 05 / 2026
+        Base: S4M5 + S2M5 Redução · Atualizado em 01 / 06 / 2026
       </div>
     </div>
   </header>
@@ -867,7 +867,7 @@ function switchTab(tab, btn) {
   </div>
 
   <div class="p26-meta">
-    Fonte: Renovação de Contratos · Relatório de Projetos (S5M4) · Redução Contratual (S3M4) · <strong>Atualizado em 26 / 05 / 2026</strong>
+    Fonte: Renovação de Contratos · Relatório de Projetos (S5M4) · Redução Contratual (S3M4) · <strong>Atualizado em 01 / 06 / 2026</strong>
   </div>
 
 </div><!-- .page -->
