@@ -884,7 +884,7 @@ function switchTab(tab, btn) {
 
 
   <!-- ╔══ ABA ANDERSON ══╗ -->
-  <div id="tab-anderson" class="tab-content" style="display:none;">
+  <div id="tab-anderson" class="tab-panel">
     <header style="background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;border-radius:12px;">
       <div>
         <div style="font-size:20px;font-weight:800;color:#111827;">👤 Anderson</div>
@@ -1676,7 +1676,7 @@ function switchTab(tab, btn) {
   <!-- ╚══ FIM ABA ══╝ -->
 
   <!-- ╔══ ABA TALITA ══╗ -->
-  <div id="tab-talita" class="tab-content" style="display:none;">
+  <div id="tab-talita" class="tab-panel">
     <header style="background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;border-radius:12px;">
       <div>
         <div style="font-size:20px;font-weight:800;color:#111827;">👤 Talita</div>
@@ -2187,7 +2187,7 @@ function switchTab(tab, btn) {
   <!-- ╚══ FIM ABA ══╝ -->
 
   <!-- ╔══ ABA INES ══╗ -->
-  <div id="tab-ines" class="tab-content" style="display:none;">
+  <div id="tab-ines" class="tab-panel">
     <header style="background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;border-radius:12px;">
       <div>
         <div style="font-size:20px;font-weight:800;color:#111827;">👤 Inês</div>
@@ -2436,7 +2436,7 @@ function switchTab(tab, btn) {
   <!-- ╚══ FIM ABA ══╝ -->
 
   <!-- ╔══ ABA PEDRO ══╗ -->
-  <div id="tab-pedro" class="tab-content" style="display:none;">
+  <div id="tab-pedro" class="tab-panel">
     <header style="background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;border-radius:12px;">
       <div>
         <div style="font-size:20px;font-weight:800;color:#111827;">👤 Pedro</div>
