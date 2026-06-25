@@ -15,7 +15,7 @@ export default {
       if(senha===S_ADMIN) h.append("Set-Cookie",C_ADMIN+"="+T_ADMIN+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
       return new Response("",{status:302,headers:h});
     }
-    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
+    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");h.append("Set-Cookie","qlt_tab=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
     if(request.method==="POST"&&path==="/send-resumo"){
       if(!isAdmin) return new Response(JSON.stringify({ok:false,error:"Acesso negado"}),{status:403,headers:{"Content-Type":"application/json"}});
       const destinatarios=["pedro@qualitor.com.br"];
@@ -726,6 +726,10 @@ function checkPwd() {
       <button class="tab-btn" id="btn-talita" onclick="switchTab('talita',this)" style="display:none;">👤 Talita</button>
       <button class="tab-btn" id="btn-ines" onclick="switchTab('ines',this)" style="display:none;">👤 Inês</button>
       <button class="tab-btn" id="btn-pedro" onclick="switchTab('pedro',this)" style="display:none;">👤 Pedro</button>
+      <a href="/logout" style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid #e5e7eb;background:#fff;color:#374151;font-size:12px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background 0.15s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='#fff'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </a>
 </nav>
 <script>
 function switchTab(tab, btn) {
