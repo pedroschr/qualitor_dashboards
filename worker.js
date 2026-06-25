@@ -4604,15 +4604,24 @@ function enviarResumo(){
 </script>
 
 <script>
-(function(){
-  const it=document.getElementById('initial-tab')?.value||'pipeline';
-  const btn=document.querySelector('[onclick*="\''+it+'\'"]');
-  if(btn){switchTab(it,btn);}
-  else{const pb=document.querySelector('[onclick*="pipeline"]');if(pb)switchTab('pipeline',pb);}
-  // Mostrar botão individual se logado como arquiteto
-  const ib=document.getElementById('btn-'+it);
-  if(ib)ib.style.display='';
-})();
+window.addEventListener('load', function(){
+  var it = (document.getElementById('initial-tab') || {}).value || 'pipeline';
+  if(!it) it = 'pipeline';
+  var btns = document.querySelectorAll('.tab-btn');
+  var found = null;
+  for(var i = 0; i < btns.length; i++){
+    if((btns[i].getAttribute('onclick') || '').indexOf(it) !== -1){
+      found = btns[i]; break;
+    }
+  }
+  if(found){
+    btns.forEach(function(b){ b.classList.remove('active'); });
+    found.classList.add('active');
+    if(typeof switchTab === 'function') switchTab(it, found);
+  }
+  var ib = document.getElementById('btn-' + it);
+  if(ib) ib.style.display = '';
+});
 </script>
 </body>
 </html>
