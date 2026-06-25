@@ -4608,23 +4608,23 @@ function enviarResumo(){
 </script>
 
 <script>
-window.addEventListener('load', function(){
-  var it = (document.getElementById('initial-tab') || {}).value || 'pipeline';
-  if(!it) it = 'pipeline';
-  var btns = document.querySelectorAll('.tab-btn');
+window.addEventListener("load", function(){
+  var it = (document.getElementById("initial-tab") || {}).value || "pipeline";
+  if(!it) it = "pipeline";
+  var btns = document.querySelectorAll(".tab-btn");
   var found = null;
   for(var i = 0; i < btns.length; i++){
-    if((btns[i].getAttribute('onclick') || '').indexOf(it) !== -1){
+    if((btns[i].getAttribute("onclick") || "").indexOf(it) !== -1){
       found = btns[i]; break;
     }
   }
   if(found){
-    btns.forEach(function(b){ b.classList.remove('active'); });
-    found.classList.add('active');
-    if(typeof switchTab === 'function') switchTab(it, found);
+    btns.forEach(function(b){ b.classList.remove("active"); });
+    found.classList.add("active");
+    if(typeof switchTab === "function") switchTab(it, found);
   }
-  var ib = document.getElementById('btn-' + it);
-  if(ib) ib.style.display = '';
+  var ib = document.getElementById("btn-" + it);
+  if(ib) ib.style.display = "";
 });
 </script>
 </body>
