@@ -1,0 +1,2116 @@
+export default {
+  async fetch(request, env) {
+    const url=new URL(request.url),path=url.pathname,ck=request.headers.get("Cookie")||"";
+    const S_USER="Qualitor!@#25",S_ADMIN="QltAdmin!2026",C_AUTH="qlt_auth",C_ADMIN="qlt_admin",T_AUTH="qualitor2026ok",T_ADMIN="qualitor_admin_ok";
+    const isAuth=ck.includes(C_AUTH+"="+T_AUTH),isAdmin=ck.includes(C_ADMIN+"="+T_ADMIN);
+    if(request.method==="POST"&&path==="/login"){
+      const body=await request.formData(),senha=body.get("senha")||"";
+      if(senha===S_ADMIN){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");h.append("Set-Cookie",C_ADMIN+"="+T_ADMIN+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");return new Response("",{status:302,headers:h});}
+      if(senha===S_USER) return new Response("",{status:302,headers:{"Location":"/","Set-Cookie":C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800"}});
+      return new Response(loginPage("Senha incorreta."),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
+    }
+    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
+    if(request.method==="POST"&&path==="/send-resumo"){
+      if(!isAdmin) return new Response(JSON.stringify({ok:false,error:"Acesso negado"}),{status:403,headers:{"Content-Type":"application/json"}});
+      const destinatarios=["pedro@qualitor.com.br"];
+      const RESEND_KEY=(env&&env.RESEND_API_KEY)?env.RESEND_API_KEY:"";
+      const hoje=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+      try{
+        const resp=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+RESEND_KEY,"Content-Type":"application/json"},body:JSON.stringify({from:"Pedro Schreck | Qualitor <onboarding@resend.dev>",to:destinatarios,subject:"Resumo Executivo · Qualitor BI · "+hoje,html:"<h1>Resumo Executivo Qualitor</h1><p>Acesse o dashboard.</p><a href='https://qualitor-dashboards.flat-fog-caf5.workers.dev'>Acessar</a>"})}); 
+        const result=await resp.json();
+        if(resp.ok) return new Response(JSON.stringify({ok:true,id:result.id}),{headers:{"Content-Type":"application/json"}});
+        return new Response(JSON.stringify({ok:false,error:result.message}),{status:500,headers:{"Content-Type":"application/json"}});
+      }catch(err){return new Response(JSON.stringify({ok:false,error:err.message}),{status:500,headers:{"Content-Type":"application/json"}});}
+    }
+    if(!isAuth) return new Response(loginPage(""),{status:200,headers:{"Content-Type":"text/html; charset=utf-8"}});
+    let html=`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Projetos — Pipeline Comercial</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --surface2: #f0f2f5;
+    --border: rgba(0,0,0,0.07);
+    --accent1: #2563eb;
+    --accent2: #d97706;
+    --accent3: #059669;
+    --accent4: #7c3aed;
+    --text: #111827;
+    --muted: #6b7280;
+    --tag-env: #dbeafe;
+    --tag-neg: #fef3c7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 32px 64px;
+  }
+
+  /* ── Header ── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left {}
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .header-title {
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--accent1);
+  }
+  .header-right {
+    text-align: right;
+  }
+  .header-date {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .header-badge {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(5,150,105,0.08);
+    border: 1px solid rgba(5,150,105,0.2);
+    color: #059669;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── Filter notice ── */
+  .filter-notice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 36px;
+    align-items: center;
+  }
+  .filter-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .ft-env { background: #dbeafe; border-color: #bfdbfe; color: #1d4ed8; }
+  .ft-neg { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+  .ft-excl { background: #fee2e2; border-color: #fecaca; color: #b91c1c; }
+  .ft-date { background: #d1fae5; border-color: #a7f3d0; color: #065f46; }
+
+  /* ── KPI Row ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media(max-width:900px){ .kpi-row { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:500px){ .kpi-row { grid-template-columns: 1fr; } }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 24px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent1));
+  }
+  .kpi-card:nth-child(1) { --card-accent: var(--accent1); }
+  .kpi-card:nth-child(2) { --card-accent: var(--accent2); }
+  .kpi-card:nth-child(3) { --card-accent: var(--accent3); }
+  .kpi-card:nth-child(4) { --card-accent: var(--accent4); }
+
+  .kpi-icon {
+    font-size: 18px;
+    margin-bottom: 12px;
+    opacity: .8;
+  }
+  .kpi-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(24px,3vw,36px);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .kpi-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .kpi-sub span { color: var(--card-accent, var(--accent1)); font-weight: 600; }
+
+  /* ── Main grid ── */
+  .grid-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media(max-width:900px){
+    .grid-main, .grid-bottom { grid-template-columns: 1fr; }
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .card-full {
+    grid-column: 1 / -1;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+  .card-title {
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    color: var(--text);
+  }
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .card-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface2);
+  }
+
+  canvas { max-height: 260px; }
+
+  /* ── Etapa comparison ── */
+  .etapa-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .etapa-block {
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .eb-env {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+  }
+  .eb-neg {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+  }
+  .eb-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .eb-env .eb-label { color: #1d4ed8; }
+  .eb-neg .eb-label { color: #92400e; }
+  .eb-num {
+    font-family: 'Nunito', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .eb-env .eb-num { color: #1d4ed8; }
+  .eb-neg .eb-num { color: #d97706; }
+  .eb-desc { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .eb-value {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .eb-env .eb-value { color: #1d4ed8; }
+  .eb-neg .eb-value { color: #92400e; }
+  .eb-pct {
+    position: absolute;
+    bottom: 16px; right: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    opacity: .4;
+    color: var(--text);
+  }
+
+  /* ── Client bars ── */
+  .client-list { margin-top: 4px; }
+  .client-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .client-row:last-child { border-bottom: none; }
+  .client-name { font-size: 13px; color: var(--text); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .client-bar-wrap { grid-column: 1/-1; margin-top: -4px; }
+  .client-bar-bg { background: rgba(255,255,255,0.05); border-radius: 2px; height: 3px; overflow: hidden; }
+  .client-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent1), var(--accent4)); transition: width 1s ease; }
+  .client-value { font-size: 12px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+
+  /* ── Resp table ── */
+  .resp-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .resp-table th {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    text-align: left;
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .resp-table th:not(:first-child) { text-align: right; }
+  .resp-table td {
+    font-size: 13px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .resp-table tr:last-child td { border-bottom: none; }
+  .resp-table td:not(:first-child) { text-align: right; }
+  .resp-table td.value { font-weight: 500; color: var(--accent3); }
+  .resp-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+
+  .resp-bar-cell { padding: 4px 0 12px !important; }
+  .resp-bar-bg { background: rgba(255,255,255,0.05); border-radius: 2px; height: 3px; overflow: hidden; }
+  .resp-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* ── Status do Projeto ── */
+  .status-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 4px;
+  }
+  .status-block {
+    border-radius: 10px;
+    padding: 18px 16px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .sb-alta  { background: #ecfdf5;  border: 1px solid #a7f3d0; }
+  .sb-media { background: #fffbeb;  border: 1px solid #fde68a; }
+  .sb-baixa { background: #fef2f2;  border: 1px solid #fecaca; }
+  .sb-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sb-alta  .sb-label { color: #065f46; }
+  .sb-media .sb-label { color: #92400e; }
+  .sb-baixa .sb-label { color: #991b1b; }
+  .sb-num {
+    font-family: 'Nunito', sans-serif;
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .sb-alta  .sb-num { color: #059669; }
+  .sb-media .sb-num { color: #d97706; }
+  .sb-baixa .sb-num { color: #dc2626; }
+  .sb-desc { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .sb-value { font-size: 13px; font-weight: 600; }
+  .sb-alta  .sb-value { color: #065f46; }
+  .sb-media .sb-value { color: #92400e; }
+  .sb-baixa .sb-value { color: #991b1b; }
+  .sb-val2 {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  .sb-alta  .sb-val2 span { color: #059669; font-weight: 600; }
+  .sb-media .sb-val2 span { color: #d97706; font-weight: 600; }
+  .sb-baixa .sb-val2 span { color: #dc2626; font-weight: 600; }
+  .sb-pct {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: .5;
+    margin-top: 2px;
+  }
+  .status-donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 4px;
+  }
+  .status-donut-wrap canvas { max-height: 220px; width: 220px !important; flex-shrink: 0; }
+  .status-legend { flex: 1; }
+  .sl-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .sl-row:last-child { border-bottom: none; }
+  .sl-left { display: flex; align-items: center; gap: 10px; }
+  .sl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .sl-name { font-size: 13px; color: var(--text); }
+  .sl-right { text-align: right; }
+  .sl-qtd { font-size: 12px; color: var(--muted); }
+  .sl-val { font-size: 13px; font-weight: 500; }
+
+  /* ── Cruzamento Status x Mês ── */
+  .cross-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  @media(max-width:700px){ .cross-grid { grid-template-columns: 1fr; } }
+
+  /* ══════════════════════════════
+     MOBILE RESPONSIVO
+  ══════════════════════════════ */
+  @media(max-width:640px) {
+    .page { padding: 24px 16px 48px; }
+
+    /* Header */
+    header { flex-direction: column; align-items: flex-start; gap: 16px; margin-bottom: 28px; padding-bottom: 20px; }
+    .header-right { text-align: left; }
+
+    /* Filtros */
+    .filter-notice { gap: 6px; margin-bottom: 24px; }
+
+    /* KPIs — 2 colunas no mobile */
+    .kpi-row { grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .kpi-card { padding: 16px; }
+    .kpi-value { font-size: 22px; }
+
+    /* Grids principais */
+    .grid-main, .grid-bottom { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Cards */
+    .card { padding: 18px; }
+    .card-title { font-size: 15px; }
+
+    /* Etapa comparison */
+    .etapa-comparison { grid-template-columns: 1fr; }
+
+    /* Status row */
+    .status-row { grid-template-columns: 1fr; gap: 10px; }
+
+    /* Donut wrap */
+    .status-donut-wrap { flex-direction: column; align-items: center; }
+    .status-donut-wrap canvas { width: 180px !important; max-height: 180px; }
+    .status-legend { width: 100%; }
+
+    /* Cross grid */
+    .cross-grid { grid-template-columns: 1fr; }
+
+    /* Tabela resp — scroll horizontal */
+    .resp-table { font-size: 11px; }
+    .resp-table th, .resp-table td { padding: 8px 6px; }
+
+    /* Seção 2 título */
+    h2.header-title { font-size: 22px !important; }
+  }
+
+  @media(max-width:400px) {
+    .kpi-row { grid-template-columns: 1fr; }
+  }
+  .cross-table { width: 100%; border-collapse: collapse; }
+  .cross-table th {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; padding: 0 8px 10px 0;
+    text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .cross-table th:not(:first-child) { text-align: center; }
+  .cross-table td {
+    padding: 10px 8px 10px 0; font-size: 12px; color: var(--text);
+    border-bottom: 1px solid var(--border); vertical-align: middle;
+  }
+  .cross-table tr:last-child td { border-bottom: none; }
+  .cross-table td:not(:first-child) { text-align: center; }
+  .cross-table td.mes-label { font-weight: 500; color: #94a3b8; font-size: 12px; white-space: nowrap; }
+  .cell-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 32px; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;
+  }
+  .pill-alta  { background: #d1fae5; color: #065f46; }
+  .pill-media { background: #fef3c7; color: #92400e; }
+  .pill-baixa { background: #fee2e2; color: #991b1b; }
+  .pill-zero  { color: rgba(0,0,0,0.2); font-size: 11px; }
+  .cross-insight { }
+  .cross-insight-title {
+    font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .insight-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 11px 0; border-bottom: 1px solid var(--border);
+  }
+  .insight-item:last-child { border-bottom: none; }
+  .insight-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .insight-text { font-size: 12px; color: #374151; line-height: 1.55; }
+  .insight-text strong { color: var(--text); font-weight: 600; }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer p { font-size: 11px; color: var(--muted); }
+
+  /* Animate on load */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .kpi-card, .card { animation: fadeUp .5s ease both; }
+  .kpi-card:nth-child(1){animation-delay:.05s}
+  .kpi-card:nth-child(2){animation-delay:.1s}
+  .kpi-card:nth-child(3){animation-delay:.15s}
+  .kpi-card:nth-child(4){animation-delay:.2s}
+
+  /* ── Abas ── */
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .tab-btn {
+    padding: 16px 24px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--accent1); }
+  .tab-btn.active { color: var(--accent1); border-bottom-color: var(--accent1); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  /* Modal */
+  .modal-overlay {
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);
+    z-index:1000;align-items:center;justify-content:center;padding:16px;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal-box {
+    background:#fff;border-radius:14px;width:100%;max-width:820px;
+    max-height:88vh;display:flex;flex-direction:column;
+    box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden;
+  }
+  .modal-header {
+    padding:18px 22px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  }
+  .modal-body { overflow-y:auto;padding:0; }
+  .modal-close {
+    background:none;border:none;font-size:20px;cursor:pointer;
+    color:var(--muted);line-height:1;padding:4px 8px;border-radius:6px;
+  }
+  .modal-close:hover { background:var(--surface2);color:var(--text); }
+  tr.clickable-row { cursor:pointer; }
+  tr.clickable-row:hover td { background:#f0f7ff !important; }
+  @media(max-width:640px){
+    .tab-nav { padding: 0 16px; overflow-x: auto; }
+    .tab-btn { padding: 14px 16px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Tela de senha ── -->
+<div id="passwordScreen" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#f5f6f8;
+  display:none;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;
+">
+  <div style="
+    background:#fff;border-radius:16px;
+    padding:48px 40px;width:100%;max-width:380px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.10);
+    text-align:center;
+  ">
+    <div style="font-size:36px;margin-bottom:16px;">🔒</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#2563eb;margin-bottom:8px;">Pipeline de Projetos · 2026</div>
+    <h2 style="font-size:22px;font-weight:800;color:#111827;margin-bottom:6px;">Acesso Restrito</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:28px;">Digite a senha para visualizar o dashboard</p>
+    <input id="pwdInput" type="password" placeholder="Senha"
+      style="
+        width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;
+        border-radius:10px;font-size:15px;font-family:'Nunito',sans-serif;
+        outline:none;margin-bottom:12px;box-sizing:border-box;
+        transition:border-color .2s;
+      "
+      onkeydown="if(event.key==='Enter') checkPwd()"
+      onfocus="this.style.borderColor='#2563eb'"
+      onblur="this.style.borderColor='#e5e7eb'"
+    />
+    <div id="pwdError" style="font-size:12px;color:#dc2626;margin-bottom:12px;min-height:16px;"></div>
+    <button onclick="checkPwd()" style="
+      width:100%;padding:13px;background:#2563eb;color:#fff;
+      border:none;border-radius:10px;font-size:15px;font-weight:700;
+      font-family:'Nunito',sans-serif;cursor:pointer;
+      transition:background .2s;
+    "
+    onmouseover="this.style.background='#1d4ed8'"
+    onmouseout="this.style.background='#2563eb'"
+    >Entrar</button>
+  </div>
+</div>
+
+<script>
+function checkPwd() {
+  const input = document.getElementById('pwdInput').value;
+  if (input === 'Qualitor!@#25') {
+    document.getElementById('passwordScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'block';
+  } else {
+    document.getElementById('pwdError').textContent = 'Senha incorreta. Tente novamente.';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdInput').focus();
+  }
+}
+</script>
+<div id="mainContent" style="display:block;">
+
+<!-- ── Navegação de Abas ── -->
+<nav class="tab-nav">
+  <button class="tab-btn" onclick="switchTab('resumo', this)">📋 Resumo Executivo</button>
+        <button class="tab-btn active" onclick="switchTab('pipeline', this)">📊 Pipeline de Projetos</button>
+  <button class="tab-btn" onclick="switchTab('gestao', this)">📁 Gestão de Contratos</button>
+  <button class="tab-btn" onclick="switchTab('wtp', this)">🎯 Where to Play</button>
+  <button class="tab-btn" onclick="switchTab('cx', this)">👥 Experiência do Cliente</button>
+  <button class="tab-btn" onclick="switchTab('changelog', this)" style="margin-left:auto;font-size:11px;opacity:0.75;">📋 Histórico de Alterações</button>
+</nav>
+<script>
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
+
+<!-- ══ ABA 1: PIPELINE ══ -->
+<div id="tab-resumo" class="tab-panel">
+<div class="page">
+
+  <header>
+    <div class="header-left">
+      <div class="header-eyebrow">Resumo Executivo · 2026</div>
+      <h1 class="header-title">Resumo<br><span style="color:var(--accent1);">Executivo</span></h1>
+    </div>
+    <div class="header-right">
+      <div class="header-badge">
+        <span class="dot" style="background:var(--accent1);"></span>
+        Base: {{GT_FONTE}} · Atualizado em {{GT_DATA}}
+      </div>
+    </div>
+  </header>
+
+  <!-- ── 1. Cards Carteira Atual ── -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;">
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #2563eb;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">💰 Carteira Atual</div>
+      <div style="font-size:28px;font-weight:900;color:#2563eb;line-height:1;">{{GT_VTC_ATUAL}}</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">{{GT_N_ATUAL}} contratos ativos</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #374151;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📅 Carteira Jan/2026</div>
+      <div style="font-size:28px;font-weight:900;color:#374151;line-height:1;">R$ 7.484.447,13</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">Valor bruto inicial</div>
+    </div>
+
+    <div style="background:#fef2f2;border:1px solid #fecaca;border-top:3px solid #dc2626;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;margin-bottom:8px;">📉 Redução de Carteira</div>
+      <div style="font-size:28px;font-weight:900;color:#dc2626;line-height:1;">−{{GT_REDUCAO}}</div>
+      <div style="font-size:12px;color:#b91c1c;margin-top:6px;font-weight:600;">{{GT_PCT_REDUCAO}}% vs início do ano</div>
+    </div>
+
+  </div>
+
+  <!-- ── 2. Card MRR Inicial e Ajustado ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px;">
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px 24px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:10px;">📊 MRR Baseline (Jan/2026)</div>
+      <div style="font-size:32px;font-weight:900;color:#374151;line-height:1;">{{GT_MRR_TOTAL}}</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">{{GT_FONTE}} · aba atual</div>
+    </div>
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px 24px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;margin-bottom:10px;">📈 MRR Ajustado ({{RE_MES_AJUST}})</div>
+      <div style="font-size:32px;font-weight:900;color:#2563eb;line-height:1;">{{RE_MRR_AJUST}}</div>
+      <div style="font-size:12px;color:#1d4ed8;margin-top:6px;font-weight:600;">Após aprovações, cancelamentos e reduções</div>
+    </div>
+
+    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:20px 24px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;margin-bottom:10px;">📉 Variação Total MRR</div>
+      <div style="font-size:32px;font-weight:900;color:{{RE_COR_VAR}};line-height:1;">{{RE_MRR_VAR}}</div>
+      <div style="font-size:12px;color:#b91c1c;margin-top:6px;font-weight:600;">{{RE_MRR_VAR_PCT}}% vs baseline</div>
+    </div>
+
+  </div>
+
+  <!-- ── 3. Tabela MRR Ajustado ── -->
+  <div style="margin-bottom:28px;">
+    <div class="p26-section-label">Evolução Mensal do MRR Ajustado · 2026</div>
+    <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px 16px;margin-bottom:10px;font-size:12px;color:#6b7280;">
+      <strong>Fórmula:</strong> MRR Ajustado = MRR Baseline {{GT_MRR_TOTAL}} + MRR de Projetos Aprovados (≥ Jan/2026) − Cancelamentos de MRR − Reduções de MRR
+    </div>
+    <div style="overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;min-width:700px;">
+        <thead><tr style="background:#eff6ff;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">+ MRR Aprovado</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">− Cancelamentos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">− Reduções</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR Ajustado</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Δ vs mês ant.</th></tr></thead>
+        <tbody>{{RE_TBODY_EVOLUCAO}}  </tbody>
+        
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ── Projetos Fechados 2026 ── -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-top:3px solid #059669;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;margin-bottom:8px;">✅ Projetos Fechados 2026</div>
+      <div style="font-size:34px;font-weight:900;color:#059669;line-height:1;">{{PL_N_FAT}}</div>
+      <div style="font-size:12px;color:#065f46;margin-top:6px;font-weight:600;">{{PL_VT_FAT}} · aprovados ≥ jan/26</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e9d5ff;border-top:3px solid #7c3aed;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;margin-bottom:8px;">📊 MRR Aprovados</div>
+      <div style="font-size:34px;font-weight:900;color:#7c3aed;line-height:1;">{{PL_MRR_FAT}}</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">receita recorrente mensal</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #bfdbfe;border-top:3px solid #0891b2;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;margin-bottom:8px;">📊 ARR Aprovados</div>
+      <div style="font-size:34px;font-weight:900;color:#0891b2;line-height:1;">{{PL_ARR_FAT}}</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">receita anual</div>
+    </div>
+
+  </div>
+
+  <!-- ── Fechados por mês + detalhe ── -->
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:28px;">
+
+    <!-- Por mês -->
+    <div>
+      <div class="p26-section-label">Fechados por Mês</div>
+      <div style="border:1px solid #bbf7d0;border-radius:12px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f0fdf4;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Projetos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">VT</th></tr></thead>
+          <tbody>{{RE_TBODY_FAT_MES}}  </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Detalhe -->
+    <div>
+      <div class="p26-section-label">Detalhe · {{PL_N_FAT}} projetos · ordenado por data de aprovação</div>
+      <div style="overflow-y:auto;max-height:340px;border:1px solid #e9d5ff;border-radius:12px;">
+        <table style="width:100%;border-collapse:collapse;min-width:500px;">
+          <thead style="position:sticky;top:0;z-index:1;">
+            <tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Aprovação</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr>
+          </thead>
+          <tbody>{{RE_TBODY_DETALHE}}  </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Botão admin — visível somente quando window.__ADMIN__ === true -->
+  <div id="btn-send-resumo" style="display:none;margin-bottom:20px;text-align:right;">
+    <button onclick="enviarResumo()"
+      style="background:#2563eb;color:#fff;border:none;border-radius:10px;
+             padding:12px 24px;font-size:13px;font-weight:700;cursor:pointer;
+             display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(37,99,235,.3);">
+      ✉️ Enviar Resumo Executivo por Email
+    </button>
+  </div>
+
+  <div class="p26-meta">
+    Fonte: Renovação de Contratos · Relatório de Projetos ({{PL_FONTE}}) · <strong>Atualizado em {{GT_DATA}}</strong>
+  </div>
+
+</div><!-- .page -->
+</div><!-- fim tab-resumo -->
+
+<div id="tab-pipeline" class="tab-panel active">
+
+<style>
+  /* ── Header ─────────────────────────────── */
+  .p26-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 52px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .p26-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 8px;
+  }
+  .p26-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .p26-title span { color: var(--accent1); }
+  .p26-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .p26-meta strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ── Section label ─────────────────────── */
+  .p26-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* ── KPI grid — top row (4 cards) ───────── */
+  .p26-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .p26-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .p26-kpi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.07);
+  }
+  .p26-kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--kpi-accent, var(--accent1));
+    border-radius: 16px 16px 0 0;
+  }
+  .p26-kpi-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .p26-kpi-number {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+  .p26-kpi-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .p26-kpi-sub strong {
+    color: var(--kpi-accent, var(--accent1));
+    font-weight: 700;
+  }
+
+  /* ── Fechados card (full width) ─────────── */
+  .p26-fech-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+  }
+  .p26-fech-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent3);
+    border-radius: 16px 16px 0 0;
+  }
+  .p26-fech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .p26-fech-item {
+    padding: 8px 20px 8px 0;
+  }
+  .p26-fech-item + .p26-fech-item {
+    padding-left: 20px;
+    border-left: 1px solid var(--border);
+  }
+  .p26-fech-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .p26-fech-number {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent3);
+    line-height: 1;
+    letter-spacing: -1.5px;
+    margin-bottom: 6px;
+  }
+  .p26-fech-number.large { font-size: 28px; }
+  .p26-fech-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .p26-fech-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .p26-fech-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .p26-fech-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: #d1fae5;
+    color: #065f46;
+    padding: 4px 12px;
+    border-radius: 99px;
+  }
+
+  /* ── Animations ──────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .p26-kpi    { animation: fadeUp .4s ease both; }
+  .p26-kpi:nth-child(1) { animation-delay: .05s; }
+  .p26-kpi:nth-child(2) { animation-delay: .10s; }
+  .p26-kpi:nth-child(3) { animation-delay: .15s; }
+  .p26-kpi:nth-child(4) { animation-delay: .20s; }
+  .p26-fech-card { animation: fadeUp .4s .25s ease both; }
+
+  @media (max-width: 768px) {
+    .p26-kpi-row    { grid-template-columns: 1fr 1fr; }
+    .p26-fech-grid  { grid-template-columns: 1fr 1fr; }
+    .p26-fech-item + .p26-fech-item { border-left: none; padding-left: 0; }
+    .p26-fech-item:nth-child(3),
+    .p26-fech-item:nth-child(4) { padding-top: 16px; border-top: 1px solid var(--border); }
+    .p26-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .p26-meta { text-align: left; }
+  }
+  @media (max-width: 480px) {
+    .p26-kpi-row   { grid-template-columns: 1fr; }
+    .p26-fech-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="p26-header">
+    <div>
+      <div class="p26-eyebrow">Pipeline de Projetos · 2026</div>
+      <h1 class="p26-title">Pipeline de <br><span>Projetos</span></h1>
+    </div>
+    <div class="p26-meta">
+      Fonte: Relatório de Projetos · {{PL_FONTE}}
+      <strong>Atualizado em {{PL_DATA}}</strong>
+    </div>
+  </div>
+
+  <!-- Seção 1 — Visão Geral -->
+  <div class="p26-section-label">Visão Geral</div>
+  <div class="p26-kpi-row">
+
+    <!-- Ativos -->
+    <div class="p26-kpi" style="--kpi-accent:#2563eb">
+      <div class="p26-kpi-label">Projetos Ativos</div>
+      <div class="p26-kpi-number">{{PL_N_ATIVOS}}</div>
+      <div class="p26-kpi-sub">Exclui <strong>Cancelados</strong> e Encerrados</div>
+    </div>
+
+    <!-- Enviados -->
+    <div class="p26-kpi" style="--kpi-accent:#7c3aed">
+      <div class="p26-kpi-label">Proj. Enviados</div>
+      <div class="p26-kpi-number">{{PL_N_ENVIADOS}}</div>
+      <div class="p26-kpi-sub">Etapa <strong>Projeto Enviado</strong></div>
+    </div>
+
+    <!-- Negociação -->
+    <div class="p26-kpi" style="--kpi-accent:#d97706">
+      <div class="p26-kpi-label">Em Negociação</div>
+      <div class="p26-kpi-number">{{PL_N_NEG}}</div>
+      <div class="p26-kpi-sub">Etapa <strong>Negociação</strong></div>
+    </div>
+
+    <!-- Valor Total -->
+    <div class="p26-kpi" style="--kpi-accent:#0891b2">
+      <div class="p26-kpi-label">Valor Total Enviados</div>
+      <div class="p26-kpi-number" style="font-size:30px;letter-spacing:-1px;">{{PL_VT_ENVIADOS}}</div>
+      <div class="p26-kpi-sub">Etapa <strong>Projeto Enviado</strong></div>
+    </div>
+
+  </div>
+
+  
+<!-- Seção 2 — Projetos Fechados -->
+  <div class="p26-section-label" style="margin-top:32px;">Projetos Fechados — 2026</div>
+  <div class="p26-fech-card">
+    <div class="p26-fech-header">
+      <div class="p26-fech-title">Aprovados a partir de Janeiro / 2026</div>
+      <div class="p26-fech-badge">Data de aprovação ≥ jan/2026</div>
+    </div>
+    <div class="p26-fech-grid">
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">Quantidade</div>
+        <div class="p26-fech-number">{{PL_N_FAT}}</div>
+        <div class="p26-fech-sub">projetos faturados</div>
+      </div>
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">Valor Total</div>
+        <div class="p26-fech-number large">{{PL_VT_FAT}}</div>
+        <div class="p26-fech-sub">soma dos VT dos projetos</div>
+      </div>
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">MRR</div>
+        <div class="p26-fech-number large">{{PL_MRR_FAT}}</div>
+        <div class="p26-fech-sub">receita recorrente mensal</div>
+      </div>
+
+      <div class="p26-fech-item">
+        <div class="p26-fech-label">ARR</div>
+        <div class="p26-fech-number large">{{PL_ARR_FAT}}</div>
+        <div class="p26-fech-sub">receita para os próximos 12 meses</div>
+      </div>
+
+    </div>
+  </div>
+
+  
+  
+  
+<!-- Seção 3 — Detalhe Projetos Fechados -->
+  <div class="p26-section-label" style="margin-top:40px;">Detalhe — Projetos Fechados 2026</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px 14px;border-bottom:1px solid var(--border);">
+      <div><div style="font-size:13px;font-weight:700;color:#111827;">Aprovados ≥ Jan / 2026</div><div style="font-size:12px;color:#6b7280;margin-top:2px;">{{PL_N_FAT}} projetos · ordenado por data de aprovação</div></div>
+      <div style="display:flex;gap:16px;font-size:11px;font-weight:700;color:#6b7280;align-items:center;"><span style="background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;">{{PL_N_FAT}} projetos</span><span>VT <strong style="color:#111827;margin-left:4px;">{{PL_VT_FAT}}</strong></span><span style="color:#7c3aed;">MRR <strong style="margin-left:4px;">{{PL_MRR_FAT}}</strong></span><span style="color:#0891b2;">ARR <strong style="margin-left:4px;">{{PL_ARR_FAT}}</strong></span></div></div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Aprovação</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;border-bottom:1px solid #e5e7eb;">ARR</th></tr></thead>
+      <tbody>{{PL_TBODY_DETALHE}}</tbody>
+      <tfoot><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;"><td colspan="3" style="padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;color:#059669;">Total · {{PL_N_FAT}} projetos</td><td style="padding:12px 16px;text-align:right;font-weight:800;color:#111827;">{{PL_VT_FAT}}</td><td style="padding:12px 16px;text-align:right;font-weight:800;color:#7c3aed;">{{PL_MRR_FAT}}</td><td style="padding:12px 16px;text-align:right;font-weight:800;color:#0891b2;">{{PL_ARR_FAT}}</td></tr></tfoot>
+    </table></div>
+  </div>
+
+
+<!-- Seção 5 — Fechados por Mês -->
+  <div class="p26-section-label" style="margin-top:40px;">Fechados por Mês — 2026</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px 14px;border-bottom:1px solid var(--border);">
+      <div><div style="font-size:13px;font-weight:700;color:#111827;">Volume por Mês de Aprovação</div><div style="font-size:12px;color:#6b7280;margin-top:2px;">Projetos aprovados ≥ Jan/2026 · agrupado por mês</div></div>
+      <span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid #bbf7d0;">Total: {{PL_VT_FAT}}</span>
+    </div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Projetos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead>
+      <tbody><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">jan/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">8</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 280.282,60</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">fev/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">5</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 51.416,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">mar/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">11</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 107.138,00</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">abr/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">6</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 50.992,00</td></tr><tr style="background:#ffffff;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">mai/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">3</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 4.883,93</td></tr><tr style="background:#f8fafc;border-bottom:1px solid #f3f4f6;"><td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">jun/26</td><td style="padding:12px 20px;text-align:center;"><span style="background:#f0fdf4;color:#166534;font-size:13px;font-weight:700;padding:3px 14px;border-radius:99px;">2</span></td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:700;color:#111827;">R$ 19.785,85</td></tr><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;"><td style="padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;color:#059669;">Total</td><td style="padding:12px 20px;text-align:center;font-size:13px;font-weight:800;color:#059669;">35</td><td style="padding:12px 20px;text-align:right;font-size:13px;font-weight:800;color:#059669;">{{PL_VT_FAT}}</td></tr></tbody>
+    </table></div>
+  </div>
+
+
+<!-- Card Movimentações Processo Financeiro -->
+  <div class="p26-section-label" style="margin-top:40px;">Movimentações · Processo Financeiro</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#111827;">Alterações na semana · Processo Financeiro</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:2px;">Comparativo {{PL_FONTE_ANT}} vs. {{PL_FONTE}} · semana corrente</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <span style="background:#f5f3ff;color:#7c3aed;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;">▲ {{PL_N_ENT_PF}} entrada{{PL_S_ENT}}</span>
+        <span style="background:#f0fdf4;color:#166534;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;">▼ {{PL_N_SAI_PF}} saída{{PL_S_SAI}}</span>
+      </div>
+    </div>
+    <div style="padding:10px 20px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7c3aed;background:#faf5ff;border-bottom:1px solid #ede9fe;">▲ Entraram no Processo Financeiro · {{PL_VT_ENT_PF}}</div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#faf5ff;"><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+      <tbody>{{PL_TBODY_ENT_PF}}</tbody>
+    </table></div>
+    <div style="padding:10px 20px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#059669;background:#f0fdf4;border-top:1px solid #d1fae5;border-bottom:1px solid #d1fae5;">▼ Saíram do Processo Financeiro · 1 projeto</div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#f0fdf4;"><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">Movimento</th><th style="padding:9px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+      <tbody>{{PL_TBODY_SAI_PF}}</tbody>
+    </table></div>
+  </div>
+
+
+
+  <!-- Seção 6 — Em Negociação -->
+  <div class="p26-section-label" style="margin-top:40px;">Em Negociação</div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px 14px;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#111827;">Projetos em fase de Negociação</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:2px;">Etapa · Negociação · projetos ativos</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span style="background:#fef3c7;color:#92400e;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid #fde68a;">{{PL_N_NEG}} projetos</span>
+        <span style="background:#fff;border:1px solid #e5e7eb;font-size:12px;font-weight:700;color:#111827;padding:5px 14px;border-radius:99px;">VT {{PL_VT_NEG}}</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#fffbeb;"><th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;border-bottom:1px solid #e5e7eb;">Responsável</th><th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;border-bottom:1px solid #e5e7eb;">Cotação</th><th style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;border-bottom:1px solid #e5e7eb;">Valor Total</th></tr></thead>
+      <tbody>{{PL_TBODY_NEG}}</tbody>
+    </table></div>
+  </div>
+
+<!-- Seção 4 — Projetos por Responsável -->
+  <div class="p26-section-label" style="margin-top:40px;">Projetos por Responsável</div>
+
+  <!-- Cards -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+    
+    <div class="resp-card" data-resp="Pedro Schreck" onclick="openDrilldown('Pedro Schreck')"
+      style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;
+             padding:18px 20px;cursor:pointer;transition:all .18s ease;
+             border-left:4px solid #2563eb;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;
+            letter-spacing:1.5px;color:#2563eb;margin-bottom:3px;">Pedro</div>
+          <div style="font-size:13px;font-weight:600;color:#374151;">Pedro Schreck</div>
+        </div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">{{PL_N_PEDRO}}</div>
+      </div>
+      <div style="height:4px;background:#f1f5f9;border-radius:2px;margin-bottom:8px;">
+        <div style="height:4px;width:{{PL_PCT_PEDRO}}%;background:#2563eb;border-radius:2px;transition:width .6s .1s ease;"></div>
+      </div>
+      <div style="font-size:11px;color:#9ca3af;font-weight:500;">{{PL_PCT_PEDRO}}% do total · clique para detalhar</div>
+    </div>
+    <div class="resp-card" data-resp="Anderson Bamberg" onclick="openDrilldown('Anderson Bamberg')"
+      style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;
+             padding:18px 20px;cursor:pointer;transition:all .18s ease;
+             border-left:4px solid #7c3aed;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;
+            letter-spacing:1.5px;color:#7c3aed;margin-bottom:3px;">Anderson</div>
+          <div style="font-size:13px;font-weight:600;color:#374151;">Anderson Bamberg</div>
+        </div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">{{PL_N_ANDERSON}}</div>
+      </div>
+      <div style="height:4px;background:#f1f5f9;border-radius:2px;margin-bottom:8px;">
+        <div style="height:4px;width:{{PL_PCT_ANDERSON}}%;background:#7c3aed;border-radius:2px;transition:width .6s .1s ease;"></div>
+      </div>
+      <div style="font-size:11px;color:#9ca3af;font-weight:500;">{{PL_PCT_ANDERSON}}% do total · clique para detalhar</div>
+    </div>
+    <div class="resp-card" data-resp="Talita Rodrigues" onclick="openDrilldown('Talita Rodrigues')"
+      style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;
+             padding:18px 20px;cursor:pointer;transition:all .18s ease;
+             border-left:4px solid #0891b2;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;
+            letter-spacing:1.5px;color:#0891b2;margin-bottom:3px;">Talita</div>
+          <div style="font-size:13px;font-weight:600;color:#374151;">Talita Rodrigues</div>
+        </div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">{{PL_N_TALITA}}</div>
+      </div>
+      <div style="height:4px;background:#f1f5f9;border-radius:2px;margin-bottom:8px;">
+        <div style="height:4px;width:{{PL_PCT_TALITA}}%;background:#0891b2;border-radius:2px;transition:width .6s .1s ease;"></div>
+      </div>
+      <div style="font-size:11px;color:#9ca3af;font-weight:500;">{{PL_PCT_TALITA}}% do total · clique para detalhar</div>
+    </div>
+    <div class="resp-card" data-resp="Ines Cristine Nunes Diogo" onclick="openDrilldown('Ines Cristine Nunes Diogo')"
+      style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;
+             padding:18px 20px;cursor:pointer;transition:all .18s ease;
+             border-left:4px solid #d97706;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;
+            letter-spacing:1.5px;color:#d97706;margin-bottom:3px;">Ines</div>
+          <div style="font-size:13px;font-weight:600;color:#374151;">Ines C. Nunes Diogo</div>
+        </div>
+        <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-1.5px;line-height:1;">{{PL_N_INES}}</div>
+      </div>
+      <div style="height:4px;background:#f1f5f9;border-radius:2px;margin-bottom:8px;">
+        <div style="height:4px;width:{{PL_PCT_INES}}%;background:#d97706;border-radius:2px;transition:width .6s .1s ease;"></div>
+      </div>
+      <div style="font-size:11px;color:#9ca3af;font-weight:500;">{{PL_PCT_INES}}% do total · clique para detalhar</div>
+    </div>
+  </div>
+
+  <!-- Drilldown panel -->
+  <div id="resp-drilldown" style="display:none;background:#fff;border:1px solid #e5e7eb;
+    border-radius:16px;overflow:hidden;animation:fadeUp .25s ease both;">
+
+    <!-- Header -->
+    <div id="dd-header" style="display:flex;justify-content:space-between;align-items:center;
+      padding:16px 20px;border-bottom:1px solid #e5e7eb;">
+      <div>
+        <div id="dd-title" style="font-size:14px;font-weight:700;color:#111827;"></div>
+        <div id="dd-sub"   style="font-size:12px;color:#6b7280;margin-top:2px;"></div>
+      </div>
+      <button onclick="closeDrilldown()" style="background:none;border:1px solid #e5e7eb;
+        border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;
+        color:#6b7280;cursor:pointer;">✕ Fechar</button>
+    </div>
+
+    <!-- Tabela -->
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#f8fafc;">
+            <th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;
+              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
+              border-bottom:1px solid #e5e7eb;">NP</th>
+            <th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;
+              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
+              border-bottom:1px solid #e5e7eb;">Cliente</th>
+            <th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;
+              text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;
+              border-bottom:1px solid #e5e7eb;">Etapa</th>
+            <th style="padding:9px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Valor Total</th>
+            <th style="padding:9px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Dias</th>
+          </tr>
+        </thead>
+        <tbody id="dd-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var respData = {{PL_RESP_DATA}};
+    var etapaColors = {
+      "Projeto Enviado":               ["#dbeafe","#1e40af"],
+      "Negociação":                    ["#fef3c7","#92400e"],
+      "Elaboração de Projeto":         ["#f3e8ff","#6b21a8"],
+      "Estimativa de Esforço":         ["#f0fdf4","#166534"],
+      "Qualificação":                  ["#f1f5f9","#334155"],
+      "Qualificação Concluída":        ["#ecfdf5","#065f46"],
+      "Elaboração de Caderno Técnico": ["#fff7ed","#9a3412"],
+      "Projeto Aprovado":              ["#dcfce7","#14532d"],
+      "Processo Financeiro":           ["#fdf4ff","#701a75"],
+      "Desistência":                   ["#f9fafb","#6b7280"],
+      "Projeto Reprovado":             ["#fef2f2","#991b1b"]
+    };
+
+    function badge(etapa) {
+      var c = etapaColors[etapa] || ["#f1f5f9","#334155"];
+      return '<span style="background:'+c[0]+';color:'+c[1]+';font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;">'+etapa+'</span>';
+    }
+
+    function ageDot(dias) {
+      if (dias === null || dias === undefined) return '';
+      var color, bg;
+      if (dias > 60)      { color = '#dc2626'; bg = '#fef2f2'; }
+      else if (dias >= 30){ color = '#d97706'; bg = '#fffbeb'; }
+      else                { color = '#16a34a'; bg = '#f0fdf4'; }
+      return '<span title="'+dias+' dias em aberto" style="display:inline-flex;align-items:center;gap:4px;'+
+        'background:'+bg+';color:'+color+';font-size:10px;font-weight:700;'+
+        'padding:2px 8px;border-radius:99px;white-space:nowrap;">'+
+        '<span style="width:6px;height:6px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+
+        dias+'d</span>';
+    }
+
+    function brFmt(v) {
+      if (!v || v === 0) return '<span style="color:#d1d5db;">—</span>';
+      return 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
+    window.openDrilldown = function(resp) {
+      var info = respData[resp];
+      if (!info) return;
+
+      document.querySelectorAll('.resp-card').forEach(function(c) {
+        c.style.opacity   = c.dataset.resp === resp ? '1' : '0.45';
+        c.style.transform = c.dataset.resp === resp ? 'translateY(-2px)' : 'none';
+        c.style.boxShadow = c.dataset.resp === resp ? '0 6px 20px rgba(0,0,0,.08)' : 'none';
+      });
+
+      document.getElementById('dd-title').textContent = resp;
+      document.getElementById('dd-sub').textContent   =
+        info.qtd + ' projetos ativos · excl. Cancelado e Encerrado';
+
+      var tbody = document.getElementById('dd-tbody');
+      tbody.innerHTML = info.projetos.map(function(p, i) {
+        var bg = i % 2 === 0 ? '#ffffff' : '#fafafa';
+        return '<tr style="background:'+bg+';border-bottom:1px solid #f3f4f6;">' +
+          '<td style="padding:10px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#2563eb;white-space:nowrap;">'+p.np+'</td>' +
+          '<td style="padding:10px 16px;font-size:13px;font-weight:500;color:#111827;">'+p.cliente+'</td>' +
+          '<td style="padding:10px 16px;">'+badge(p.etapa)+'</td>' +
+          '<td style="padding:10px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">'+brFmt(p.vt)+'</td>' +
+          '<td style="padding:10px 16px;text-align:center;">'+ageDot(p.dias)+'</td>' +
+          '</tr>';
+      }).join('');
+
+      var panel = document.getElementById('resp-drilldown');
+      panel.style.display = 'block';
+      panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+    };
+
+    window.closeDrilldown = function() {
+      document.getElementById('resp-drilldown').style.display = 'none';
+      document.querySelectorAll('.resp-card').forEach(function(c) {
+        c.style.opacity   = '1';
+        c.style.transform = 'none';
+        c.style.boxShadow = 'none';
+      });
+    };
+
+    document.querySelectorAll('.resp-card').forEach(function(c) {
+      c.addEventListener('mouseenter', function() {
+        if (c.style.opacity !== '0.45') c.style.boxShadow = '0 4px 16px rgba(0,0,0,.07)';
+      });
+      c.addEventListener('mouseleave', function() {
+        if (c.style.opacity !== '0.45') c.style.boxShadow = 'none';
+      });
+    });
+  })();
+  </script>
+
+  </div>
+</div> <!-- fim tab-pipeline -->
+<div id="tab-gestao" class="tab-panel">
+<div class="page">
+
+  <header>
+    <div class="header-left">
+      <div class="header-eyebrow">Gestão de Contratos · 2026</div>
+      <h1 class="header-title">Gestão de<br><span style="color:var(--accent1);">Contratos</span></h1>
+    </div>
+    <div class="header-right">
+      <div class="header-badge">
+        <span class="dot" style="background:var(--accent1);"></span>
+        Base: S4M6 · Atualizado em 22/06/2026
+      </div>
+    </div>
+  </header>
+
+  <!-- KPIs -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px;">
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #374151;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📅 Carteira Jan/2026</div>
+      <div style="font-size:34px;font-weight:900;color:#111827;line-height:1;">144</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">R$ 7.484.447,13</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid var(--accent1);border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📋 Carteira Atual</div>
+      <div style="font-size:34px;font-weight:900;color:#2563eb;line-height:1;">135</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:6px;">R$ 7.201.874,95</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #dc2626;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">✖ Contratos Cancelados</div>
+      <div style="font-size:34px;font-weight:900;color:#dc2626;line-height:1;">{{GT_N_CANCEL}}</div>
+      <div style="font-size:12px;color:#b91c1c;margin-top:6px;font-weight:600;">{{GT_PCT_CANCEL}}% do total</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #059669;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">✅ Renovados</div>
+      <div style="font-size:34px;font-weight:900;color:#059669;line-height:1;">{{GT_N_RENOV}}</div>
+      <div style="font-size:12px;color:#065f46;margin-top:6px;font-weight:600;">{{GT_PCT_RENOV}}% da carteira atual</div>
+    </div>
+
+  </div>
+
+  <!-- VTC -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;">
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📅 Carteira Jan/2026</div>
+      <div style="font-size:26px;font-weight:900;color:#111827;line-height:1;">R$ 7.484.447,13</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:4px;">Valor bruto · incl. cancelados</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">💰 Carteira Atual</div>
+      <div style="font-size:26px;font-weight:900;color:#2563eb;line-height:1;">{{GT_VTC_ATUAL}}</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:4px;">Valor líquido · {{GT_N_ATUAL}} contratos ativos</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">📉 Redução da Carteira</div>
+      <div style="font-size:26px;font-weight:900;color:#dc2626;line-height:1;">−{{GT_REDUCAO}}</div>
+      <div style="font-size:11px;color:#dc2626;margin-top:4px;font-weight:600;">{{GT_PCT_REDUCAO}}% vs início do ano</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">🎯 Ticket Médio</div>
+      <div style="font-size:26px;font-weight:900;color:#374151;line-height:1;">{{GT_TICKET}}</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:4px;">por contrato ativo</div>
+    </div>
+
+  </div>
+
+  <!-- MRR -->
+  <div style="margin-bottom:28px;">
+    <div class="p26-section-label">MRR — Receita Recorrente Mensal</div>
+    <div style="overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Contratos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Cancelamentos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Reduções</th></tr></thead></table></div>
+  </div>
+
+  <!-- ARR -->
+  <div style="margin-bottom:28px;">
+    <div class="p26-section-label">ARR — Receita Anual (Manutenção)</div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Contratos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Cancelamentos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Reduções</th></tr></thead>eceita Anual (Manutenção)</div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Contratos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Cancelamentos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Reduções</th></tr></thead><tbody>{{GT_TBODY_MRR}}</tbody>eceita Anual (Manutenção)</div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Contratos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Cancelamentos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ Reduções</th></tr></thead><tbody>{{GT_TBODY_ARR}}</tbody></table></div>
+  </div>
+
+  <!-- Renovados -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">✅ Renovados</div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:700px;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Vencimento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody>{{GT_TBODY_RENOV}}</tbody></table></div>
+  </div>
+
+  <!-- PF -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">💜 Processo Financeiro</div>
+    <div style="overflow-x:auto;border:1px solid #e9d5ff;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:700px;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Vencimento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody>{{GT_TBODY_PF}}</tbody></table></div>
+  </div>
+
+  <!-- Em análise -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">🔵 Em Análise pelo Cliente</div>
+    <div style="overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:800px;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Prazo</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Vencimento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody>{{GT_TBODY_ANALISE}}</tbody></table></div>
+  </div>
+
+
+  <!-- Análise de Requisição -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">📋 Análise de Requisição — 112 contratos · agrupado por vencimento</div>
+    <div style="overflow-x:auto;border:1px solid #e5e7eb;border-radius:12px;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Vencimento</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Contratos</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead><tbody>{{GT_TBODY_REQ}}</tbody></table></div>
+  </div>
+
+  <!-- Cancelados -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">🔴 Contratos Cancelados</div>
+    <div style="overflow-x:auto;border:1px solid #fecaca;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:700px;"><thead><tr style="background:#fef2f2;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês Cancelamento</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Valor Total</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">ARR</th></tr></thead></table></div>
+  </div>
+
+  <div 
+  <!-- Análise de Requisição -->
+  <div style="margin-bottom:24px;">
+    <div class="p26-section-label">📉 Contratos Reduzidos — 8 contratos</div>
+    <div style="overflow-x:auto;border:1px solid #fde68a;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:600px;"><thead><tr style="background:#fef9c3;"><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">NP</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th><th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Resp.</th><th style="padding:10px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Mês Redução</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ MRR</th><th style="padding:10px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">▼ ARR</th></tr></thead><tbody>{{GT_TBODY_CANCEL}}</tbody></table></div>
+  </div>
+
+  <class="p26-meta">
+    Fonte: Renovação de Contratos · <strong>Atualizado em {{GT_DATA}}</strong>
+  </div>
+
+</div><!-- .page -->
+</div><!-- fim tab-gestao -->
+
+
+
+
+
+
+<div id="tab-wtp" class="tab-panel">
+<div class="page">
+
+  <header>
+    <div class="header-left">
+      <div class="header-eyebrow">Where to Play · Playing to Win</div>
+      <h1 class="header-title">Análise de<br><span style="color:var(--accent4);">Segmentos</span></h1>
+    </div>
+    <div class="header-right">
+      <div class="header-badge"><span class="dot" style="background:var(--accent4);"></span>64 proj · 134 contratos · 134 clientes na carteira</div>
+    </div>
+  </header>
+
+<!-- Intro metodologia -->
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px;margin-bottom:32px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+      <!-- Texto -->
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7c3aed;margin-bottom:10px;">A Metodologia</div>
+        <div style="font-size:18px;font-weight:800;color:#111827;margin-bottom:12px;line-height:1.3;">Playing to Win · <span style="color:#7c3aed;">Where to Play?</span></div>
+        <p style="font-size:13px;color:#374151;line-height:1.7;margin-bottom:12px;">Desenvolvida por Roger Martin e A.G. Lafley (ex-CEO da P&G), a metodologia <strong>Playing to Win</strong> define que estratégia é um conjunto de escolhas integradas que posicionam a empresa para vencer. A pergunta <em>"Where to Play?"</em> é a segunda das cinco escolhas estratégicas e define <strong>em quais arenas a empresa vai competir</strong> — e, tão importante, onde <em>não</em> vai.</p>
+        <p style="font-size:13px;color:#374151;line-height:1.7;">Sem essa escolha deliberada, a empresa tenta atender a todos e não vence em lugar nenhum. A escolha de <em>onde jogar</em> define o campo; a escolha de <em>como vencer</em> define o jogo.</p>
+      </div>
+      <!-- Cascata estratégica -->
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#9ca3af;margin-bottom:10px;">A Cascata Estratégica</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8fafc;border-radius:8px;"><span style="font-size:16px;">🏆</span><div><span style="font-size:11px;font-weight:700;color:#9ca3af;">1.</span> <span style="font-size:12px;font-weight:600;color:#374151;">Winning Aspiration</span> <span style="font-size:11px;color:#9ca3af;">— Qual é nossa ambição?</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f5f3ff;border-radius:8px;border:1px solid #ede9fe;"><span style="font-size:16px;">🎯</span><div><span style="font-size:11px;font-weight:700;color:#7c3aed;">2.</span> <span style="font-size:12px;font-weight:700;color:#7c3aed;">Where to Play</span> <span style="font-size:11px;color:#7c3aed;">— Em quais segmentos competir?</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8fafc;border-radius:8px;"><span style="font-size:16px;">⚔️</span><div><span style="font-size:11px;font-weight:700;color:#9ca3af;">3.</span> <span style="font-size:12px;font-weight:600;color:#374151;">How to Win</span> <span style="font-size:11px;color:#9ca3af;">— Como vencer nessas arenas?</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8fafc;border-radius:8px;"><span style="font-size:16px;">💪</span><div><span style="font-size:11px;font-weight:700;color:#9ca3af;">4.</span> <span style="font-size:12px;font-weight:600;color:#374151;">Capabilities</span> <span style="font-size:11px;color:#9ca3af;">— Quais capacidades precisamos?</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8fafc;border-radius:8px;"><span style="font-size:16px;">⚙️</span><div><span style="font-size:11px;font-weight:700;color:#9ca3af;">5.</span> <span style="font-size:12px;font-weight:600;color:#374151;">Management Systems</span> <span style="font-size:11px;color:#9ca3af;">— Quais sistemas de gestão?</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- H1 H2 H3 Section -->
+<div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px 28px;margin-bottom:28px;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:20px;">
+  <div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px;">Framework Estratégico</div>
+    <div style="font-size:18px;font-weight:800;color:#111827;margin-bottom:6px;">Três Horizontes de Crescimento</div>
+    <div style="font-size:13px;color:#6b7280;max-width:580px;">Baseado no modelo McKinsey Three Horizons, classifica cada segmento pelo estágio atual de maturidade da presença da Qualitor — orientando onde defender, onde investir e onde explorar.</div>  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#059669;font-size:11px;font-weight:700;padding:5px 14px;border-radius:99px;">H1 · 6 segmentos</span>
+    <span style="background:#fffbeb;border:1px solid #fde68a;color:#d97706;font-size:11px;font-weight:700;padding:5px 14px;border-radius:99px;">H2 · 3 segmentos</span>
+    <span style="background:#f8fafc;border:1px solid #e5e7eb;color:#6b7280;font-size:11px;font-weight:700;padding:5px 14px;border-radius:99px;">H3 · 3 segmentos</span>
+  </div>
+  </div>
+  <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">📐 Como esta análise é feita — Score por segmento</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="background:#fff;border-radius:10px;padding:12px;border:1px solid #e5e7eb;">
+        <div style="font-size:22px;font-weight:800;color:#2563eb;margin-bottom:4px;">30%</div>
+        <div style="font-size:12px;font-weight:700;color:#111827;">Share de Pipeline</div>
+        <div style="font-size:11px;color:#6b7280;margin-top:4px;">% dos projetos ativos da Qualitor que pertencem a este segmento</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:12px;border:1px solid #e5e7eb;">
+        <div style="font-size:22px;font-weight:800;color:#059669;margin-bottom:4px;">40%</div>
+        <div style="font-size:12px;font-weight:700;color:#111827;">Taxa de Conversão</div>
+        <div style="font-size:11px;color:#6b7280;margin-top:4px;">% dos projetos ativos que se converteram em projetos fechados</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:12px;border:1px solid #e5e7eb;">
+        <div style="font-size:22px;font-weight:800;color:#7c3aed;margin-bottom:4px;">20%</div>
+        <div style="font-size:12px;font-weight:700;color:#111827;">Share de MRR</div>
+        <div style="font-size:11px;color:#6b7280;margin-top:4px;">% do MRR total da carteira gerado por contratos deste segmento</div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:12px;border:1px solid #e5e7eb;">
+        <div style="font-size:22px;font-weight:800;color:#0891b2;margin-bottom:4px;">10%</div>
+        <div style="font-size:12px;font-weight:700;color:#111827;">Share de Contratos</div>
+        <div style="font-size:11px;color:#6b7280;margin-top:4px;">% dos contratos ativos da carteira que estão neste segmento</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:#6b7280;display:flex;align-items:center;gap:8px;">
+      <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 10px;border-radius:99px;">H1 Score ≥ 6 + MRR ≥ 8%</span>
+      <span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:2px 10px;border-radius:99px;">H2 Score ≥ 3 ou MRR ≥ 5% ou Pipeline ≥ 8%</span>
+      <span style="background:#f1f5f9;color:#475569;font-size:10px;font-weight:700;padding:2px 10px;border-radius:99px;">H3 demais casos</span>
+    </div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px;">
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:16px;overflow:hidden;"><div style="padding:20px 20px 16px;border-bottom:1px solid #bbf7d0;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;"><div><div style="display:inline-flex;align-items:center;gap:8px;background:#059669;color:#fff;font-size:12px;font-weight:800;padding:4px 14px;border-radius:99px;margin-bottom:8px;">H1 · 6 segmentos</div><div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px;">Núcleo — Defender e Rentabilizar</div><div style="font-size:12px;color:#6b7280;">Segmentos com base sólida de receita recorrente e pipeline ativo consistente</div></div></div><div style="background:#05966915;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:16px;flex-shrink:0;">⚡</span><div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#059669;margin-bottom:3px;">Ação Recomendada</div><div style="font-size:12px;color:#374151;font-weight:500;">Proteger a base instalada, aumentar wallet share por cliente, acelerar renovações e expandir contratos existentes.</div></div></div></div><div style="padding:16px 20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:10px;">Segmentos neste horizonte</div><div style="display:flex;flex-direction:column;gap:8px;"><div style="background:#fff;border:1px solid #2563eb30;border-left:3px solid #2563eb;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">💻</span><span style="font-size:12px;font-weight:700;color:#111827;">Tecnologia & TI</span></div><span style="font-size:10px;font-weight:700;color:#2563eb;background:#2563eb15;padding:2px 8px;border-radius:99px;">score 15.3</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 35 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 31 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 77K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 10.3%</span></div></div>
+<div style="background:#fff;border:1px solid #7c3aed30;border-left:3px solid #7c3aed;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🏗️</span><span style="font-size:12px;font-weight:700;color:#111827;">Serviços & Infraestrutura</span></div><span style="font-size:10px;font-weight:700;color:#7c3aed;background:#7c3aed15;padding:2px 8px;border-radius:99px;">score 12.9</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 19 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 21 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 71K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 13.6%</span></div></div>
+<div style="background:#fff;border:1px solid #4f46e530;border-left:3px solid #4f46e5;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">💳</span><span style="font-size:12px;font-weight:700;color:#111827;">Financeiro & Seguros</span></div><span style="font-size:10px;font-weight:700;color:#4f46e5;background:#4f46e515;padding:2px 8px;border-radius:99px;">score 9.2</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 24 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 12 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 69K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 4.0%</span></div></div>
+<div style="background:#fff;border:1px solid #05966930;border-left:3px solid #059669;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🏥</span><span style="font-size:12px;font-weight:700;color:#111827;">Saúde</span></div><span style="font-size:10px;font-weight:700;color:#059669;background:#05966915;padding:2px 8px;border-radius:99px;">score 9.1</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 21 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 14 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 119K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 0.0%</span></div></div>
+<div style="background:#fff;border:1px solid #d9770630;border-left:3px solid #d97706;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🏭</span><span style="font-size:12px;font-weight:700;color:#111827;">Indústria</span></div><span style="font-size:10px;font-weight:700;color:#d97706;background:#d9770615;padding:2px 8px;border-radius:99px;">score 12.6</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 16 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 16 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 62K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 15.8%</span></div></div>
+<div style="background:#fff;border:1px solid #ea580c30;border-left:3px solid #ea580c;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🍽️</span><span style="font-size:12px;font-weight:700;color:#111827;">Alimentos & Bebidas</span></div><span style="font-size:10px;font-weight:700;color:#ea580c;background:#ea580c15;padding:2px 8px;border-radius:99px;">score 9.5</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 7 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 9 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 70K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 12.5%</span></div></div></div></div><div style="padding:12px 20px 16px;border-top:1px solid #bbf7d0;"><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.met-arrow').textContent=this.nextElementSibling.style.display==='none'?'▶ Ver':'▼ Ocultar';" style="background:none;border:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#059669;cursor:pointer;display:flex;align-items:center;gap:4px;"><span class="met-arrow">▶ Ver</span> metodologia desta classificação</button><div style="display:none;margin-top:10px;font-size:11px;color:#6b7280;line-height:1.7;background:#f8fafc;border-radius:8px;padding:12px 14px;"><strong>Critérios H1:</strong> Score composto ≥ 6,0 <em>e</em> participação no MRR da carteira ≥ 8%. O score é calculado por: <strong>30% share de pipeline</strong> + <strong>40% taxa de conversão</strong> + <strong>20% share de MRR</strong> + <strong>10% share de contratos ativos</strong>. Segmentos H1 têm tanto presença estabelecida na carteira quanto geração ativa de negócios no pipeline — indicando que a empresa já tem credibilidade e capacidade de entrega comprovada nesse mercado.</div></div></div>
+  <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:16px;overflow:hidden;"><div style="padding:20px 20px 16px;border-bottom:1px solid #fde68a;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;"><div><div style="display:inline-flex;align-items:center;gap:8px;background:#d97706;color:#fff;font-size:12px;font-weight:800;padding:4px 14px;border-radius:99px;margin-bottom:8px;">H2 · 3 segmentos</div><div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px;">Emergente — Investir e Desenvolver</div><div style="font-size:12px;color:#6b7280;">Segmentos com potencial real mas ainda desequilibrados entre pipeline e carteira</div></div></div><div style="background:#d9770615;border:1px solid #fde68a;border-radius:10px;padding:10px 14px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:16px;flex-shrink:0;">⚡</span><div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#d97706;margin-bottom:3px;">Ação Recomendada</div><div style="font-size:12px;color:#374151;font-weight:500;">Identificar os maiores clientes desses segmentos na carteira, criar propostas de expansão, e aumentar investimento em prospecção qualificada.</div></div></div></div><div style="padding:16px 20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:10px;">Segmentos neste horizonte</div><div style="display:flex;flex-direction:column;gap:8px;"><div style="background:#fff;border:1px solid #db277730;border-left:3px solid #db2777;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🛍️</span><span style="font-size:12px;font-weight:700;color:#111827;">Varejo & Moda</span></div><span style="font-size:10px;font-weight:700;color:#db2777;background:#db277715;padding:2px 8px;border-radius:99px;">score 7.0</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 12 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 11 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 28K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 7.7%</span></div></div>
+<div style="background:#fff;border:1px solid #0891b230;border-left:3px solid #0891b2;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">📡</span><span style="font-size:12px;font-weight:700;color:#111827;">Telecom & Mídia</span></div><span style="font-size:10px;font-weight:700;color:#0891b2;background:#0891b215;padding:2px 8px;border-radius:99px;">score 8.5</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 5 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 7 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 11K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 16.7%</span></div></div>
+<div style="background:#fff;border:1px solid #0d948830;border-left:3px solid #0d9488;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🌱</span><span style="font-size:12px;font-weight:700;color:#111827;">Meio Ambiente</span></div><span style="font-size:10px;font-weight:700;color:#0d9488;background:#0d948815;padding:2px 8px;border-radius:99px;">score 15.5</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 8 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 4 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 14K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 33.3%</span></div></div></div></div><div style="padding:12px 20px 16px;border-top:1px solid #fde68a;"><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.met-arrow').textContent=this.nextElementSibling.style.display==='none'?'▶ Ver':'▼ Ocultar';" style="background:none;border:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#d97706;cursor:pointer;display:flex;align-items:center;gap:4px;"><span class="met-arrow">▶ Ver</span> metodologia desta classificação</button><div style="display:none;margin-top:10px;font-size:11px;color:#6b7280;line-height:1.7;background:#f8fafc;border-radius:8px;padding:12px 14px;"><strong>Critérios H2:</strong> Score ≥ 3,0 <em>ou</em> share de MRR ≥ 5% <em>ou</em> share de pipeline ≥ 8%, mas sem atingir o limiar de H1. Esses segmentos mostram presença relevante em pelo menos uma dimensão — pipeline promissor sem carteira consolidada (ex: Telecom com 16,7% de conversão), ou carteira ativa com pipeline fraco (ex: Varejo com 11 contratos mas conversão de apenas 7,7%). Precisam de investimento direcionado para equilibrar as duas dimensões.</div></div></div>
+  <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;"><div style="padding:20px 20px 16px;border-bottom:1px solid #e5e7eb;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;"><div><div style="display:inline-flex;align-items:center;gap:8px;background:#6b7280;color:#fff;font-size:12px;font-weight:800;padding:4px 14px;border-radius:99px;margin-bottom:8px;">H3 · 3 segmentos</div><div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px;">Exploração — Testar com Cautela</div><div style="font-size:12px;color:#6b7280;">Segmentos com baixa presença hoje, mas que podem representar apostas futuras</div></div></div><div style="background:#6b728015;border:1px solid #e5e7eb;border-radius:10px;padding:10px 14px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:16px;flex-shrink:0;">⚡</span><div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7280;margin-bottom:3px;">Ação Recomendada</div><div style="font-size:12px;color:#374151;font-weight:500;">Manter presença mínima, monitorar sinais de mercado, e só aumentar investimento se houver validação de demanda consistente.</div></div></div></div><div style="padding:16px 20px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:10px;">Segmentos neste horizonte</div><div style="display:flex;flex-direction:column;gap:8px;"><div style="background:#fff;border:1px solid #65a30d30;border-left:3px solid #65a30d;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🌾</span><span style="font-size:12px;font-weight:700;color:#111827;">Agronegócio</span></div><span style="font-size:10px;font-weight:700;color:#65a30d;background:#65a30d15;padding:2px 8px;border-radius:99px;">score 2.8</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 11 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 6 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 13K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 0.0%</span></div></div>
+<div style="background:#fff;border:1px solid #9333ea30;border-left:3px solid #9333ea;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🎓</span><span style="font-size:12px;font-weight:700;color:#111827;">Educação</span></div><span style="font-size:10px;font-weight:700;color:#9333ea;background:#9333ea15;padding:2px 8px;border-radius:99px;">score 1.8</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 8 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 3 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 5K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 0.0%</span></div></div>
+<div style="background:#fff;border:1px solid #47556930;border-left:3px solid #475569;border-radius:10px;padding:12px 14px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:15px;">🏛️</span><span style="font-size:12px;font-weight:700;color:#111827;">Governo & Público</span></div><span style="font-size:10px;font-weight:700;color:#475569;background:#47556915;padding:2px 8px;border-radius:99px;">score 1.3</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><span style="font-size:10px;color:#6b7280;background:#f8fafc;padding:2px 8px;border-radius:6px;">🔵 5 proj</span><span style="font-size:10px;color:#059669;background:#f0fdf4;padding:2px 8px;border-radius:6px;">📋 3 contr</span><span style="font-size:10px;color:#7c3aed;background:#f5f3ff;padding:2px 8px;border-radius:6px;">💰 R$ 7K/mês</span><span style="font-size:10px;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">🎯 conv. 0.0%</span></div></div></div></div><div style="padding:12px 20px 16px;border-top:1px solid #e5e7eb;"><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.met-arrow').textContent=this.nextElementSibling.style.display==='none'?'▶ Ver':'▼ Ocultar';" style="background:none;border:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:4px;"><span class="met-arrow">▶ Ver</span> metodologia desta classificação</button><div style="display:none;margin-top:10px;font-size:11px;color:#6b7280;line-height:1.7;background:#f8fafc;border-radius:8px;padding:12px 14px;"><strong>Critérios H3:</strong> Score &lt; 3,0, share de MRR &lt; 5% e share de pipeline &lt; 8%. Baixa representatividade nos dois lados (pipeline <em>e</em> carteira). Não significa que o segmento não tem valor estratégico — significa que a empresa ainda não tem escala suficiente para considerar como foco. A entrada deve ser deliberada e testada, com aprendizados antes de comprometer recursos significativos.</div></div></div>
+</div>
+
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:0 0 14px;">📌 Insights Estratégicos</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;"><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #059669;border-radius:12px;padding:20px 18px;"><div style="font-size:22px;margin-bottom:10px;">💰</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Maior MRR na carteira</div><div style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:#059669">Saúde</strong> lidera com <strong>R$ 119K</strong>/mês (14 contratos ativos).</div></div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #2563eb;border-radius:12px;padding:20px 18px;"><div style="font-size:22px;margin-bottom:10px;">🎯</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Melhor conversão no pipeline</div><div style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:#0d9488">Meio Ambiente</strong> converte <strong>33.3%</strong> dos projetos ativos.</div></div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #7c3aed;border-radius:12px;padding:20px 18px;"><div style="font-size:22px;margin-bottom:10px;">🔓</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Clientes exclusivos da carteira</div><div style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:#7c3aed;">Tecnologia & TI</strong> tem <strong>13</strong> clientes só na carteira sem projetos ativos — oportunidade imediata de expansão.</div></div><div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid #dc2626;border-radius:12px;padding:20px 18px;"><div style="font-size:22px;margin-bottom:10px;">⚡</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">Base instalada sem expansão</div><div style="font-size:12px;color:var(--muted);line-height:1.6;"><strong>Saúde</strong><strong>, </strong><strong>Agronegócio</strong><strong>, </strong><strong>Educação</strong> têm receita recorrente ativa mas <strong style="color:#dc2626;">0% de conversão</strong> no pipeline.</div></div></div>
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:0 0 14px;">Ranking por Segmento · Pipeline × Carteira</div>
+<div class="card">
+  <div class="card-header"><div><div class="card-title">Onde estamos jogando hoje?</div><div class="card-subtitle">Clique em qualquer linha para ver projetos e contratos · Carteira = S3M4 excl. cancelados · Conv. = Fechados ÷ Ativos</div></div></div>
+  <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
+    <thead><tr style="background:var(--surface2);"><th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Segmento</th><th style="padding:11px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Pipeline</th><th style="padding:11px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid var(--border);">Carteira</th><th style="padding:11px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;border-bottom:1px solid var(--border);">MRR Carteira</th><th style="padding:11px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;border-bottom:1px solid var(--border);">Conv.</th><th style="padding:11px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid var(--border);">Só Carteira</th><th style="padding:11px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Recomendação</th></tr></thead>
+    <tbody><tr class="clickable-row" onclick="wtpDrilldown('Tecnologia & TI')" style="background:var(--surface);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💻</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Tecnologia & TI</div><div style="font-size:11px;color:var(--muted);">40 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#2563eb18;color:#2563eb;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">35</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">31</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 77K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#d97706;">10.3%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">13</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Jogar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Serviços & Infraestrutura')" style="background:var(--surface2);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏗️</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Serviços & Infraestrutura</div><div style="font-size:11px;color:var(--muted);">24 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#7c3aed18;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">19</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">21</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 71K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#d97706;">13.6%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">12</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Jogar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Financeiro & Seguros')" style="background:var(--surface);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💳</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Financeiro & Seguros</div><div style="font-size:11px;color:var(--muted);">11 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#4f46e518;color:#4f46e5;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">24</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">12</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 69K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#dc2626;">4.0%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">4</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Explorar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Saúde')" style="background:var(--surface2);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏥</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Saúde</div><div style="font-size:11px;color:var(--muted);">19 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#05966918;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">21</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">14</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 119K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#dc2626;">0.0%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">7</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Explorar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Indústria')" style="background:var(--surface);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏭</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Indústria</div><div style="font-size:11px;color:var(--muted);">20 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#d9770618;color:#d97706;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">16</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">16</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 62K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#059669;">15.8%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">11</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Jogar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Varejo & Moda')" style="background:var(--surface2);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🛍️</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Varejo & Moda</div><div style="font-size:11px;color:var(--muted);">12 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#db277718;color:#db2777;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">12</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">11</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 28K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#d97706;">7.7%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">7</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Explorar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Agronegócio')" style="background:var(--surface);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🌾</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Agronegócio</div><div style="font-size:11px;color:var(--muted);">8 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#65a30d18;color:#65a30d;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">11</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">6</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 13K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#dc2626;">0.0%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">2</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fee2e2;color:#991b1b;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Avaliar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Alimentos & Bebidas')" style="background:var(--surface2);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🍽️</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Alimentos & Bebidas</div><div style="font-size:11px;color:var(--muted);">11 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#ea580c18;color:#ea580c;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">7</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">9</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 70K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#d97706;">12.5%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">5</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Explorar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Telecom & Mídia')" style="background:var(--surface);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">📡</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Telecom & Mídia</div><div style="font-size:11px;color:var(--muted);">8 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#0891b218;color:#0891b2;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">5</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">7</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 11K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#059669;">16.7%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">4</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Jogar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Meio Ambiente')" style="background:var(--surface2);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🌱</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Meio Ambiente</div><div style="font-size:11px;color:var(--muted);">7 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#0d948818;color:#0d9488;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">8</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">4</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 14K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#059669;">33.3%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">2</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Jogar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Educação')" style="background:var(--surface);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🎓</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Educação</div><div style="font-size:11px;color:var(--muted);">7 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#9333ea18;color:#9333ea;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">8</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">3</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 5K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#dc2626;">0.0%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">1</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fee2e2;color:#991b1b;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Avaliar</span></td></tr>
+<tr class="clickable-row" onclick="wtpDrilldown('Governo & Público')" style="background:var(--surface2);border-bottom:1px solid var(--border);"><td style="padding:11px 16px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏛️</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Governo & Público</div><div style="font-size:11px;color:var(--muted);">3 clientes</div></div></div></td><td style="padding:11px 16px;text-align:center;"><span style="background:#47556918;color:#475569;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">5</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#f0fdf4;color:#059669;font-size:12px;font-weight:700;padding:3px 12px;border-radius:99px;">3</span></td><td style="padding:11px 16px;text-align:right;font-size:13px;font-weight:600;color:#059669;">R$ 7K</td><td style="padding:11px 16px;text-align:center;font-size:13px;font-weight:700;color:#dc2626;">0.0%</td><td style="padding:11px 16px;text-align:center;"><span style="background:#f5f3ff;color:#7c3aed;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;">0</span></td><td style="padding:11px 16px;text-align:center;"><span style="background:#fee2e2;color:#991b1b;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;">Avaliar</span></td></tr></tbody>
+  </table></div>
+  <div style="padding:10px 16px;background:var(--surface2);border-top:1px solid var(--border);display:flex;gap:16px;font-size:11px;color:var(--muted);flex-wrap:wrap;align-items:center;"><span><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;">Jogar</span> Score ≥ 8</span><span><span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;">Explorar</span> Score 4–8</span><span><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;">Avaliar</span> Score &lt; 4</span></div>
+</div>
+<div id="wtp-drilldown" style="display:none;margin-bottom:24px;" class="card"><div class="card-header"><div><div id="wtp-dd-title" class="card-title"></div><div id="wtp-dd-sub" class="card-subtitle"></div></div><button onclick="wtpClose()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;">✕ Fechar</button></div><div style="display:flex;border-bottom:1px solid var(--border);margin:-4px 0 0;"><button id="wtp-tab-proj" onclick="wtpTab('proj')" style="padding:10px 20px;font-size:12px;font-weight:700;background:none;border:none;border-bottom:2px solid var(--accent1);color:var(--text);cursor:pointer;">📊 Pipeline</button><button id="wtp-tab-contr" onclick="wtpTab('contr')" style="padding:10px 20px;font-size:12px;font-weight:700;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;">📋 Carteira</button></div><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead id="wtp-dd-thead"></thead><tbody id="wtp-dd-tbody"></tbody></table></div></div>
+<script>
+(function(){
+var D={"Tecnologia & TI": {"pipe_ativos": 18, "pipe_vt": 447889.77, "pipe_enviados": 18, "pipe_negoc": 0, "pipe_fechados": 4, "pipe_vt_fech": 68821.6, "conv_pct": 18.2, "contr_ativos": 31, "contr_cancel": 0, "contr_mrr": 76889.25, "contr_arr": 144806.17, "contr_vt": 972088.01, "n_cli_pipe": 26, "n_cli_contr": 31, "n_cli_ambos": 19, "n_cli_so_contr": 12, "n_cli_so_pipe": 7, "projetos": [{"np": "NP-116385", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Projeto Enviado", "vt": 1200.0, "dias": null, "tipo": "ativo"}, {"np": "NP-116081", "cliente": "NETCENTER INFORMATICA", "etapa": "Projeto Faturado", "vt": 3800.0, "dias": null, "tipo": "fechado"}, {"np": "NP-115870", "cliente": "WAY DATA SOLUTION S/A", "etapa": "Projeto Enviado", "vt": 17700.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115812", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Faturado", "vt": 1140.0, "dias": null, "tipo": "fechado"}, {"np": "NP-115715", "cliente": "CORPFLEX INFORMATICA LTDA", "etapa": "Projeto Faturado", "vt": 992.0, "dias": null, "tipo": "fechado"}, {"np": "NP-115404", "cliente": "Solo Network", "etapa": "Projeto Enviado", "vt": 0.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115314", "cliente": "GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPRE", "etapa": "Projeto Enviado", "vt": 17670.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115265", "cliente": "Solucap Sistemas", "etapa": "Projeto Enviado", "vt": 58200.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115157", "cliente": "STEFANINI", "etapa": "Projeto Faturado", "vt": 62889.6, "dias": null, "tipo": "fechado"}, {"np": "NP-114418", "cliente": "RAPIDONET SISTEMAS", "etapa": "Projeto Enviado", "vt": 36000.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114405", "cliente": "S3CURITY", "etapa": "Projeto Enviado", "vt": 7600.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114383", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Enviado", "vt": 21600.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114249", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Projeto Enviado", "vt": 760.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113970", "cliente": "Data Engenharia", "etapa": "Projeto Enviado", "vt": 172116.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113740", "cliente": "GOVERNANÇA BRASIL", "etapa": "Projeto Enviado", "vt": 3800.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113639", "cliente": "INTERSISTEMAS INFORMATICA LTDA - NETLOGI", "etapa": "Projeto Enviado", "vt": 3007.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113582", "cliente": "SAFEWEB", "etapa": "Projeto Enviado", "vt": 30636.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113199", "cliente": "S3CURITY", "etapa": "Projeto Enviado", "vt": 5700.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113096", "cliente": "BRASTORAGE - THINK", "etapa": "Projeto Enviado", "vt": 10640.0, "dias": null, "tipo": "ativo"}, {"np": "NP-112404", "cliente": "NETCENTER INFORMATICA", "etapa": "Projeto Enviado", "vt": 32780.0, "dias": null, "tipo": "ativo"}, {"np": "NP-112211", "cliente": "GOLDEN TECHNOLOGIA", "etapa": "Projeto Enviado", "vt": 12436.77, "dias": null, "tipo": "ativo"}, {"np": "NP-112132", "cliente": "DATACOM", "etapa": "Projeto Enviado", "vt": 16044.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115078", "cliente": "CONNECTION SEGURANÇA E GESTÃO DE TI", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 949.43, "arr": 6242.03}, {"np": "115077", "cliente": "NETCENTER INFORMATICA", "etapa": "Em análise pelo cliente", "venc": "jan/26", "mrr": 0.0, "arr": 2254.0}, {"np": "115073", "cliente": "WAY DATA SOLUTION S/A", "etapa": "Renovado", "venc": "jan/26", "mrr": 0.0, "arr": 2930.46}, {"np": "115070", "cliente": "VANTIX TECNOLOGIA COMÉRCIO E SERVIÇOS DE", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 0.0, "arr": 10194.0}, {"np": "115058", "cliente": "TEEVO COM E SERVS DE INFORMÁTICA (MI)", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 82.0, "arr": 0.0}, {"np": "115057", "cliente": "TECCLOUD SERVICOS DE TECNOLOGIA AHU LTDA", "etapa": "Em análise pelo cliente", "venc": "jan/26", "mrr": 0.0, "arr": 13500.0}, {"np": "115055", "cliente": "STEFANINI", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 5918.55, "arr": 0.0}, {"np": "115052", "cliente": "SOLVER", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 3125.72, "arr": 0.0}, {"np": "115051", "cliente": "SERVIX", "etapa": "Análise de Requisição", "venc": "abr/26", "mrr": 856.45, "arr": 0.0}, {"np": "115038", "cliente": "SAFEWEB", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 10688.0, "arr": 0.0}, {"np": "115036", "cliente": "S3CURITY", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 0.0, "arr": 7183.0}, {"np": "115032", "cliente": "RCXIT NETWORK IT EXPERTS", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 0.0, "arr": 11010.0}, {"np": "115030", "cliente": "RAPIDONET SISTEMAS", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 1012.92, "arr": 9464.89}, {"np": "115028", "cliente": "QINTESS", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 1250.0, "arr": 0.0}, {"np": "115025", "cliente": "PERTO S/A PERIFÉRICOS P/ AUTOMAÇÃO - GRA", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 0.0}, {"np": "115019", "cliente": "MULTISUPORTE TECNOLOGIA", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 1620.93}, {"np": "115010", "cliente": "LG SISTEMAS", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 21863.99, "arr": 0.0}, {"np": "115005", "cliente": "JME INFORMÁTICA", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 2234.19, "arr": 0.0}, {"np": "115002", "cliente": "INTERSISTEMAS INFORMATICA LTDA - NETLOGI", "etapa": "Renovado", "venc": "fev/26", "mrr": 618.05, "arr": 0.0}, {"np": "114999", "cliente": "INOVATECH SOLUÇÕES EM INFORMÁTICA LTDA -", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 0.0, "arr": 4046.44}, {"np": "114998", "cliente": "INCORP TECHNOLOGY INFORMATICA LTDA - EPP", "etapa": "Processo Financeiro", "venc": "fev/26", "mrr": 0.0, "arr": 6388.02}, {"np": "114994", "cliente": "HT SOLUTIONS", "etapa": "Análise de Requisição", "venc": "jun/26", "mrr": 185.0, "arr": 0.0}, {"np": "114985", "cliente": "GOVERNANÇA BRASIL", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 10087.0, "arr": 0.0}, {"np": "114983", "cliente": "GOLDEN TECHNOLOGIA", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 1810.17, "arr": 0.0}, {"np": "114982", "cliente": "GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPRE", "etapa": "Em análise pelo cliente", "venc": "mar/26", "mrr": 0.0, "arr": 54090.0}, {"np": "114977", "cliente": "FLOWTI", "etapa": "Análise de Requisição", "venc": "jun/26", "mrr": 4216.81, "arr": 0.0}, {"np": "114972", "cliente": "EQUALITI E SOLUCOES EM TI LTDA", "etapa": "Análise de Requisição", "venc": "abr/26", "mrr": 0.0, "arr": 2832.72}, {"np": "114970", "cliente": "DATACOM", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 6820.06}, {"np": "114958", "cliente": "Celk Sistemas", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 10135.49, "arr": 0.0}, {"np": "114954", "cliente": "BRASTORAGE - THINK", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 1855.48, "arr": 0.0}, {"np": "114945", "cliente": "ATP", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 6229.62}], "ativos": 35, "vt_pipeline": 509434.88, "vt_fechados": 68821.6, "enviados": 19}, "Serviços & Infraestrutura": {"pipe_ativos": 8, "pipe_vt": 382514.0, "pipe_enviados": 8, "pipe_negoc": 0, "pipe_fechados": 3, "pipe_vt_fech": 130601.0, "conv_pct": 27.3, "contr_ativos": 21, "contr_cancel": 0, "contr_mrr": 70962.89, "contr_arr": 86277.05, "contr_vt": 937831.73, "n_cli_pipe": 13, "n_cli_contr": 21, "n_cli_ambos": 10, "n_cli_so_contr": 11, "n_cli_so_pipe": 3, "projetos": [{"np": "NP-115351", "cliente": "AUXILIADORA PREDIAL", "etapa": "Projeto Enviado", "vt": 266832.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115335", "cliente": "CPA", "etapa": "Projeto Enviado", "vt": 0.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115262", "cliente": "INTERCITY", "etapa": "Projeto Faturado", "vt": 76721.0, "dias": null, "tipo": "fechado"}, {"np": "NP-114700", "cliente": "Planem Engenharia", "etapa": "Projeto Enviado", "vt": 16100.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114660", "cliente": "M.L.GOMES", "etapa": "Projeto Faturado", "vt": 6080.0, "dias": null, "tipo": "fechado"}, {"np": "NP-113863", "cliente": "ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL", "etapa": "Projeto Enviado", "vt": 12872.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113660", "cliente": "AUXILIADORA PREDIAL", "etapa": "Projeto Enviado", "vt": 950.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113545", "cliente": "AUTOGLASS", "etapa": "Projeto Enviado", "vt": 70160.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113067", "cliente": "EBM Incorporações S/A", "etapa": "Projeto Faturado", "vt": 47800.0, "dias": null, "tipo": "fechado"}, {"np": "NP-111979", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Projeto Enviado", "vt": 6720.0, "dias": null, "tipo": "ativo"}, {"np": "NP-111866", "cliente": "VIAÇÃO OURO E PRATA S.A", "etapa": "Projeto Enviado", "vt": 8880.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115072", "cliente": "VIAÇÃO OURO E PRATA S.A", "etapa": "Análise de Requisição", "venc": "jun/26", "mrr": 932.17, "arr": 0.0}, {"np": "115071", "cliente": "VERZANI & SANDRINI LTDA", "etapa": "Em análise pelo cliente", "venc": "jan/26", "mrr": 0.0, "arr": 0.0}, {"np": "115062", "cliente": "TRISUL", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 450.0, "arr": 7250.0}, {"np": "115054", "cliente": "SOTRAN LOGÍSTICA E TRANSPORTE", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 4325.58, "arr": 36745.45}, {"np": "115044", "cliente": "SCGAS - COMPANHIA DE GAS DE SANTA CATARI", "etapa": "Análise de Requisição", "venc": "mar/26", "mrr": 0.0, "arr": 6986.0}, {"np": "115035", "cliente": "ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 2943.8, "arr": 0.0}, {"np": "115027", "cliente": "PLANSERVI ENGENHARIA", "etapa": "Renovado", "venc": "fev/26", "mrr": 0.0, "arr": 4909.09}, {"np": "115016", "cliente": "M.L.GOMES", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 2056.69, "arr": 0.0}, {"np": "115015", "cliente": "LUXCEL MAXLOG", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 941.26, "arr": 0.0}, {"np": "115001", "cliente": "INTERCITY", "etapa": "Renovado", "venc": "jan/26", "mrr": 3424.0, "arr": 0.0}, {"np": "114978", "cliente": "FORSALES MECANET", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 1399.82, "arr": 0.0}, {"np": "114974", "cliente": "EZEX", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 3333.54}, {"np": "114969", "cliente": "CPA", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 0.0, "arr": 10657.47}, {"np": "114966", "cliente": "CONSTRUTORA NORBERTO ODEBRECHT S.A.", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 4207.0, "arr": 0.0}, {"np": "114965", "cliente": "CONSTRUTORA MARQUISE", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 0.0, "arr": 14510.0}, {"np": "114964", "cliente": "CONSTRUCAP CCPS", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 913.85, "arr": 0.0}, {"np": "114949", "cliente": "AUXILIADORA PREDIAL", "etapa": "Renovado", "venc": "mar/26", "mrr": 34357.34, "arr": 0.0}, {"np": "114947", "cliente": "AUTOGLASS", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 6348.61, "arr": 0.0}, {"np": "114946", "cliente": "ATRIO HOTÉIS", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 441.58, "arr": 1885.5}, {"np": "114941", "cliente": "ANDRADE GUTIERREZ", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 6072.19, "arr": 0.0}, {"np": "114939", "cliente": "ADESTE PARTICIPACOES E EMPREENDIMENTOS L", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 2149.0, "arr": 0.0}], "ativos": 19, "vt_pipeline": 403654.0, "vt_fechados": 130601.0, "enviados": 8}, "Financeiro & Seguros": {"pipe_ativos": 6, "pipe_vt": 79580.0, "pipe_enviados": 6, "pipe_negoc": 2, "pipe_fechados": 1, "pipe_vt_fech": 9600.0, "conv_pct": 14.3, "contr_ativos": 11, "contr_cancel": 0, "contr_mrr": 49211.1, "contr_arr": 35845.75, "contr_vt": 626386.35, "n_cli_pipe": 7, "n_cli_contr": 10, "n_cli_ambos": 6, "n_cli_so_contr": 4, "n_cli_so_pipe": 1, "projetos": [{"np": "NP-116364", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 7600.0, "dias": null, "tipo": "ativo"}, {"np": "NP-116363", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 9120.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115830", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 9500.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114416", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 1360.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113663", "cliente": "BULLLA SA", "etapa": "Projeto Enviado", "vt": 38400.0, "dias": null, "tipo": "ativo"}, {"np": "NP-112107", "cliente": "SABEMI SEGURADORA", "etapa": "Projeto Faturado", "vt": 9600.0, "dias": null, "tipo": "fechado"}, {"np": "NP-111880", "cliente": "Argenta Participacoes LTDA", "etapa": "Projeto Enviado", "vt": 13600.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "NP-116108", "cliente": "Argenta Participacoes LTDA", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 19752.92, "arr": 0.0}, {"np": "NP-115702", "cliente": "Argenta Participacoes LTDA", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 3988.05, "arr": 0.0}, {"np": "115079", "cliente": "BULLLA SA", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 2970.6, "arr": 0.0}, {"np": "115048", "cliente": "SEPROL", "etapa": "Renovado", "venc": "jan/26", "mrr": 746.27, "arr": 0.0}, {"np": "115043", "cliente": "SAQUE PAGUE", "etapa": "Renovado", "venc": "fev/26", "mrr": 5081.9, "arr": 0.0}, {"np": "115037", "cliente": "SABEMI SEGURADORA", "etapa": "Renovado", "venc": "fev/26", "mrr": 1923.8, "arr": 0.0}, {"np": "115026", "cliente": "Pestana Leilões", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 0.0, "arr": 7387.08}, {"np": "114950", "cliente": "BEG", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 0.0, "arr": 3309.0}, {"np": "114948", "cliente": "AUTTAR - GETNET", "etapa": "Análise de Requisição", "venc": "jun/26", "mrr": 0.0, "arr": 20834.0}, {"np": "114940", "cliente": "AGIPLAN SERVIÇOS FINANCEIROS (AGIBANK)", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 14747.56, "arr": 0.0}, {"np": "114796", "cliente": "ABBC - Associação Brasileira de Bancos", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 0.0, "arr": 4315.67}], "ativos": 24, "vt_pipeline": 189595.0, "vt_fechados": 9600.0, "enviados": 5}, "Saúde": {"pipe_ativos": 7, "pipe_vt": 88140.0, "pipe_enviados": 7, "pipe_negoc": 0, "pipe_fechados": 0, "pipe_vt_fech": 0.0, "conv_pct": 0.0, "contr_ativos": 14, "contr_cancel": 1, "contr_mrr": 118721.32, "contr_arr": 168058.29, "contr_vt": 1557440.37, "n_cli_pipe": 11, "n_cli_contr": 14, "n_cli_ambos": 8, "n_cli_so_contr": 6, "n_cli_so_pipe": 3, "projetos": [{"np": "NP-115925", "cliente": "KleyHertz Farmacêutica", "etapa": "Projeto Enviado", "vt": 35520.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114550", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 15200.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114513", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 5700.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114397", "cliente": "UNIMED PORTO ALEGRE", "etapa": "Projeto Enviado", "vt": 6840.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114210", "cliente": "KleyHertz Farmacêutica", "etapa": "Projeto Enviado", "vt": 3600.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114061", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Projeto Enviado", "vt": 1520.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113847", "cliente": "FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX", "etapa": "Projeto Enviado", "vt": 19760.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115066", "cliente": "UNIMED VALES DO TAQUARI E RIO PARDO LTDA", "etapa": "Renovado", "venc": "fev/26", "mrr": 0.0, "arr": 38120.85}, {"np": "115065", "cliente": "UNIMED PORTO ALEGRE", "etapa": "Renovado", "venc": "mar/26", "mrr": 11068.22, "arr": 0.0}, {"np": "115040", "cliente": "SANTA CASA DE MISERICÓRDIA DE PORTO ALEG", "etapa": "Renovado", "venc": "mar/26", "mrr": 0.0, "arr": 3646.9}, {"np": "115039", "cliente": "SANTA CASA DE MISERICORDIA DA BAHIA", "etapa": "Em análise pelo cliente", "venc": "abr/26", "mrr": 1183.08, "arr": 0.0}, {"np": "115011", "cliente": "LIFE EMPRESARIAL SAÚDE LTDA", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 14838.17, "arr": 0.0}, {"np": "115008", "cliente": "KleyHertz Farmacêutica", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 0.0, "arr": 12823.0}, {"np": "114993", "cliente": "HOSPITAL MAE DE DEUS (AESC)", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 7880.0, "arr": 0.0}, {"np": "114992", "cliente": "HOSPITAL DE CLINICAS (HCPA)", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 2529.0, "arr": 0.0}, {"np": "114991", "cliente": "HOSPITAL CARE", "etapa": "Análise de Requisição", "venc": "jun/26", "mrr": 24903.05, "arr": 0.0}, {"np": "114981", "cliente": "FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 9723.8, "arr": 30466.42}, {"np": "114959", "cliente": "CENTRO HOSPITALAR DE SETÚBAL, EPE (TCSI)", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 0.0, "arr": 83001.12}, {"np": "114951", "cliente": "BIONOVIS S.A. - COMPANHIA BRASILEIRA DE ", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 0.0}, {"np": "114944", "cliente": "ASSOCIACAO HOSPITALAR MOINHOS DE VENTO", "etapa": "Em análise pelo cliente", "venc": "mar/26", "mrr": 3757.0, "arr": 0.0}, {"np": "114797", "cliente": "ACHE LABORATÓRIOS FARMACÊUTICOS SA", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 42839.0, "arr": 0.0}], "ativos": 21, "vt_pipeline": 212603.0, "vt_fechados": 0.0, "enviados": 7}, "Indústria": {"pipe_ativos": 7, "pipe_vt": 350336.0, "pipe_enviados": 7, "pipe_negoc": 0, "pipe_fechados": 3, "pipe_vt_fech": 3600.0, "conv_pct": 30.0, "contr_ativos": 15, "contr_cancel": 0, "contr_mrr": 59027.52, "contr_arr": 37477.67, "contr_vt": 745807.91, "n_cli_pipe": 11, "n_cli_contr": 15, "n_cli_ambos": 8, "n_cli_so_contr": 7, "n_cli_so_pipe": 3, "projetos": [{"np": "NP-116022", "cliente": "IRANI PAPEL E EMBALAGEM S.A", "etapa": "Projeto Enviado", "vt": 16720.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115653", "cliente": "FRIGELAR", "etapa": "Projeto Faturado", "vt": 0.0, "dias": null, "tipo": "fechado"}, {"np": "NP-115316", "cliente": "FRIGELAR", "etapa": "Projeto Faturado", "vt": 3600.0, "dias": null, "tipo": "fechado"}, {"np": "NP-114776", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Projeto Enviado", "vt": 1140.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114662", "cliente": "IRANI PAPEL E EMBALAGEM S.A", "etapa": "Projeto Faturado", "vt": 0.0, "dias": null, "tipo": "fechado"}, {"np": "NP-114308", "cliente": "SPRINGER CARRIER (MIDEA)", "etapa": "Projeto Enviado", "vt": 10776.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114241", "cliente": "PANATLANTICA", "etapa": "Projeto Enviado", "vt": 11400.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113859", "cliente": "FRIGELAR", "etapa": "Projeto Enviado", "vt": 24000.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113270", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Projeto Enviado", "vt": 6300.0, "dias": null, "tipo": "ativo"}, {"np": "NP-112013", "cliente": "FRIGELAR", "etapa": "Projeto Enviado", "vt": 280000.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "NP-116088", "cliente": "BOMBRIL S.A", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 10397.0, "arr": 0.0}, {"np": "115049", "cliente": "SERILON BRASIL", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 0.0, "arr": 3744.37}, {"np": "115033", "cliente": "RESERVA BRASILEIRA INDUSTRIA E COMERCIO ", "etapa": "Em análise pelo cliente", "venc": "abr/26", "mrr": 3050.76, "arr": 0.0}, {"np": "115024", "cliente": "PANATLANTICA", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 277.36, "arr": 0.0}, {"np": "NP-115022", "cliente": "OCYAN", "etapa": "Renovado", "venc": "jan/26", "mrr": 0.0, "arr": 9176.64}, {"np": "115018", "cliente": "MARELLI", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 0.0, "arr": 3763.92}, {"np": "115017", "cliente": "MARCOPOLO", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 0.0, "arr": 2914.25}, {"np": "115006", "cliente": "KEPLER WEBER", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 10679.5}, {"np": "115003", "cliente": "IRANI PAPEL E EMBALAGEM S.A", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 14743.0, "arr": 0.0}, {"np": "114997", "cliente": "INBETTA", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 4407.74, "arr": 0.0}, {"np": "114996", "cliente": "IMPORTADORA BAGE S/A", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 3124.0, "arr": 0.0}, {"np": "114979", "cliente": "FRIGELAR", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 13387.17, "arr": 0.0}, {"np": "114976", "cliente": "FERBASA", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 4011.49, "arr": 7198.99}, {"np": "114975", "cliente": "FCC - FORNECEDORA COMPONENTES QUÍMICOS E", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 2929.0, "arr": 0.0}, {"np": "114953", "cliente": "BRASKEM", "etapa": "Análise de Requisição", "venc": "abr/26", "mrr": 2700.0, "arr": 0.0}], "ativos": 16, "vt_pipeline": 356336.0, "vt_fechados": 3600.0, "enviados": 7}, "Varejo & Moda": {"pipe_ativos": 4, "pipe_vt": 42108.0, "pipe_enviados": 4, "pipe_negoc": 0, "pipe_fechados": 0, "pipe_vt_fech": 0.0, "conv_pct": 0.0, "contr_ativos": 11, "contr_cancel": 0, "contr_mrr": 28112.36, "contr_arr": 89101.97, "contr_vt": 426450.29, "n_cli_pipe": 8, "n_cli_contr": 11, "n_cli_ambos": 7, "n_cli_so_contr": 4, "n_cli_so_pipe": 1, "projetos": [{"np": "NP-115495", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Projeto Enviado", "vt": 1200.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115323", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Projeto Enviado", "vt": 20900.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113798", "cliente": "SAO JOAO FARMACIAS", "etapa": "Projeto Enviado", "vt": 15048.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113762", "cliente": "TORRA TORRA", "etapa": "Projeto Enviado", "vt": 4960.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115061", "cliente": "TORRA TORRA", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 4424.57, "arr": 0.0}, {"np": "115047", "cliente": "SEPHORA DO BRASIL PARTICIPAÇÕES S.A.", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 19264.2}, {"np": "115041", "cliente": "SAO JOAO FARMACIAS", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 2905.27, "arr": 0.0}, {"np": "115014", "cliente": "LOJAS LEBES", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 5420.61, "arr": 0.0}, {"np": "115013", "cliente": "LOJAS RENNER", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 521.2, "arr": 0.0}, {"np": "115012", "cliente": "LOJAS COLOMBO S/A", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 863.0, "arr": 0.0}, {"np": "114995", "cliente": "IGUATEMI EMPRESA DE SHOPPING CENTERS S/A", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 7141.4, "arr": 0.0}, {"np": "114989", "cliente": "GRUPO THATHI - PANAMBY", "etapa": "Análise de Requisição", "venc": "abr/26", "mrr": 3160.16, "arr": 0.0}, {"np": "114987", "cliente": "GRUPO MARINGÁ", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 1466.15, "arr": 7198.99}, {"np": "114956", "cliente": "CALÇADOS BEIRA RIO", "etapa": "Renovado", "venc": "jan/26", "mrr": 0.0, "arr": 9062.78}, {"np": "114942", "cliente": "AREZZO INDUSTRIA E COMERCIO LTDA", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 2210.0, "arr": 53576.0}], "ativos": 12, "vt_pipeline": 42868.0, "vt_fechados": 1140.0, "enviados": 4}, "Agronegócio": {"pipe_ativos": 4, "pipe_vt": 392868.0, "pipe_enviados": 4, "pipe_negoc": 0, "pipe_fechados": 0, "pipe_vt_fech": 0.0, "conv_pct": 0.0, "contr_ativos": 6, "contr_cancel": 0, "contr_mrr": 8328.63, "contr_arr": 68581.0, "contr_vt": 168524.56, "n_cli_pipe": 6, "n_cli_contr": 6, "n_cli_ambos": 4, "n_cli_so_contr": 2, "n_cli_so_pipe": 2, "projetos": [{"np": "NP-115875", "cliente": "CASTROLANDA", "etapa": "Projeto Enviado", "vt": 23472.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113753", "cliente": "COOPERATIVA AGRO-INDUSTRIAL HOLAMBRA", "etapa": "Projeto Enviado", "vt": 343404.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113547", "cliente": "TIMAC AGRO", "etapa": "Projeto Enviado", "vt": 24192.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113058", "cliente": "CASTROLANDA", "etapa": "Projeto Enviado", "vt": 1800.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115074", "cliente": "ZILOR ENERGIA E ALIMENTOS", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 3204.47, "arr": 0.0}, {"np": "115069", "cliente": "USINA SAO JOSE DA ESTIVA", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 1967.37, "arr": 0.0}, {"np": "115068", "cliente": "USINA SANTA ISABEL", "etapa": "Renovado", "venc": "fev/26", "mrr": 1435.0, "arr": 0.0}, {"np": "115060", "cliente": "TIMAC AGRO", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 11826.0}, {"np": "114968", "cliente": "COTRIBÁ", "etapa": "Renovado", "venc": "mar/26", "mrr": 623.79, "arr": 0.0}, {"np": "114957", "cliente": "CASTROLANDA", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 1098.0, "arr": 56755.0}], "ativos": 11, "vt_pipeline": 392868.0, "vt_fechados": 0.0, "enviados": 4}, "Alimentos & Bebidas": {"pipe_ativos": 2, "pipe_vt": 133487.0, "pipe_enviados": 2, "pipe_negoc": 0, "pipe_fechados": 1, "pipe_vt_fech": 760.0, "conv_pct": 33.3, "contr_ativos": 9, "contr_cancel": 0, "contr_mrr": 69931.62, "contr_arr": 34501.98, "contr_vt": 873674.1, "n_cli_pipe": 8, "n_cli_contr": 9, "n_cli_ambos": 6, "n_cli_so_contr": 3, "n_cli_so_pipe": 2, "projetos": [{"np": "NP-114520", "cliente": "Nutrire Indústria de Alimentos", "etapa": "Projeto Enviado", "vt": 23087.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114454", "cliente": "KICALDO", "etapa": "Projeto Faturado", "vt": 760.0, "dias": null, "tipo": "fechado"}, {"np": "NP-113068", "cliente": "CERVEJARIA PETRÓPOLIS", "etapa": "Projeto Enviado", "vt": 110400.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "NP-116091", "cliente": "CERVEJARIA PETRÓPOLIS", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 21968.61, "arr": 0.0}, {"np": "115076", "cliente": "FORNO DE MINAS", "etapa": "Processo Financeiro", "venc": "jan/26", "mrr": 0.0, "arr": 777.0}, {"np": "115064", "cliente": "UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A.", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 24390.47, "arr": 0.0}, {"np": "115059", "cliente": "TENDA ATACADO", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 0.0, "arr": 19865.53}, {"np": "115042", "cliente": "Sapore", "etapa": "Análise de Requisição", "venc": "mar/26", "mrr": 14196.9, "arr": 0.0}, {"np": "115021", "cliente": "NISSIN FOODS DO BRASIL LTDA", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 3670.0, "arr": 0.0}, {"np": "115007", "cliente": "KICALDO", "etapa": "Análise de Requisição", "venc": "fev/26", "mrr": 0.0, "arr": 2052.45}, {"np": "114984", "cliente": "Gourmet Sports Hospitality Serviços de A", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 5705.64, "arr": 0.0}, {"np": "114980", "cliente": "FRUKI", "etapa": "Análise de Requisição", "venc": "ago/26", "mrr": 0.0, "arr": 11807.0}], "ativos": 7, "vt_pipeline": 144491.0, "vt_fechados": 760.0, "enviados": 2}, "Telecom & Mídia": {"pipe_ativos": 2, "pipe_vt": 23392.0, "pipe_enviados": 2, "pipe_negoc": 0, "pipe_fechados": 1, "pipe_vt_fech": 43056.0, "conv_pct": 33.3, "contr_ativos": 6, "contr_cancel": 0, "contr_mrr": 9158.62, "contr_arr": 80504.28, "contr_vt": 189025.38, "n_cli_pipe": 5, "n_cli_contr": 6, "n_cli_ambos": 3, "n_cli_so_contr": 3, "n_cli_so_pipe": 2, "projetos": [{"np": "NP-115120", "cliente": "RBS - Televisão Gaúcha SA", "etapa": "Projeto Enviado", "vt": 7600.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115119", "cliente": "RBS - Televisão Gaúcha SA", "etapa": "Projeto Enviado", "vt": 15792.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114632", "cliente": "Novvacore Jr & Js - Telecom LTDA", "etapa": "Projeto Faturado", "vt": 43056.0, "dias": null, "tipo": "fechado"}], "contratos": [{"np": "NP-116092", "cliente": "CORTEL", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 1377.72, "arr": 0.0}, {"np": "115031", "cliente": "RBS - Televisão Gaúcha SA", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 59339.73}, {"np": "115020", "cliente": "Nauterra", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 13048.0}, {"np": "115009", "cliente": "LETTEL", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 8116.55}, {"np": "114986", "cliente": "GRPCOM GRUPO PARANAENSE DE COMUNICAÇÃO", "etapa": "Análise de Requisição", "venc": "jul/26", "mrr": 6869.0, "arr": 0.0}, {"np": "114971", "cliente": "ENERGY TELECOM", "etapa": "Análise de Requisição", "venc": "nov/26", "mrr": 911.9, "arr": 0.0}], "ativos": 5, "vt_pipeline": 23392.0, "vt_fechados": 43056.0, "enviados": 2}, "Meio Ambiente": {"pipe_ativos": 1, "pipe_vt": 67387.0, "pipe_enviados": 1, "pipe_negoc": 0, "pipe_fechados": 4, "pipe_vt_fech": 86432.0, "conv_pct": 80.0, "contr_ativos": 4, "contr_cancel": 0, "contr_mrr": 14469.32, "contr_arr": 51254.37, "contr_vt": 224886.21, "n_cli_pipe": 6, "n_cli_contr": 4, "n_cli_ambos": 3, "n_cli_so_contr": 1, "n_cli_so_pipe": 3, "projetos": [{"np": "NP-116294", "cliente": "Cetrel - Central de Tratamento de Efluen", "etapa": "Projeto Faturado", "vt": 2400.0, "dias": null, "tipo": "fechado"}, {"np": "NP-116129", "cliente": "Cetrel - Central de Tratamento de Efluen", "etapa": "Projeto Faturado", "vt": 3600.0, "dias": null, "tipo": "fechado"}, {"np": "NP-115586", "cliente": "Cetrel - Central de Tratamento de Efluen", "etapa": "Projeto Faturado", "vt": 1520.0, "dias": null, "tipo": "fechado"}, {"np": "NP-115250", "cliente": "RRP ENERGIA", "etapa": "Projeto Enviado", "vt": 67387.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114581", "cliente": "SOLVI PARTICIPAÇÕES", "etapa": "Projeto Faturado", "vt": 78912.0, "dias": null, "tipo": "fechado"}], "contratos": [{"np": "115053", "cliente": "SOLVI PARTICIPAÇÕES", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 12792.0, "arr": 0.0}, {"np": "115023", "cliente": "ORIZON", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 1677.32, "arr": 23122.0}, {"np": "114973", "cliente": "ESTRE AMBIENTAL", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 16810.0}, {"np": "114961", "cliente": "Cetrel - Central de Tratamento de Efluen", "etapa": "Análise de Requisição", "venc": "dez/26", "mrr": 0.0, "arr": 11322.37}], "ativos": 8, "vt_pipeline": 70987.0, "vt_fechados": 86432.0, "enviados": 1}, "Educação": {"pipe_ativos": 4, "pipe_vt": 182084.0, "pipe_enviados": 4, "pipe_negoc": 1, "pipe_fechados": 0, "pipe_vt_fech": 0.0, "conv_pct": 0.0, "contr_ativos": 3, "contr_cancel": 0, "contr_mrr": 5282.72, "contr_arr": 50366.01, "contr_vt": 113758.65, "n_cli_pipe": 5, "n_cli_contr": 3, "n_cli_ambos": 2, "n_cli_so_contr": 1, "n_cli_so_pipe": 3, "projetos": [{"np": "NP-115719", "cliente": "UNIVALI", "etapa": "Projeto Enviado", "vt": 0.0, "dias": null, "tipo": "ativo"}, {"np": "NP-115363", "cliente": "SENAC RJ", "etapa": "Projeto Enviado", "vt": 13680.0, "dias": null, "tipo": "ativo"}, {"np": "NP-114712", "cliente": "Associação dos Engenheiros da Sabesp", "etapa": "Projeto Enviado", "vt": 142404.0, "dias": null, "tipo": "ativo"}, {"np": "NP-113350", "cliente": "Associação Leopoldina Juvenil (ALJ)", "etapa": "Projeto Enviado", "vt": 26000.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115067", "cliente": "UNIVALI", "etapa": "Análise de Requisição", "venc": "out/26", "mrr": 4353.0, "arr": 0.0}, {"np": "115046", "cliente": "SENAC RJ", "etapa": "Análise de Requisição", "venc": "mai/26", "mrr": 0.0, "arr": 44543.0}, {"np": "115000", "cliente": "INSTITUTO FALCAO BAUER DA QUALIDADE", "etapa": "Em análise pelo cliente", "venc": "abr/26", "mrr": 929.72, "arr": 5823.01}], "ativos": 8, "vt_pipeline": 360127.28, "vt_fechados": 0.0, "enviados": 4}, "Governo & Público": {"pipe_ativos": 1, "pipe_vt": 73700.0, "pipe_enviados": 1, "pipe_negoc": 0, "pipe_fechados": 0, "pipe_vt_fech": 0.0, "conv_pct": 0.0, "contr_ativos": 3, "contr_cancel": 0, "contr_mrr": 6561.56, "contr_arr": 37234.16, "contr_vt": 151101.12, "n_cli_pipe": 3, "n_cli_contr": 3, "n_cli_ambos": 3, "n_cli_so_contr": 0, "n_cli_so_pipe": 0, "projetos": [{"np": "NP-113992", "cliente": "SECRETARIA DA FAZENDA DO ESTADO DO ALAGO", "etapa": "Projeto Enviado", "vt": 73700.0, "dias": null, "tipo": "ativo"}], "contratos": [{"np": "115063", "cliente": "Trt Da 4ª Região", "etapa": "Em análise pelo cliente", "venc": "jan/26", "mrr": 6561.56, "arr": 0.0}, {"np": "115050", "cliente": "SERVIÇO SOCIAL DO COMÉRCIO - ADMINISTRAÇ", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 0.0}, {"np": "115045", "cliente": "SECRETARIA DA FAZENDA DO ESTADO DO ALAGO", "etapa": "Análise de Requisição", "venc": "set/26", "mrr": 0.0, "arr": 37234.16}], "ativos": 5, "vt_pipeline": 153044.0, "vt_fechados": 0.0, "enviados": 1}};
+var EC={"Projeto Enviado": ["#dbeafe", "#1e40af"], "Negociação": ["#fef3c7", "#92400e"], "Elaboração de Projeto": ["#f3e8ff", "#6b21a8"], "Estimativa de Esforço": ["#f0fdf4", "#166534"], "Qualificação": ["#f1f5f9", "#334155"], "Qualificação Concluída": ["#ecfdf5", "#065f46"], "Elaboração de Caderno Técnico": ["#fff7ed", "#9a3412"], "Projeto Aprovado": ["#dcfce7", "#14532d"], "Processo Financeiro": ["#fdf4ff", "#701a75"], "Projeto Faturado": ["#dcfce7", "#14532d"], "Análise de Requisição": ["#f8fafc", "#334155"], "Em análise pelo cliente": ["#fef9c3", "#854d0e"], "Renovado": ["#dcfce7", "#166534"], "Desistência": ["#f9fafb", "#6b7280"]};
+var SC={"Tecnologia & TI": "#2563eb", "Saúde": "#059669", "Serviços & Infraestrutura": "#7c3aed", "Indústria": "#d97706", "Telecom & Mídia": "#0891b2", "Varejo & Moda": "#db2777", "Financeiro & Seguros": "#4f46e5", "Agronegócio": "#65a30d", "Meio Ambiente": "#0d9488", "Educação": "#9333ea", "Alimentos & Bebidas": "#ea580c", "Governo & Público": "#475569", "Outros": "#9ca3af"};
+var SEG=null;
+function bdg(e){var c=EC[e]||["#f1f5f9","#334155"];return'<span style="background:'+c[0]+';color:'+c[1]+';font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;">'+e+'</span>';}
+function age(d){if(d==null)return"—";var c,bg;if(d>60){c="#dc2626";bg="#fef2f2";}else if(d>=30){c="#d97706";bg="#fffbeb";}else{c="#16a34a";bg="#f0fdf4";}return'<span style="display:inline-flex;align-items:center;gap:3px;background:'+bg+';color:'+c+';font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;"><span style="width:6px;height:6px;border-radius:50%;background:'+c+';flex-shrink:0;"></span>'+d+'d</span>';}
+function brf(v){if(!v)return'<span style="color:#d1d5db;">—</span>';return"R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:2});}
+function renderP(info){
+  document.getElementById("wtp-dd-thead").innerHTML='<tr style="background:var(--surface2)"><th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">NP</th><th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Cliente</th><th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Etapa</th><th style="padding:9px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Valor Total</th><th style="padding:9px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Idade</th></tr>';
+  document.getElementById("wtp-dd-tbody").innerHTML=(info.projetos||[]).map(function(p,i){
+    var bg=i%2===0?"var(--surface)":"var(--surface2)";var nc=p.tipo==="fechado"?"#059669":"var(--accent1)";
+    return'<tr style="background:'+bg+';border-bottom:1px solid var(--border);">'+
+      '<td style="padding:9px 16px;font-family:monospace;font-size:11px;font-weight:600;color:'+nc+';">'+p.np+'</td>'+
+      '<td style="padding:9px 16px;font-size:13px;color:var(--text);">'+p.cliente+'</td>'+
+      '<td style="padding:9px 16px;">'+bdg(p.etapa)+'</td>'+
+      '<td style="padding:9px 16px;text-align:right;font-size:12px;font-weight:700;">'+brf(p.vt)+'</td>'+
+      '<td style="padding:9px 16px;text-align:center;">'+age(p.dias)+'</td></tr>';
+  }).join("");
+}
+function renderC(info){
+  document.getElementById("wtp-dd-thead").innerHTML='<tr style="background:var(--surface2)"><th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">NP</th><th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Cliente</th><th style="padding:9px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Etapa</th><th style="padding:9px 16px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">Vencimento</th><th style="padding:9px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;border-bottom:1px solid var(--border);">MRR</th><th style="padding:9px 16px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0891b2;border-bottom:1px solid var(--border);">ARR</th></tr>';
+  document.getElementById("wtp-dd-tbody").innerHTML=(info.contratos||[]).map(function(p,i){
+    var bg=i%2===0?"var(--surface)":"var(--surface2)";
+    return'<tr style="background:'+bg+';border-bottom:1px solid var(--border);">'+
+      '<td style="padding:9px 16px;font-family:monospace;font-size:11px;font-weight:600;color:#059669;">'+p.np+'</td>'+
+      '<td style="padding:9px 16px;font-size:13px;color:var(--text);">'+p.cliente+'</td>'+
+      '<td style="padding:9px 16px;">'+bdg(p.etapa)+'</td>'+
+      '<td style="padding:9px 16px;text-align:center;font-size:12px;color:var(--muted);">'+p.vencimento+'</td>'+
+      '<td style="padding:9px 16px;text-align:right;font-size:12px;font-weight:600;color:#7c3aed;">'+brf(p.mrr)+'</td>'+
+      '<td style="padding:9px 16px;text-align:right;font-size:12px;font-weight:600;color:#0891b2;">'+brf(p.arr)+'</td></tr>';
+  }).join("");
+}
+window.wtpDrilldown=function(seg){
+  SEG=seg;var info=D[seg];if(!info)return;var color=SC[seg]||"var(--accent1)";
+  document.getElementById("wtp-dd-title").textContent=seg;
+  document.getElementById("wtp-dd-title").style.color=color;
+  document.getElementById("wtp-dd-sub").textContent=(info.projetos||[]).length+" projetos · "+(info.contratos||[]).length+" contratos · conv. "+info.conv_pct+"%";
+  var bp=document.getElementById("wtp-tab-proj"),bc=document.getElementById("wtp-tab-contr");
+  bp.style.borderBottomColor=color;bp.style.color="var(--text)";bc.style.borderBottomColor="transparent";bc.style.color="var(--muted)";
+  renderP(info);
+  var panel=document.getElementById("wtp-drilldown");panel.style.display="block";
+  panel.scrollIntoView({behavior:"smooth",block:"nearest"});
+};
+window.wtpTab=function(tab){
+  if(!SEG)return;var info=D[SEG];var color=SC[SEG]||"var(--accent1)";
+  var bp=document.getElementById("wtp-tab-proj"),bc=document.getElementById("wtp-tab-contr");
+  if(tab==="proj"){bp.style.borderBottomColor=color;bp.style.color="var(--text)";bc.style.borderBottomColor="transparent";bc.style.color="var(--muted)";renderP(info);}
+  else{bc.style.borderBottomColor=color;bc.style.color="var(--text)";bp.style.borderBottomColor="transparent";bp.style.color="var(--muted)";renderC(info);}
+};
+window.wtpClose=function(){document.getElementById("wtp-drilldown").style.display="none";};
+})();
+</script>
+</div><!-- fecha .page -->
+</div><!-- fecha tab-wtp -->
+<!-- fim tab-wtp -->
+
+
+
+
+
+
+
+<!-- ══ ABA 5: EXPERIÊNCIA DO CLIENTE ══ -->
+<div id="tab-cx" class="tab-panel">
+<div class="page">
+
+<header><div class="header-left"><div class="header-eyebrow">Experiência do Cliente · S3M4 · 2025–2026</div><h1 class="header-title">Análise de<br><span style="color:#dc2626;">Perfil de Uso</span></h1></div><div class="header-right"><div class="header-badge"><span class="dot" style="background:#dc2626;"></span>123 clientes · 39 Power Users · S3M4</div></div></header>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;align-items:center;"><button class="cx-fbtn active" data-f="todos" onclick="cxFilter(this,'todos')" style="padding:6px 16px;border-radius:99px;border:1.5px solid #374151;background:#374151;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;">Todos (123)</button><button class="cx-fbtn" data-f="risco" onclick="cxFilter(this,'risco')" style="padding:6px 16px;border-radius:99px;border:1.5px solid #fecaca;background:#fff;color:#dc2626;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;">🔴 Risco (18)</button><button class="cx-fbtn" data-f="atencao" onclick="cxFilter(this,'atencao')" style="padding:6px 16px;border-radius:99px;border:1.5px solid #fde68a;background:#fff;color:#d97706;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;">🟡 Atenção (57)</button><button class="cx-fbtn" data-f="crescente" onclick="cxFilter(this,'crescente')" style="padding:6px 16px;border-radius:99px;border:1.5px solid #bfdbfe;background:#fff;color:#2563eb;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;">🔵 Crescente (15)</button><button class="cx-fbtn" data-f="estavel" onclick="cxFilter(this,'estavel')" style="padding:6px 16px;border-radius:99px;border:1.5px solid #bbf7d0;background:#fff;color:#059669;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;">🟢 Estável (33)</button><div style="margin-left:auto;position:relative;"><span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:13px;pointer-events:none;">🔍</span><input id="cx-search" type="text" placeholder="Buscar cliente..." oninput="cxSearch(this.value)" style="padding:6px 12px 6px 32px;border:1.5px solid #e5e7eb;border-radius:99px;font-family:inherit;font-size:12px;outline:none;width:210px;" onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e5e7eb'"/></div></div>
+
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;"><div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid #374151;border-radius:12px;padding:18px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:8px;">Total</div><div style="font-size:36px;font-weight:900;color:#111827;line-height:1;">123</div><div style="font-size:11px;color:#6b7280;margin-top:4px;">clientes analisados</div></div><div style="background:#fef2f2;border:1px solid #fecaca;border-top:3px solid #dc2626;border-radius:12px;padding:18px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;margin-bottom:8px;">🔴 Risco</div><div style="font-size:36px;font-weight:900;color:#dc2626;line-height:1;">18</div><div style="font-size:11px;color:#b91c1c;margin-top:4px;font-weight:600;">14.6% · ação urgente</div></div><div style="background:#fffbeb;border:1px solid #fde68a;border-top:3px solid #d97706;border-radius:12px;padding:18px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;margin-bottom:8px;">🟡 Atenção</div><div style="font-size:36px;font-weight:900;color:#d97706;line-height:1;">57</div><div style="font-size:11px;color:#92400e;margin-top:4px;font-weight:600;">46.3% · monitorar</div></div><div style="background:#eff6ff;border:1px solid #bfdbfe;border-top:3px solid #2563eb;border-radius:12px;padding:18px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;margin-bottom:8px;">🔵 Crescente</div><div style="font-size:36px;font-weight:900;color:#2563eb;line-height:1;">15</div><div style="font-size:11px;color:#1e40af;margin-top:4px;font-weight:600;">12.2% · expandir</div></div><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-top:3px solid #059669;border-radius:12px;padding:18px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;margin-bottom:8px;">🟢 Estável</div><div style="font-size:36px;font-weight:900;color:#059669;line-height:1;">33</div><div style="font-size:11px;color:#065f46;margin-top:4px;font-weight:600;">26.8% · manter</div></div></div>
+<div style="background:linear-gradient(135deg,#faf5ff,#f5f3ff);border:1px solid #e9d5ff;border-radius:12px;padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;"><div style="font-size:26px;">⚡</div><div style="flex:1;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;margin-bottom:3px;">Power Users</div><div style="font-size:12px;color:#374151;">Clientes com <strong>&gt;3.000 chamados/mês</strong> — alto volume de uso, impacto crítico no suporte</div></div><div style="text-align:center;flex-shrink:0;"><div style="font-size:32px;font-weight:900;color:#7c3aed;line-height:1;">39</div><div style="font-size:11px;color:#7c3aed;font-weight:700;">32% da base</div></div></div>
+
+<div id="cx-sec-risco" style="margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-size:14px;font-weight:800;color:#dc2626;">🔴 Lista Crítica — Clientes em Risco</div><span style="background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">18 clientes</span></div><div style="overflow-x:auto;border:1px solid #fecaca;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:580px;"><thead><tr style="background:#f8fafc;">
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Cham./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Proc./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Módulos <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Sinais de Alerta</th>
+</tr></thead>
+<tbody id="cx-tbody-risco"><tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="frigelar" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FRIGELAR <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="9730">9.730 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="9">9 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Processos em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="torra torra" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">TORRA TORRA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="9302">9.302 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="auttar - getnet" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">AUTTAR - GETNET</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1826">1.826 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="21">21 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="saque pague" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SAQUE PAGUE</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1360">1.360 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="89">89 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="ocyan" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">OCYAN</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1234">1.234 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="93">93 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="iguatemi empresa de shopping centers s/a" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">IGUATEMI EMPRESA DE SHOPPING CENTERS S/A</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1153">1.153 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="teccloud servicos de tecnologia ahu ltda" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">TECCLOUD SERVICOS DE TECNOLOGIA AHU LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1080">1.080 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="qintess" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">QINTESS</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="727">727 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="8">8 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="servix" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SERVIX</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="460">460 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Processos em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="connection segurança e gestão de ti" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CONNECTION SEGURANÇA E GESTÃO DE TI</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="303">303 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="cotribá" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">COTRIBÁ</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="132">132 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="2">2 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="instituto falcao bauer da qualidade" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">INSTITUTO FALCAO BAUER DA QUALIDADE</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="127">127 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="39">39 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="flowti" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FLOWTI</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="79">79 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="6">6 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="solver" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SOLVER</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="25">25 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="planservi engenharia" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">PLANSERVI ENGENHARIA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="23">23 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="forno de minas" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FORNO DE MINAS</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="lojas renner" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LOJAS RENNER</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="0">0 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="561">561 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="netcenter informatica" data-sinal="🔴 RISCO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">NETCENTER INFORMATICA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span> <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+</tbody><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="5" style="padding:9px 14px;font-size:11px;color:#6b7280;"><strong>18 clientes</strong> em risco · clique no cabeçalho para ordenar</td></tr></table></div></div>
+
+<div id="cx-sec-atencao" style="margin-bottom:24px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;"><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:14px;font-weight:800;color:#d97706;">🟡 Clientes em Atenção</div><span style="background:#d9770618;color:#d97706;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">57 clientes</span></div><button id="cx-btn-atencao" onclick="cxToggle('atencao')" style="background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:4px 12px;font-family:inherit;font-size:12px;font-weight:700;color:#6b7280;cursor:pointer;">▼ Expandir</button></div><div id="cx-body-atencao" style="display:none;overflow-x:auto;border:1px solid #fde68a;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:580px;"><thead><tr style="background:#f8fafc;">
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Cham./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Proc./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Módulos <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Sinais de Alerta</th>
+</tr></thead>
+<tbody id="cx-tbody-atencao"><tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="cervejaria petrópolis" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CERVEJARIA PETRÓPOLIS <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="18741">18.741 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="20">20 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Processos em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="rbs - televisão gaúcha sa" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RBS - Televisão Gaúcha SA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="8962">8.962 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="117">117 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="viação ouro e prata s.a" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">VIAÇÃO OURO E PRATA S.A <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="7624">7.624 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="16">16 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="ache laboratórios farmacêuticos sa" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ACHE LABORATÓRIOS FARMACÊUTICOS SA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="7153">7.153 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="21">21 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="golden technologia" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GOLDEN TECHNOLOGIA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="6304">6.304 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="s3curity" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">S3CURITY <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="5373">5.373 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="49">49 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="rcxit network it experts" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RCXIT NETWORK IT EXPERTS <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="5358">5.358 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="intercity" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">INTERCITY <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="5172">5.172 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="20">20 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="verzani &amp; sandrini ltda" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">VERZANI &amp; SANDRINI LTDA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="5034">5.034 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="serviço social do comércio - administração regional no estado do rio de janeiro (sesc/ arrj)" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SERVIÇO SOCIAL DO COMÉRCIO - ADMINISTRAÇÃO REGIONAL NO ESTADO DO RIO DE JANEIRO (SESC/ ARRJ) <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4934">4.934 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="18">18 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="stefanini" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">STEFANINI <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4783">4.783 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="91">91 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="lojas lebes" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LOJAS LEBES <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4662">4.662 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="solvi participações" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SOLVI PARTICIPAÇÕES <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4331">4.331 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="307">307 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="santa casa de misericordia da bahia" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SANTA CASA DE MISERICORDIA DA BAHIA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4201">4.201 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="grpcom grupo paranaense de comunicação" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GRPCOM GRUPO PARANAENSE DE COMUNICAÇÃO <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="3490">3.490 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="safeweb" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SAFEWEB <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="3400">3.400 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="59">59 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="andrade gutierrez" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ANDRADE GUTIERREZ <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="3369">3.369 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="64">64 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="energy telecom" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ENERGY TELECOM</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2881">2.881 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="timac agro" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">TIMAC AGRO</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2869">2.869 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Processos em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="nissin foods do brasil ltda" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">NISSIN FOODS DO BRASIL LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2497">2.497 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="20">20 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="celk sistemas" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Celk Sistemas</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2337">2.337 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="luxcel maxlog" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LUXCEL MAXLOG</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2328">2.328 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="zilor energia e alimentos" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ZILOR ENERGIA E ALIMENTOS</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2326">2.326 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="8">8 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="life empresarial saúde ltda" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LIFE EMPRESARIAL SAÚDE LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2035">2.035 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="agiplan serviços financeiros (agibank)" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">AGIPLAN SERVIÇOS FINANCEIROS (AGIBANK)</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1813">1.813 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="96">96 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="secretaria da fazenda do estado do alagoas (sefaz al)" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SECRETARIA DA FAZENDA DO ESTADO DO ALAGOAS (SEFAZ AL)</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1733">1.733 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="6">6 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="sotran logística e transporte" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SOTRAN LOGÍSTICA E TRANSPORTE</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1351">1.351 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="125">125 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="trisul" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">TRISUL</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1283">1.283 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="fcc - fornecedora componentes químicos e couros ltda" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FCC - FORNECEDORA COMPONENTES QUÍMICOS E COUROS LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1188">1.188 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="grupo thathi - panamby" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GRUPO THATHI - PANAMBY</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1146">1.146 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="37">37 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="lettel" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LETTEL</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1140">1.140 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="cpa" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CPA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1094">1.094 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="fruki" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FRUKI</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1031">1.031 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Processos em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="bionovis s.a. - companhia brasileira de biotecnologia farmaceutica" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">BIONOVIS S.A. - COMPANHIA BRASILEIRA DE BIOTECNOLOGIA FARMACEUTICA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1009">1.009 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="11">11 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="datacom" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">DATACOM</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="910">910 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="9">9 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="construtora marquise" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CONSTRUTORA MARQUISE</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="865">865 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="4">4 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="rapidonet sistemas" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RAPIDONET SISTEMAS</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="809">809 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="4">4 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="lojas colombo s/a" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LOJAS COLOMBO S/A</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="622">622 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="associacao hospitalar moinhos de vento" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ASSOCIACAO HOSPITALAR MOINHOS DE VENTO</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="618">618 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="beg" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">BEG</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="562">562 <span style="color:#dc2626;font-size:11px;font-weight:900;">↓</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="2">2 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Chamados em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="incorp technology informatica ltda - epp" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">INCORP TECHNOLOGY INFORMATICA LTDA - EPP</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="527">527 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="0"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Nenhum módulo complementar</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="abbc - associação brasileira de bancos" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ABBC - Associação Brasileira de Bancos</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="522">522 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Mudanças em queda</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="cortel" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CORTEL</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="480">480 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="16">16 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="pestana leilões" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Pestana Leilões</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="386">386 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="teevo com e servs de informática (mi)" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">TEEVO COM E SERVS DE INFORMÁTICA (MI)</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="356">356 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="calçados beira rio" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CALÇADOS BEIRA RIO</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="345">345 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="3"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="connection segurança e gestão de ti" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Connection Segurança e Gestão de Ti</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="296">296 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="inovatech soluções em informática ltda - epp" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">INOVATECH SOLUÇÕES EM INFORMÁTICA LTDA - EPP</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="230">230 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="6">6 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="kicaldo" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">KICALDO</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="212">212 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="seprol" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SEPROL</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="188">188 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="4">4 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="jme informática" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">JME INFORMÁTICA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="148">148 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="panatlantica" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">PANATLANTICA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="148">148 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="equaliti e solucoes em ti ltda" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">EQUALITI E SOLUCOES EM TI LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="133">133 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="ezex" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">EZEX</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="78">78 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="ht solutions" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">HT SOLUTIONS</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="48">48 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="10">10 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="construtora norberto odebrecht s.a." data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="350">350 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="marcopolo" data-sinal="🟡 ATENÇÃO"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">MARCOPOLO</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;">Volume baixo (&lt;500)</span></td></tr>
+</tbody><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="5" style="padding:9px 14px;font-size:11px;color:#6b7280;"><strong>57 clientes</strong></td></tr></table></div></div><div id="cx-sec-crescente" style="margin-bottom:24px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;"><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:14px;font-weight:800;color:#2563eb;">🔵 Clientes Crescentes</div><span style="background:#2563eb18;color:#2563eb;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">15 clientes</span></div><button id="cx-btn-crescente" onclick="cxToggle('crescente')" style="background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:4px 12px;font-family:inherit;font-size:12px;font-weight:700;color:#6b7280;cursor:pointer;">▼ Expandir</button></div><div id="cx-body-crescente" style="display:none;overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:580px;"><thead><tr style="background:#f8fafc;">
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Cham./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Proc./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Módulos <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Sinais de Alerta</th>
+</tr></thead>
+<tbody id="cx-tbody-crescente"><tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="sao joao farmacias" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SAO JOAO FARMACIAS <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="62362">62.362 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="5">5 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="sapore" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Sapore <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="28089">28.089 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="governança brasil" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GOVERNANÇA BRASIL <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="13486">13.486 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="unimed porto alegre" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">UNIMED PORTO ALEGRE <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="12682">12.682 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="24">24 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="vantix tecnologia comércio e serviços de informática ltda" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">VANTIX TECNOLOGIA COMÉRCIO E SERVIÇOS DE INFORMÁTICA LTDA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="6816">6.816 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="17">17 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="tenda atacado" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">TENDA ATACADO <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="6802">6.802 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="8">8 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="3"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="inbetta" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">INBETTA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="6771">6.771 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="17">17 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="senac rj" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SENAC RJ <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="5818">5.818 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="19">19 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="reserva brasileira industria e comercio ltda" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">RESERVA BRASILEIRA INDUSTRIA E COMERCIO LTDA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4732">4.732 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="irani papel e embalagem s.a" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2360">2.360 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="8">8 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="3"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="ferbasa" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FERBASA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2017">2.017 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="37">37 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="kepler weber" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">KEPLER WEBER</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1482">1.482 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="cetrel - central de tratamento de efluentes líquidos" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Cetrel - Central de Tratamento de Efluentes Líquidos</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1245">1.245 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="35">35 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="bombril s.a" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">BOMBRIL S.A</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="915">915 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="perto s/a periféricos p/ automação - gravatai ( digicom )" data-sinal="🔵 CRESCENTE"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">PERTO S/A PERIFÉRICOS P/ AUTOMAÇÃO - GRAVATAI ( Digicom )</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="673">673 <span style="color:#059669;font-size:11px;font-weight:900;">↑</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="2">2 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+</tbody><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="5" style="padding:9px 14px;font-size:11px;color:#6b7280;"><strong>15 clientes</strong></td></tr></table></div></div><div id="cx-sec-estavel" style="margin-bottom:24px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;"><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:14px;font-weight:800;color:#059669;">🟢 Clientes Estáveis</div><span style="background:#05966918;color:#059669;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;">33 clientes</span></div><button id="cx-btn-estavel" onclick="cxToggle('estavel')" style="background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:4px 12px;font-family:inherit;font-size:12px;font-weight:700;color:#6b7280;cursor:pointer;">▼ Expandir</button></div><div id="cx-body-estavel" style="display:none;overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;"><table style="width:100%;border-collapse:collapse;min-width:580px;"><thead><tr style="background:#f8fafc;">
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Cliente</th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Cham./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Proc./mês <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th onclick="cxSort(this)" style="padding:10px 14px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;cursor:pointer;user-select:none;">Módulos <span style="opacity:.4;font-size:9px;">⇅</span></th>
+<th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap;">Sinais de Alerta</th>
+</tr></thead>
+<tbody id="cx-tbody-estavel"><tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="auxiliadora predial" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">AUXILIADORA PREDIAL <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="46107">46.107 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="50">50 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="hospital care" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">HOSPITAL CARE <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="25832">25.832 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="121">121 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="arezzo industria e comercio ltda" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">AREZZO INDUSTRIA E COMERCIO LTDA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="18575">18.575 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="63">63 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="3"><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="brastorage - think" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">BRASTORAGE - THINK <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="16719">16.719 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="9">9 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="autoglass" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">AUTOGLASS <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="14652">14.652 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="489">489 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="hospital mae de deus (aesc)" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">HOSPITAL MAE DE DEUS (AESC) <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="13997">13.997 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="218">218 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="castrolanda" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CASTROLANDA <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="7617">7.617 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="224">224 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="fundação são francisco xavier - fsfx" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="7083">7.083 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="129">129 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="unidasul distribuidora alimentícia s.a." data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A. <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="6874">6.874 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="53">53 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="lg sistemas" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">LG SISTEMAS <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4798">4.798 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="75">75 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="atrio hotéis" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ATRIO HOTÉIS <span style="background:#f5f3ff;color:#7c3aed;font-size:9px;font-weight:800;padding:1px 6px;border-radius:99px;">⚡</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="4523">4.523 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="usina sao jose da estiva" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">USINA SAO JOSE DA ESTIVA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2751">2.751 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="orizon" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ORIZON</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2550">2.550 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="4">4 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="unimed vales do taquari e rio pardo ltda" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">UNIMED VALES DO TAQUARI E RIO PARDO LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2326">2.326 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="15">15 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="univali" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">UNIVALI</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2171">2.171 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="m.l.gomes" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">M.L.GOMES</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2097">2.097 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="2">2 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="trt da 4ª região" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">Trt Da 4ª Região</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="2047">2.047 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="2">2 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="2"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="hospital de clinicas (hcpa)" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">HOSPITAL DE CLINICAS (HCPA)</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1448">1.448 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="royal palm hotels &amp; resorts (grupo arcel)" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ROYAL PALM HOTELS &amp; RESORTS (GRUPO ARCEL)</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1094">1.094 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="bullla sa" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">BULLLA SA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1061">1.061 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="intersistemas informatica ltda - netlogic" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">INTERSISTEMAS INFORMATICA LTDA - NETLOGIC</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="1004">1.004 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="importadora bage s/a" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">IMPORTADORA BAGE S/A</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="972">972 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="7">7 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="construcap ccps" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">CONSTRUCAP CCPS</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="963">963 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="marelli" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">MARELLI</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="954">954 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="13">13 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="adeste participacoes e empreendimentos ltda" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ADESTE PARTICIPACOES E EMPREENDIMENTOS LTDA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="941">941 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="9">9 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="grupo maringá" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">GRUPO MARINGÁ</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="931">931 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span><span style="color:#059669;">✅</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="way data solution s/a" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">WAY DATA SOLUTION S/A</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="806">806 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="10">10 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="kleyhertz farmacêutica" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">KleyHertz Farmacêutica</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="768">768 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="1">1 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="sabemi seguradora" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SABEMI SEGURADORA</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="730">730 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="41">41 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="usina santa isabel" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">USINA SANTA ISABEL</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="729">729 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="santa casa de misericórdia de porto alegre" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="691">691 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="3">3 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fafafa;border-bottom:1px solid #f3f4f6;" data-nome="sephora do brasil participações s.a." data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">SEPHORA DO BRASIL PARTICIPAÇÕES S.A.</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="598">598 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="0">0 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+<tr style="background:#fff;border-bottom:1px solid #f3f4f6;" data-nome="atp" data-sinal="🟢 ESTÁVEL"><td style="padding:9px 14px;font-size:12px;font-weight:600;color:#111827;">ATP</td><td style="padding:9px 14px;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;" data-val="553">553 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:right;font-size:12px;white-space:nowrap;" data-val="2">2 <span style="color:#9ca3af;font-size:11px;font-weight:900;">→</span></td><td style="padding:9px 14px;text-align:center;white-space:nowrap;" data-val="1"><span style="color:#059669;">✅</span><span style="color:#e5e7eb;">❌</span><span style="color:#e5e7eb;">❌</span></td><td style="padding:9px 14px;"><span style="color:#d1d5db;">—</span></td></tr>
+</tbody><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="5" style="padding:9px 14px;font-size:11px;color:#6b7280;"><strong>33 clientes</strong></td></tr></table></div></div>
+<div id="cx-sec-radar" style="margin-bottom:24px;"><div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:12px;">📡 Radar de Adoção de Módulos</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;"><div style="background:#fef2f2;border:1px solid #e5e7eb;border-top:3px solid #dc2626;border-radius:12px;padding:16px 18px;" data-sinal="🔴 RISCO"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;">RISCO</span><span style="font-size:11px;font-weight:700;color:#6b7280;">18 clientes</span></div><div style="display:flex;flex-direction:column;gap:9px;"><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📱 Mobile</span><span style="font-size:11px;font-weight:800;color:#dc2626;">13/18 <span style="color:#9ca3af;font-weight:600;">(72%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#dc2626;height:6px;border-radius:99px;width:72%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📋 Kanban</span><span style="font-size:11px;font-weight:800;color:#dc2626;">1/18 <span style="color:#9ca3af;font-weight:600;">(6%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#dc2626;height:6px;border-radius:99px;width:6%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📄 Artigos</span><span style="font-size:11px;font-weight:800;color:#dc2626;">0/18 <span style="color:#9ca3af;font-weight:600;">(0%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#dc2626;height:6px;border-radius:99px;width:0%;"></div></div></div></div></div><div style="background:#fffbeb;border:1px solid #e5e7eb;border-top:3px solid #d97706;border-radius:12px;padding:16px 18px;" data-sinal="🟡 ATENÇÃO"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">ATENÇÃO</span><span style="font-size:11px;font-weight:700;color:#6b7280;">57 clientes</span></div><div style="display:flex;flex-direction:column;gap:9px;"><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📱 Mobile</span><span style="font-size:11px;font-weight:800;color:#d97706;">52/57 <span style="color:#9ca3af;font-weight:600;">(91%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#d97706;height:6px;border-radius:99px;width:91%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📋 Kanban</span><span style="font-size:11px;font-weight:800;color:#d97706;">4/57 <span style="color:#9ca3af;font-weight:600;">(7%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#d97706;height:6px;border-radius:99px;width:7%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📄 Artigos</span><span style="font-size:11px;font-weight:800;color:#d97706;">11/57 <span style="color:#9ca3af;font-weight:600;">(19%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#d97706;height:6px;border-radius:99px;width:19%;"></div></div></div></div></div><div style="background:#eff6ff;border:1px solid #e5e7eb;border-top:3px solid #2563eb;border-radius:12px;padding:16px 18px;" data-sinal="🔵 CRESCENTE"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">CRESCENTE</span><span style="font-size:11px;font-weight:700;color:#6b7280;">15 clientes</span></div><div style="display:flex;flex-direction:column;gap:9px;"><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📱 Mobile</span><span style="font-size:11px;font-weight:800;color:#2563eb;">14/15 <span style="color:#9ca3af;font-weight:600;">(93%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#2563eb;height:6px;border-radius:99px;width:93%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📋 Kanban</span><span style="font-size:11px;font-weight:800;color:#2563eb;">3/15 <span style="color:#9ca3af;font-weight:600;">(20%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#2563eb;height:6px;border-radius:99px;width:20%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📄 Artigos</span><span style="font-size:11px;font-weight:800;color:#2563eb;">7/15 <span style="color:#9ca3af;font-weight:600;">(47%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#2563eb;height:6px;border-radius:99px;width:47%;"></div></div></div></div></div><div style="background:#f0fdf4;border:1px solid #e5e7eb;border-top:3px solid #059669;border-radius:12px;padding:16px 18px;" data-sinal="🟢 ESTÁVEL"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#059669;">ESTÁVEL</span><span style="font-size:11px;font-weight:700;color:#6b7280;">33 clientes</span></div><div style="display:flex;flex-direction:column;gap:9px;"><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📱 Mobile</span><span style="font-size:11px;font-weight:800;color:#059669;">32/33 <span style="color:#9ca3af;font-weight:600;">(97%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#059669;height:6px;border-radius:99px;width:97%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📋 Kanban</span><span style="font-size:11px;font-weight:800;color:#059669;">1/33 <span style="color:#9ca3af;font-weight:600;">(3%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#059669;height:6px;border-radius:99px;width:3%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#374151;font-weight:600;">📄 Artigos</span><span style="font-size:11px;font-weight:800;color:#059669;">4/33 <span style="color:#9ca3af;font-weight:600;">(12%)</span></span></div><div style="background:#ececec;border-radius:99px;height:6px;margin-top:3px;overflow:hidden;"><div style="background:#059669;height:6px;border-radius:99px;width:12%;"></div></div></div></div></div></div></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;" id="cx-sec-top15"><div><div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:12px;">🏆 Top 15 por Volume de Chamados</div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 18px;" id="cx-top15-list"><div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="sao joao farmacias" data-sinal="🔵 CRESCENTE"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#1</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">SAO JOAO FARMACIAS ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#2563eb;height:5px;border-radius:99px;width:100%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">62.362</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#2563eb18;color:#2563eb;">CRESCENTE</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="auxiliadora predial" data-sinal="🟢 ESTÁVEL"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#2</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AUXILIADORA PREDIAL ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#059669;height:5px;border-radius:99px;width:74%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">46.107</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#05966918;color:#059669;">ESTÁVEL</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="sapore" data-sinal="🔵 CRESCENTE"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#3</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Sapore ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#2563eb;height:5px;border-radius:99px;width:45%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">28.089</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#2563eb18;color:#2563eb;">CRESCENTE</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="hospital care" data-sinal="🟢 ESTÁVEL"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#4</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">HOSPITAL CARE ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#059669;height:5px;border-radius:99px;width:41%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">25.832</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#05966918;color:#059669;">ESTÁVEL</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="cervejaria petrópolis" data-sinal="🟡 ATENÇÃO"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#5</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CERVEJARIA PETRÓPOLIS ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#d97706;height:5px;border-radius:99px;width:30%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">18.741</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#d9770618;color:#d97706;">ATENÇÃO</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="arezzo industria e comercio ltda" data-sinal="🟢 ESTÁVEL"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#6</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AREZZO INDUSTRIA E COMERCIO LTDA ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#059669;height:5px;border-radius:99px;width:30%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">18.575</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#05966918;color:#059669;">ESTÁVEL</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="brastorage - think" data-sinal="🟢 ESTÁVEL"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#7</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">BRASTORAGE - THINK ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#059669;height:5px;border-radius:99px;width:27%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">16.719</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#05966918;color:#059669;">ESTÁVEL</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="autoglass" data-sinal="🟢 ESTÁVEL"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#8</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AUTOGLASS ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#059669;height:5px;border-radius:99px;width:23%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">14.652</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#05966918;color:#059669;">ESTÁVEL</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="hospital mae de deus (aesc)" data-sinal="🟢 ESTÁVEL"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#9</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">HOSPITAL MAE DE DEUS (AESC) ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#059669;height:5px;border-radius:99px;width:22%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">13.997</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#05966918;color:#059669;">ESTÁVEL</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="governança brasil" data-sinal="🔵 CRESCENTE"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#10</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">GOVERNANÇA BRASIL ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#2563eb;height:5px;border-radius:99px;width:22%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">13.486</div><div style="font-size:12px;font-weight:900;color:#059669;flex-shrink:0;width:14px;">↑</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#2563eb18;color:#2563eb;">CRESCENTE</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="unimed porto alegre" data-sinal="🔵 CRESCENTE"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#11</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">UNIMED PORTO ALEGRE ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#2563eb;height:5px;border-radius:99px;width:20%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">12.682</div><div style="font-size:12px;font-weight:900;color:#059669;flex-shrink:0;width:14px;">↑</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#2563eb18;color:#2563eb;">CRESCENTE</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="frigelar" data-sinal="🔴 RISCO"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#12</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">FRIGELAR ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#dc2626;height:5px;border-radius:99px;width:16%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">9.730</div><div style="font-size:12px;font-weight:900;color:#059669;flex-shrink:0;width:14px;">↑</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#dc262618;color:#dc2626;">RISCO</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="torra torra" data-sinal="🔴 RISCO"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#13</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">TORRA TORRA ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#dc2626;height:5px;border-radius:99px;width:15%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">9.302</div><div style="font-size:12px;font-weight:900;color:#dc2626;flex-shrink:0;width:14px;">↓</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#dc262618;color:#dc2626;">RISCO</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="rbs - televisão gaúcha sa" data-sinal="🟡 ATENÇÃO"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#14</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">RBS - Televisão Gaúcha SA ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#d97706;height:5px;border-radius:99px;width:14%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">8.962</div><div style="font-size:12px;font-weight:900;color:#9ca3af;flex-shrink:0;width:14px;">→</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#d9770618;color:#d97706;">ATENÇÃO</span></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;" data-nome="viação ouro e prata s.a" data-sinal="🟡 ATENÇÃO"><div style="width:22px;text-align:right;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;">#15</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">VIAÇÃO OURO E PRATA S.A ⚡</div><div style="margin-top:4px;background:#f3f4f6;border-radius:99px;height:5px;overflow:hidden;"><div style="background:#d97706;height:5px;border-radius:99px;width:12%;"></div></div></div><div style="font-size:13px;font-weight:800;color:#111827;flex-shrink:0;min-width:60px;text-align:right;">7.624</div><div style="font-size:12px;font-weight:900;color:#dc2626;flex-shrink:0;width:14px;">↓</div><div style="flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:#d9770618;color:#d97706;">ATENÇÃO</span></div></div>
+</div></div><div><div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:12px;">📊 Adoção de Módulos — Base Completa</div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;"><div style="display:flex;flex-direction:column;gap:14px;"><div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:13px;font-weight:700;color:#374151;">📱 Mobile</span><span style="font-size:13px;font-weight:800;color:#2563eb;">111/123 <span style="color:#9ca3af;font-weight:600;">(90%)</span></span></div><div style="background:#f3f4f6;border-radius:99px;height:10px;margin-top:5px;overflow:hidden;"><div style="background:#2563eb;height:10px;border-radius:99px;width:90%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:13px;font-weight:700;color:#374151;">📋 Kanban</span><span style="font-size:13px;font-weight:800;color:#7c3aed;">9/123 <span style="color:#9ca3af;font-weight:600;">(7%)</span></span></div><div style="background:#f3f4f6;border-radius:99px;height:10px;margin-top:5px;overflow:hidden;"><div style="background:#7c3aed;height:10px;border-radius:99px;width:7%;"></div></div></div><div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:13px;font-weight:700;color:#374151;">📄 Artigos</span><span style="font-size:13px;font-weight:800;color:#059669;">22/123 <span style="color:#9ca3af;font-weight:600;">(18%)</span></span></div><div style="background:#f3f4f6;border-radius:99px;height:10px;margin-top:5px;overflow:hidden;"><div style="background:#059669;height:10px;border-radius:99px;width:18%;"></div></div></div><div style="border-top:1px solid #f3f4f6;padding-top:14px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-bottom:10px;">Distribuição por nº de módulos ativos</div><div style="display:flex;gap:8px;"><div style="flex:1;text-align:center;background:#f8fafc;border-radius:8px;padding:8px 4px;"><div style="font-size:20px;font-weight:900;color:#374151;">8</div><div style="font-size:10px;color:#9ca3af;font-weight:600;">0 mod</div></div><div style="flex:1;text-align:center;background:#f8fafc;border-radius:8px;padding:8px 4px;"><div style="font-size:20px;font-weight:900;color:#374151;">92</div><div style="font-size:10px;color:#9ca3af;font-weight:600;">1 mod</div></div><div style="flex:1;text-align:center;background:#f8fafc;border-radius:8px;padding:8px 4px;"><div style="font-size:20px;font-weight:900;color:#374151;">19</div><div style="font-size:10px;color:#9ca3af;font-weight:600;">2 mod</div></div><div style="flex:1;text-align:center;background:#f8fafc;border-radius:8px;padding:8px 4px;"><div style="font-size:20px;font-weight:900;color:#374151;">4</div><div style="font-size:10px;color:#9ca3af;font-weight:600;">3 mod</div></div></div></div></div></div></div></div>
+
+<div id="cx-sec-fora" style="margin-bottom:24px;"><div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:12px;">⚠️ Fora do Radar — 11 Clientes Não Analisados</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;">📭 Sem dados recentes · possível churn</span></div><div style="border:1px solid #fecaca;border-radius:10px;overflow:hidden;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#fef2f2;"><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;border-bottom:1px solid #fecaca;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;border-bottom:1px solid #fecaca;">Último Ano</th><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;border-bottom:1px solid #fecaca;">Observação</th></tr></thead><tbody><tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">CENTRO HOSPITALAR DE SETÚBAL, EPE (TCSI)</td><td style="padding:9px 12px;text-align:center;font-size:12px;font-weight:700;color:#dc2626;">2022</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Sem atividade há 3+ anos — possível churn</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">FORSALES MECANET</td><td style="padding:9px 12px;text-align:center;font-size:12px;font-weight:700;color:#dc2626;">2023</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Parou em 2023 — verificar se contrato ainda ativo</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SCGAS - COMPANHIA DE GAS DE SANTA CATARINA</td><td style="padding:9px 12px;text-align:center;font-size:12px;font-weight:700;color:#dc2626;">2020</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Sem atividade há 5+ anos — provável churn</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">SERILON BRASIL</td><td style="padding:9px 12px;text-align:center;font-size:12px;font-weight:700;color:#dc2626;">2023</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Parou em 2023 — uso intermitente, verificar contrato</td></tr>
+</tbody></table></div></div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="background:#f8fafc;border:1px solid #e5e7eb;color:#6b7280;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;">🔍 Sem registro na base PRODUÇÃO</span></div><div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Observação</th></tr></thead><tbody><tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Argenta Participacoes LTDA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Nauterra</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">MULTISUPORTE TECNOLOGIA</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">Gourmet Sports Hospitality Serviços de Alimentação Ltda</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">ESTRE AMBIENTAL</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:9px 12px;font-size:12px;font-weight:600;color:#111827;">BRASKEM</td><td style="padding:9px 12px;font-size:11px;color:#6b7280;">Nenhum registro na base de produção (2019–2026)</td></tr>
+</tbody></table></div></div></div></div>
+
+</div>
+<script>
+(function(){
+var cxFiltro="todos",cxBusca="";
+var sMap={risco:"🔴 RISCO",atencao:"🟡 ATENÇÃO",crescente:"🔵 CRESCENTE",estavel:"🟢 ESTÁVEL"};
+var secMap={"cx-sec-risco":"🔴 RISCO","cx-sec-atencao":"🟡 ATENÇÃO","cx-sec-crescente":"🔵 CRESCENTE","cx-sec-estavel":"🟢 ESTÁVEL"};
+var btnColors={todos:"#374151",risco:"#dc2626",atencao:"#d97706",crescente:"#2563eb",estavel:"#059669"};
+var btnBorders={todos:"#374151",risco:"#fecaca",atencao:"#fde68a",crescente:"#bfdbfe",estavel:"#bbf7d0"};
+var btnText={todos:"#fff",risco:"#dc2626",atencao:"#d97706",crescente:"#2563eb",estavel:"#059669"};
+
+window.cxFilter=function(btn,f){
+  cxFiltro=f;
+  document.querySelectorAll(".cx-fbtn").forEach(function(b){
+    var bf=b.dataset.f;
+    if(bf===f){b.style.background=btnColors[bf];b.style.color="#fff";b.style.borderColor=btnColors[bf];}
+    else{b.style.background="#fff";b.style.color=btnText[bf];b.style.borderColor=btnBorders[bf];}
+  });
+  cxApply();
+};
+
+window.cxSearch=function(v){
+  cxBusca=v.toLowerCase().trim();
+  cxApply();
+};
+
+function cxApply(){
+  var sf=sMap[cxFiltro]||null;
+  ["risco","atencao","crescente","estavel"].forEach(function(g){
+    var tb=document.getElementById("cx-tbody-"+g);
+    if(!tb)return;
+    tb.querySelectorAll("tr[data-sinal]").forEach(function(tr){
+      var mn=!cxBusca||(tr.dataset.nome||"").includes(cxBusca);
+      var ms=!sf||(tr.dataset.sinal||"")===sf;
+      tr.style.display=(mn&&ms)?"":"none";
+    });
+  });
+  document.querySelectorAll("#cx-top15-list > div").forEach(function(item){
+    var mn=!cxBusca||(item.dataset.nome||"").includes(cxBusca);
+    var ms=!sf||(item.dataset.sinal||"")===sf;
+    item.style.display=(mn&&ms)?"":"none";
+  });
+  Object.keys(secMap).forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.style.display=(!sf||secMap[id]===sf)?"":"none";
+  });
+  document.querySelectorAll("#cx-sec-radar > div > div[data-sinal]").forEach(function(card){
+    card.style.opacity=(!sf||card.getAttribute("data-sinal")===sf)?"1":"0.3";
+  });
+}
+
+window.cxToggle=function(id){
+  var body=document.getElementById("cx-body-"+id);
+  var btn=document.getElementById("cx-btn-"+id);
+  if(!body||!btn)return;
+  var open=body.style.display!=="none";
+  body.style.display=open?"none":"block";
+  btn.textContent=open?"▼ Expandir":"▲ Recolher";
+};
+
+window.cxSort=function(th){
+  var table=th.closest("table");
+  var tbody=table.querySelector("tbody");
+  if(!tbody)return;
+  var idx=Array.from(th.parentNode.children).indexOf(th);
+  var asc=th.dataset.asc!=="1";
+  th.dataset.asc=asc?"1":"0";
+  var rows=Array.from(tbody.querySelectorAll("tr[data-sinal]"));
+  rows.sort(function(a,b){
+    var ca=a.querySelectorAll("td")[idx];
+    var cb=b.querySelectorAll("td")[idx];
+    var va=ca?parseFloat(ca.dataset.val!==undefined?ca.dataset.val:ca.textContent.replace(/[^0-9.-]/g,""))||0:0;
+    var vb=cb?parseFloat(cb.dataset.val!==undefined?cb.dataset.val:cb.textContent.replace(/[^0-9.-]/g,""))||0:0;
+    return asc?vb-va:va-vb;
+  });
+  rows.forEach(function(r){tbody.appendChild(r);});
+  table.querySelectorAll("th span").forEach(function(sp){sp.style.opacity="0.4";});
+  var sp=th.querySelector("span");if(sp)sp.style.opacity="1";
+};
+})();
+</script>
+</div>
+
+<!-- fim tab-cx -->
+
+<div id="tab-changelog" class="tab-panel">
+<div class="page">
+  <header>
+    <div class="header-left">
+      <div class="header-eyebrow">Histórico de Alterações</div>
+      <h1 class="header-title">Histórico de<br><span style="color:var(--accent4);">Alterações</span></h1>
+    </div>
+  </header>
+  <div class="card"><div class="card-header"><div><div class="card-title">Registro de Atualizações</div></div></div><p style="padding:20px;color:var(--muted);font-size:13px;">Histórico de snapshots e correções aplicadas ao dashboard.</p></div>
+</div>
+</div> <!-- fim tab-changelog -->
+
+</div><!-- fecha mainContent -->
+
+<script>
+// ── Admin mode detection ──────────────────────────────────────────────────────
+(function(){
+  if(typeof window.__ADMIN__ !== 'undefined' && window.__ADMIN__){
+    var btn = document.getElementById('btn-send-resumo');
+    if(btn) btn.style.display = 'block';
+  }
+})();
+
+// ── Enviar Resumo Executivo ───────────────────────────────────────────────────
+function enviarResumo(){
+  if(!confirm('Enviar Resumo Executivo por email para a lista de destinatários?')) return;
+
+  var btn = document.querySelector('#btn-send-resumo button');
+  var orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Enviando...';
+  btn.disabled  = true;
+
+  fetch('/send-resumo', { method: 'POST', credentials: 'include' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.ok){
+        btn.innerHTML = '✅ Email enviado!';
+        btn.style.background = '#059669';
+        setTimeout(function(){ btn.innerHTML = orig; btn.style.background = '#2563eb'; btn.disabled = false; }, 3000);
+      } else {
+        alert('Erro ao enviar: ' + (data.error || 'desconhecido'));
+        btn.innerHTML = orig; btn.disabled = false;
+      }
+    })
+    .catch(function(err){
+      alert('Erro de rede: ' + err.message);
+      btn.innerHTML = orig; btn.disabled = false;
+    });
+}
+</script>
+</body>
+</html>
+`;
+    if(isAdmin){html=html.replace("window.__ADMIN__ !== 'undefined'","true !== 'undefined'");}
+    return new Response(html,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
+  }
+};
+function loginPage(erro){return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style></head><body><div class="c"><div style="font-size:40px;margin-bottom:18px">🔒</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus><div class="er">${erro}</div><button>Entrar</button></form></div></body></html>`;}
