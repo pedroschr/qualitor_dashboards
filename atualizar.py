@@ -278,7 +278,7 @@ def calcular_gestao(path_contratos, path_reducao):
     for r in analise_req:
         dt = parse_dt(r[7])
         if not dt: continue
-        mk = MESES[dt.month - 1] + '/26/26'
+        mk = MESES[dt.month - 1] + '/26'
         req_mes.setdefault(mk, {'n': 0, 'vtc': 0, 'mrr': 0, 'arr': 0})
         req_mes[mk]['n']   += 1
         req_mes[mk]['vtc'] += pv(r[9])
@@ -378,7 +378,7 @@ def gerar_tbody_fat_mes(fat_mes, n_fat, vt_fat):
         bg = BG[idx % 2]; idx += 1
         rows += (
             f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
-            f'<td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">{mk}/26</td>'
+            f'<td style="padding:12px 20px;font-size:14px;font-weight:700;color:#111827;">{mk}</td>'
             f'<td style="padding:12px 20px;text-align:center;"><span style="background:#f0f2f5;color:#374151;font-size:13px;font-weight:700;padding:3px 12px;border-radius:99px;">{d["n"]}</span></td>'
             f'<td style="padding:12px 20px;text-align:right;font-size:14px;font-weight:700;color:#111827;">{fmt(d["vt"])}</td>'
             f'</tr>'
@@ -478,7 +478,7 @@ def gerar_tbody_mrr(mrr_mes, total_mrr, total_cancel_mrr, total_red_mrr, n_mrr):
         v_s = fmt(d['v']) if d['v'] else '<span style="color:#d1d5db;">—</span>'
         rows += (
             f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
-            f'<td style="padding:10px 16px;font-size:13px;font-weight:700;color:#111827;">{m}/26/26</td>'
+            f'<td style="padding:10px 16px;font-size:13px;font-weight:700;color:#111827;">{m}/26</td>'
             f'<td style="padding:10px 16px;text-align:center;font-size:13px;color:#6b7280;">{n_s}</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#2563eb;">{v_s}</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:12px;">{dash_cancel(d["cancel_mrr"])}</td>'
@@ -509,7 +509,7 @@ def gerar_tbody_arr(arr_mes, total_arr, total_cancel_arr, total_red_arr, n_arr):
         v_s = fmt(d['v']) if d['v'] else '<span style="color:#d1d5db;">—</span>'
         rows += (
             f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
-            f'<td style="padding:10px 16px;font-size:13px;font-weight:700;color:#111827;">{m}/26/26</td>'
+            f'<td style="padding:10px 16px;font-size:13px;font-weight:700;color:#111827;">{m}/26</td>'
             f'<td style="padding:10px 16px;text-align:center;font-size:13px;color:#6b7280;">{n_s}</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:13px;font-weight:700;color:#059669;">{v_s}</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:12px;">{dash_cancel(d["cancel_arr"])}</td>'
@@ -534,7 +534,7 @@ def gerar_tbody_gestao_tabela(registros, cor_np, cor_total, label_total, extra_c
     rows = ""; tot = {'vtc': 0, 'mrr': 0, 'arr': 0}
     for i, r in enumerate(registros):
         dt = parse_dt(r[7])
-        mk = (MESES[dt.month - 1] + '/26/26') if dt else '—'
+        mk = (MESES[dt.month - 1] + '/26') if dt else '—'
         vtc = pv(r[9]); mrr = pv(r[18]); arr = pv(r[19])
         tot['vtc'] += vtc; tot['mrr'] += mrr; tot['arr'] += arr
         bg = BG[i % 2]
@@ -571,7 +571,7 @@ def gerar_tbody_em_analise(em_analise, semaforo_fn):
         dt = parse_dt(r[7])
         emoji, label, cor_txt, cor_bg = semaforo_fn(dt)
         sem[emoji] = sem.get(emoji, 0) + 1
-        mk = (MESES[dt.month - 1] + '/26/26') if dt else '—'
+        mk = (MESES[dt.month - 1] + '/26') if dt else '—'
         vtc = pv(r[9]); mrr = pv(r[18]); arr = pv(r[19])
         tot['vtc'] += vtc; tot['mrr'] += mrr; tot['arr'] += arr
         pill = f'<span style="background:{cor_bg};color:{cor_txt};font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;">{emoji} {label}</span>'
@@ -612,7 +612,7 @@ def gerar_tbody_em_analise(em_analise, semaforo_fn):
 def gerar_tbody_req(req_mes):
     rows = ""; tot = {'n': 0, 'vtc': 0, 'mrr': 0, 'arr': 0}
     idx = 0
-    for mk in [f'{m}/26/26' for m in MESES]:
+    for mk in [f'{m}/26' for m in MESES]:
         d = req_mes.get(mk)
         if not d: continue
         bg = BG[idx % 2]; idx += 1
@@ -643,7 +643,7 @@ def gerar_tbody_cancel_gestao(cancelados_g):
     rows = ""; tot = {'vtc': 0, 'mrr': 0, 'arr': 0}
     for i, r in enumerate(cancelados_g):
         dt_c = parse_dt(r[20])
-        mk = (MESES[dt_c.month - 1] + '/26/26') if dt_c else '—'
+        mk = (MESES[dt_c.month - 1] + '/26') if dt_c else '—'
         vtc = pv(r[9]); mrr = pv(r[18]); arr = pv(r[19])
         tot['vtc'] += vtc; tot['mrr'] += mrr; tot['arr'] += arr
         bg = "#ffffff" if i % 2 == 0 else "#fef2f2"
@@ -678,7 +678,7 @@ def gerar_tbody_evolucao(evolucao, mrr_baseline, mrr_ajust):
         ap_s = f'<span style="color:#059669;font-weight:600;">+{fmt(aprov)}</span>' if aprov else '<span style="color:#d1d5db;">—</span>'
         rows += (
             f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
-            f'<td style="padding:10px 16px;font-size:13px;font-weight:700;color:#111827;">{m}/26/26</td>'
+            f'<td style="padding:10px 16px;font-size:13px;font-weight:700;color:#111827;">{m}/26</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:13px;">{ap_s}</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:13px;">{dash_cancel(cancel)}</td>'
             f'<td style="padding:10px 16px;text-align:right;font-size:13px;">{dash_red(red)}</td>'
