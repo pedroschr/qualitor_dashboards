@@ -1,3 +1,4 @@
+// v20260713225020
 export default {
   async fetch(request, env) {
     const url=new URL(request.url),path=url.pathname,ck=request.headers.get("Cookie")||"";
