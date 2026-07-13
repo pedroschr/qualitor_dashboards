@@ -2808,7 +2808,7 @@ function switchTab(tab, btn) {
 </div><!-- .page -->
 </div><!-- fim tab-resumo -->
 
-<div id="tab-pipeline" class="tab-panel active">
+<div id="tab-pipeline" class="tab-panel">
 
 <style>
   /* ── Header ─────────────────────────────── */
@@ -4042,24 +4042,33 @@ function enviarResumo(){
 </script>
 
 <script>
-window.addEventListener("load", function(){
-  var it = (document.getElementById("initial-tab") || {}).value || "pipeline";
-  if(!it) it = "pipeline";
-  var btns = document.querySelectorAll(".tab-btn");
-  var found = null;
-  for(var i = 0; i < btns.length; i++){
-    if((btns[i].getAttribute("onclick") || "").indexOf(it) !== -1){
-      found = btns[i]; break;
-    }
-  }
-  if(found){
+(function(){
+  function activateTab(it){
+    var panels = document.querySelectorAll(".tab-panel");
+    panels.forEach(function(p){ p.classList.remove("active"); });
+    var panel = document.getElementById("tab-" + it);
+    if(panel) panel.classList.add("active");
+    var btns = document.querySelectorAll(".tab-btn");
     btns.forEach(function(b){ b.classList.remove("active"); });
-    found.classList.add("active");
-    if(typeof switchTab === "function") switchTab(it, found);
+    var found = null;
+    for(var i=0;i<btns.length;i++){
+      if((btns[i].getAttribute("onclick")||"").indexOf(it)!==-1){
+        found=btns[i]; break;
+      }
+    }
+    if(found) found.classList.add("active");
+    var ib = document.getElementById("btn-"+it);
+    if(ib) ib.style.display="";
   }
-  var ib = document.getElementById("btn-" + it);
-  if(ib) ib.style.display = "";
-});
+  var el = document.getElementById("initial-tab");
+  var it = el ? el.value : "pipeline";
+  if(!it) it = "pipeline";
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ activateTab(it); });
+  } else {
+    activateTab(it);
+  }
+})();
 </script>
 </body>
 </html>
