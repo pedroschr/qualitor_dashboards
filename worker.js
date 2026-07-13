@@ -888,13 +888,12 @@ function switchTab(tab, btn) {
 
   
   
-            <div id="tab-anderson" class="tab-panel">
+              <div id="tab-anderson" class="tab-panel">
 
   <!-- HEADER -->
   <div class="p26-header" style="margin-bottom:36px;">
     <div>
       <div class="p26-eyebrow">Visão Individual · 13/07/2026</div>
-      <div class="p26-title" style="color:#7c3aed;">Anderson Bamberg</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
         
         <span style="background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">💼 2 aguardando PF</span>
@@ -1224,7 +1223,6 @@ function switchTab(tab, btn) {
   <div class="p26-header" style="margin-bottom:36px;">
     <div>
       <div class="p26-eyebrow">Visão Individual · 13/07/2026</div>
-      <div class="p26-title" style="color:#0891b2;">Talita Rodrigues</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
         
         
@@ -1492,7 +1490,6 @@ function switchTab(tab, btn) {
   <div class="p26-header" style="margin-bottom:36px;">
     <div>
       <div class="p26-eyebrow">Visão Individual · 13/07/2026</div>
-      <div class="p26-title" style="color:#d97706;">Inês Diogo</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
         
         <span style="background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">💼 2 aguardando PF</span>
@@ -1771,7 +1768,6 @@ function switchTab(tab, btn) {
   <div class="p26-header" style="margin-bottom:36px;">
     <div>
       <div class="p26-eyebrow">Visão Individual · 13/07/2026</div>
-      <div class="p26-title" style="color:#2563eb;">Pedro Schreck</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
         
         <span style="background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">💼 2 aguardando PF</span>
