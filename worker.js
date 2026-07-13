@@ -881,7 +881,8 @@ function switchTab(tab, btn) {
   <div class="p26-meta">
     Fonte: Renovação de Contratos · Relatório de Projetos (S2M7) · <strong>Atualizado em 13/07/2026</strong>
   </div>
-
+</div><!-- .page -->
+</div><!-- fim tab-resumo -->
 
 
   <div id="tab-anderson" class="tab-panel">
@@ -2805,8 +2806,6 @@ function switchTab(tab, btn) {
               <td style="padding:9px 14px;text-align:right;font-weight:800;color:#7c3aed;">R$ 0,00</td>
             </tr></tfoot></table></div></div>
   </div>
-</div><!-- .page -->
-</div><!-- fim tab-resumo -->
 
 <div id="tab-pipeline" class="tab-panel">
 
