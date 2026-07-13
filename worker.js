@@ -1464,7 +1464,7 @@ function switchTab(tab, btn) {
     <div class="header-right">
       <div class="header-badge">
         <span class="dot" style="background:var(--accent1);"></span>
-        Base: S4M6 · Atualizado em 22/06/2026
+        Base: S2M7 · Atualizado em 13/07/2026
       </div>
     </div>
   </header>
