@@ -8,7 +8,7 @@ export default {
     if(request.method==="POST"&&path==="/login"){
       const body=await request.formData(),senha=body.get("senha")||"";
       const user=USERS[senha];
-      if(!user) return new Response(loginPage("Senha incorreta."),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
+      if(!user) return new Response(loginPage("Errooouuuu! Tenta de novo!"),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
       const h=new Headers();
       h.append("Location","/");
       h.append("Set-Cookie",C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
