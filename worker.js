@@ -888,7 +888,7 @@ function switchTab(tab, btn) {
 
   
   
-        <div id="tab-anderson" class="tab-panel">
+            <div id="tab-anderson" class="tab-panel">
 
   <!-- HEADER -->
   <div class="p26-header" style="margin-bottom:36px;">
@@ -898,22 +898,22 @@ function switchTab(tab, btn) {
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
         
         <span style="background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">💼 2 aguardando PF</span>
-        <span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">⚡ 4 contratos em risco</span>
+        <span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">⚡ 4 em risco</span>
       </div>
     </div>
   </div>
 
   <!-- KPIs -->
-  <div class="p26-kpi-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;">
+  <div class="p26-kpi-row" style="margin-bottom:40px;">
     <div class="p26-kpi" style="--kpi-accent:#7c3aed">
       <div class="p26-kpi-label">Projetos Ativos</div>
       <div class="p26-kpi-number">31</div>
-      <div class="p26-kpi-sub">R$ 282K em carteira · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 282K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#6b7280">
       <div class="p26-kpi-label">Leads</div>
       <div class="p26-kpi-number" style="color:#6b7280">11</div>
-      <div class="p26-kpi-sub">R$ 96K potencial · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 96K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#059669">
       <div class="p26-kpi-label">Fechados 2026</div>
@@ -923,1017 +923,299 @@ function switchTab(tab, btn) {
     <div class="p26-kpi" style="--kpi-accent:#7c3aed">
       <div class="p26-kpi-label">Carteira</div>
       <div class="p26-kpi-number" style="color:#7c3aed">52</div>
-      <div class="p26-kpi-sub">MRR R$ 58K · 9 renovados · 4 em risco</div>
+      <div class="p26-kpi-sub">MRR R$ 58K · 9 renov · 4 risco</div>
     </div>
   </div>
-  <!-- KANBAN PROJETOS -->
+
+  <!-- RESUMO CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#7c3aed;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">📋 Pipeline Clientes</div>
+      <div style="font-size:26px;font-weight:900;color:#7c3aed;line-height:1;margin-bottom:10px;">31</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 282K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em negociação</span><span style="font-size:11px;font-weight:700;color:#374151;">2</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#6b7280;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🎯 Leads</div>
+      <div style="font-size:26px;font-weight:900;color:#6b7280;line-height:1;margin-bottom:10px;">11</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT potencial</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 96K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#7c3aed;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🔄 Contratos</div>
+      <div style="font-size:26px;font-weight:900;color:#7c3aed;line-height:1;margin-bottom:10px;">52</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 58K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em risco</span><span style="font-size:11px;font-weight:700;color:#374151;">4</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Cancelados</span><span style="font-size:11px;font-weight:700;color:#374151;">6</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#059669;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">✅ Fechados 2026</div>
+      <div style="font-size:26px;font-weight:900;color:#059669;line-height:1;margin-bottom:10px;">3</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 28K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR gerado</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 2K</span></div></div>
+  </div>
+  <!-- BLOCOS PROJETOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">📋 Pipeline — Projetos Ativos (31) · R$ 282K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117495</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117495</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATP</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117480</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATP</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117479</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATRIO HOTÉIS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117359</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATP</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117358</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATP</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATP</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117480</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATP</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117479</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATRIO HOTÉIS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117359</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATP</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117358</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATP</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">20 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 173K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-111370</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-111370</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SANTA CASA DE MISERICORDIA DA BAHIA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 42.522,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115925</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">KleyHertz Farmacêutica</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 35.520,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113547</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TIMAC AGRO</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 24.192,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115788</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">USINA SAO JOSE DA ESTIVA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 15.664,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113863</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 12.872,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114241</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">PANATLANTICA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.400,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116911</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TENDA ATACADO</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.260,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114405</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">S3CURITY</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.600,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113199</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">S3CURITY</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 5.700,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116759</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.040,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116758</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 1.520,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116385</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONNECTION SEGURANÇA E GESTÃO DE TI</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 1.200,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114776</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IMPORTADORA BAGE S/A</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 1.140,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117313</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RBS - Televisão Gaúcha SA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117188</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATRIO HOTÉIS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117185</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GRUPO MARINGÁ</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117074</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATRIO HOTÉIS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117054</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SERILON BRASIL</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">115730</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IMPORTADORA BAGE S/A</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115517</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IMPORTADORA BAGE S/A</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 172.630,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SANTA CASA DE MISERICORDIA DA BAHIA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 42.522,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115925</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">KleyHertz Farmacêutica</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 35.520,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-113547</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TIMAC AGRO</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 24.192,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115788</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">USINA SAO JOSE DA ESTIVA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 15.664,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-113863</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 12.872,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114241</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">PANATLANTICA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.400,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-116911</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TENDA ATACADO</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.260,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114405</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">S3CURITY</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.600,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-113199</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">S3CURITY</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 5.700,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-116759</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.040,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-116758</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 1.520,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-116385</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONNECTION SEGURANÇA E GESTÃO DE TI</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 1.200,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114776</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IMPORTADORA BAGE S/A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 1.140,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117313</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RBS - Televisão Gaúcha SA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117188</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATRIO HOTÉIS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117185</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GRUPO MARINGÁ</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117074</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATRIO HOTÉIS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-117054</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SERILON BRASIL</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">115730</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IMPORTADORA BAGE S/A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115517</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IMPORTADORA BAGE S/A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#d97706;">2 itens</span>
           <span style="font-size:11px;font-weight:700;color:#d97706;">R$ 103K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-116087</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116087</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 73.587,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115335</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CPA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 29.454,42</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 103.041,42</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 73.587,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Negociação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115335</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CPA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 29.454,42</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Negociação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">4 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;">R$ 6K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114151</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114151</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SERVIX</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 6.144,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116721</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TORRA TORRA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115156</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TORRA TORRA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113281</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LUXCEL MAXLOG</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 6.144,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SERVIX</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 6.144,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-116721</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TORRA TORRA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115156</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TORRA TORRA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-113281</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LUXCEL MAXLOG</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN LEADS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS LEADS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🎯 Leads em Prospecção (11) · R$ 96K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116600</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116600</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Enops Engenharia S.A.</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116426</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Attus</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116425</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">VaBene Confeitaria e Sorveteria</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116424</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AFECC - Hospital Santa Rita de Cássia</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116420</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Essencis MG</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Enops Engenharia S.A.</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116426</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Attus</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116425</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">VaBene Confeitaria e Sorveteria</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116424</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AFECC - Hospital Santa Rita de Cássia</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116420</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Essencis MG</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 96K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-115250</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115250</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RRP ENERGIA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 67.387,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116728</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Novus Automation</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 17.464,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114308</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SPRINGER CARRIER (MIDEA)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.776,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117447</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HUB4IT TECNOLOGIA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116428</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Costão do Santinho Resort & SPA.</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 95.627,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RRP ENERGIA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 67.387,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116728</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Novus Automation</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 17.464,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-114308</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SPRINGER CARRIER (MIDEA)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.776,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-117447</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HUB4IT TECNOLOGIA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116428</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Costão do Santinho Resort & SPA.</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">1 item</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-115242</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115242</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Brasdiesel SA Comercial e Importadora</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Brasdiesel SA Comercial e Importadora</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN CONTRATOS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS CONTRATOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🔄 Contratos em Renovação (52) · MRR R$ 58K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;">Análise de Requisição</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#7c3aed;">39 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 840K</span>
+          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 5K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114958</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Celk Sistemas</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 121.625,88</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 121.625,88</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.135,49</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115031</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RBS - Televisão Gaúcha SA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 59.339,73</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 59.339,73</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115061</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TORRA TORRA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 53.094,84</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 53.094,84</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.424,57</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114997</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">INBETTA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 52.892,88</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 52.892,88</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.407,74</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115067</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">UNIVALI</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 52.236,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 52.236,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.353,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115023</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 73d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ORIZON</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 43.249,84</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 43.249,84</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.677,32</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">73d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115074</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ZILOR ENERGIA E ALIMENTOS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 38.463,24</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 38.463,24</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.205,27</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114996</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IMPORTADORA BAGE S/A</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 37.488,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 37.488,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.124,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115035</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 35.325,60</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 35.325,60</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.943,80</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114975</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FCC - FORNECEDORA COMPONENTES QUÍMICOS E COUROS LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 35.148,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 35.148,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.929,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115005</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">JME INFORMÁTICA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 26.810,28</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 26.810,28</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.234,19</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115016</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">M.L.GOMES</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 24.680,28</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 24.680,28</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.056,69</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115069</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">USINA SAO JOSE DA ESTIVA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 23.608,44</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 23.608,44</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.967,37</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115030</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RAPIDONET SISTEMAS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 21.619,93</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 21.619,93</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.012,92</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114948</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 42d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUTTAR - GETNET</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 20.834,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jun/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 20.834,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">42d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115059</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TENDA ATACADO</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 19.865,53</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 19.865,53</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114973</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ESTRE AMBIENTAL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 16.810,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 16.810,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115020</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Nauterra</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 13.048,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 13.048,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115060</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TIMAC AGRO</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.826,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.826,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114980</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRUKI</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.807,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.807,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115015</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LUXCEL MAXLOG</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.295,12</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.295,12</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 941,26</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115072</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 42d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">VIAÇÃO OURO E PRATA S.A</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.186,04</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jun/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.186,04</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 932,17</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">42d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115032</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RCXIT NETWORK IT EXPERTS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.010,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.010,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115006</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">KEPLER WEBER</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.679,50</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.679,50</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114969</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CPA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.657,47</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.657,47</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115051</span>
-                <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟡 103d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SERVIX</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.277,40</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.277,40</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 856,45</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">103d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115009</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LETTEL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 8.116,55</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 8.116,55</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114946</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATRIO HOTÉIS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.184,46</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 7.184,46</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 441,58</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114970</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">DATACOM</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 6.820,06</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.820,06</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114945</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATP</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 6.229,62</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.229,62</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115025</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">PERTO S/A PERIFÉRICOS P/ AUTOMAÇÃO - GRAVATAI ( Digicom )</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 4.891,09</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.891,09</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115018</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">MARELLI</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.763,92</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.763,92</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115049</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SERILON BRASIL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.744,37</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.744,37</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114974</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">EZEX</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.333,54</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.333,54</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114950</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BEG</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.309,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.309,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115017</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">MARCOPOLO</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 2.914,25</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.914,25</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115007</span>
-                <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟡 162d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">KICALDO</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 2.052,45</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Fev/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.052,45</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">162d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115019</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">MULTISUPORTE TECNOLOGIA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 1.620,93</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.620,93</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115058</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TEEVO COM E SERVS DE INFORMÁTICA (MI)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 984,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 984,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 82,00</span></div>
-              
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114958</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Celk Sistemas</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 121.625,88</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 10.135,49</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115031</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RBS - Televisão Gaúcha SA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 59.339,73</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115061</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TORRA TORRA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 53.094,84</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.424,57</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114997</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">INBETTA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 52.892,88</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.407,74</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115067</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">UNIVALI</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 52.236,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.353,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115023</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ORIZON</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+73d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 43.249,84</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.677,32</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115074</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ZILOR ENERGIA E ALIMENTOS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 38.463,24</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.205,27</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114996</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IMPORTADORA BAGE S/A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 37.488,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.124,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115035</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ROYAL PALM HOTELS & RESORTS (GRUPO ARCEL)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 35.325,60</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.943,80</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114975</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FCC - FORNECEDORA COMPONENTES QUÍMICOS E COUROS LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 35.148,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.929,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115005</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">JME INFORMÁTICA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 26.810,28</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.234,19</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115016</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">M.L.GOMES</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 24.680,28</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.056,69</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115069</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">USINA SAO JOSE DA ESTIVA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 23.608,44</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.967,37</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115030</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RAPIDONET SISTEMAS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 21.619,93</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.012,92</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114948</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUTTAR - GETNET</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jun/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+42d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 20.834,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115059</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TENDA ATACADO</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 19.865,53</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114973</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ESTRE AMBIENTAL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 16.810,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115020</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Nauterra</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 13.048,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115060</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TIMAC AGRO</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.826,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114980</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRUKI</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.807,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115015</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LUXCEL MAXLOG</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.295,12</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 941,26</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115072</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">VIAÇÃO OURO E PRATA S.A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jun/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+42d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.186,04</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 932,17</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115032</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RCXIT NETWORK IT EXPERTS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.010,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115006</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">KEPLER WEBER</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.679,50</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114969</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CPA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.657,47</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115051</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SERVIX</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+103d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.277,40</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 856,45</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115009</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LETTEL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 8.116,55</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114946</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATRIO HOTÉIS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.184,46</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 441,58</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114970</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">DATACOM</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 6.820,06</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114945</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATP</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 6.229,62</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115025</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">PERTO S/A PERIFÉRICOS P/ AUTOMAÇÃO - GRAVATAI ( Digicom )</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 4.891,09</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115018</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">MARELLI</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.763,92</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115049</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SERILON BRASIL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.744,37</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114974</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">EZEX</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.333,54</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114950</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BEG</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.309,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115017</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">MARCOPOLO</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.914,25</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115007</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">KICALDO</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Fev/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+162d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.052,45</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115019</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">MULTISUPORTE TECNOLOGIA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 1.620,93</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115058</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TEEVO COM E SERVS DE INFORMÁTICA (MI)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 984,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 82,00</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 839.843,24</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 47.724,82</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#92400e;">Em análise pelo cliente</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#92400e;">3 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#92400e;">R$ 35K</span>
+          <span style="font-size:11px;font-weight:700;color:#92400e;">R$ 1K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115039</span>
-                <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟡 103d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SANTA CASA DE MISERICORDIA DA BAHIA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 14.196,96</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 14.196,96</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.183,08</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">103d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115057</span>
-                <span style="background:#fee2e2;color:#dc2626;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🔴 193d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TECCLOUD SERVICOS DE TECNOLOGIA AHU LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 13.500,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jan/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 13.500,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">193d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115036</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 73d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">S3CURITY</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.530,69</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 7.530,69</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">73d</span></div>
-              
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115039</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SANTA CASA DE MISERICORDIA DA BAHIA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+103d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 14.196,96</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.183,08</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115057</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TECCLOUD SERVICOS DE TECNOLOGIA AHU LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jan/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+193d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 13.500,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115036</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">S3CURITY</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+73d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.530,69</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 35.227,65</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 1.183,08</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#2563eb;">1 item</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;">R$ 18K</span>
+          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115078</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONNECTION SEGURANÇA E GESTÃO DE TI</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 17.635,19</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 17.635,19</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 994,29</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115078 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONNECTION SEGURANÇA E GESTÃO DE TI</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 17.635,19</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 994,29</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 17.635,19</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 994,29</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;">Renovado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#059669;">9 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#059669;">R$ 130K</span>
+          <span style="font-size:11px;font-weight:700;color:#059669;">R$ 3K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115054</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SOTRAN LOGÍSTICA E TRANSPORTE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 66.993,34</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 66.993,34</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.313,27</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114983</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GOLDEN TECHNOLOGIA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 22.773,48</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 22.773,48</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.897,79</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115000</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">INSTITUTO FALCAO BAUER DA QUALIDADE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 16.979,65</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 16.979,65</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 929,72</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114968</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">COTRIBÁ</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.485,48</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 7.485,48</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 623,79</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114999</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">INOVATECH SOLUÇÕES EM INFORMÁTICA LTDA - EPP</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 4.144,36</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.144,36</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115040</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.646,90</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.646,90</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-115024</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">PANATLANTICA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 3.489,43</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.489,43</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 290,78</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114972</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">EQUALITI E SOLUCOES EM TI LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 2.949,99</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.949,99</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#7c3aed;">NP-114965</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONSTRUTORA MARQUISE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 1.584,62</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.584,62</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div></div>
-    </div></div></div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115054 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SOTRAN LOGÍSTICA E TRANSPORTE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 66.993,34</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.313,27</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114983 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GOLDEN TECHNOLOGIA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 22.773,48</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.897,79</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115000 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">INSTITUTO FALCAO BAUER DA QUALIDADE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 16.979,65</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 929,72</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114968 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">COTRIBÁ</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.485,48</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 623,79</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114999 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">INOVATECH SOLUÇÕES EM INFORMÁTICA LTDA - EPP</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 4.144,36</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115040 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SANTA CASA DE MISERICÓRDIA DE PORTO ALEGRE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.646,90</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115024 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">PANATLANTICA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.489,43</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 290,78</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114972 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">EQUALITI E SOLUCOES EM TI LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.949,99</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#7c3aed;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114965 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONSTRUTORA MARQUISE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 1.584,62</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 130.047,25</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 8.055,35</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef2f2;border-radius:10px 10px 0 0;padding:10px 16px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;">Cancelados</div>
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
+          <span style="font-size:11px;font-weight:800;color:#dc2626;">6 itens</span>
+          <span style="font-size:11px;font-weight:700;color:#dc2626;">R$ 2K</span>
+        </div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116093</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SYNERGIE SISTEMAS LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 41.899,68</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.491,64</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116075</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ASSOCIAÇÃO ANTÔNIO VEIRA JESUÍTA DO BRASIL (ASAV)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jan/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+193d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 28.993,68</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.416,14</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114994</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HT SOLUTIONS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jun/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+42d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.220,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 185,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114990</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GTFOODS GROUP</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+134d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 14.240,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114988</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Grupo Orcali</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 22.757,52</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.896,46</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114962</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CLAMPER</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.109,28</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 592,44</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 117.220,16</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 8.581,68</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
   <!-- PF DENISE -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">💼 Aguardando PF — Denise (2) · R$ 108K</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114418</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RAPIDONET SISTEMAS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 70.040,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.190,00</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114516</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUTTAR - GETNET</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 37.475,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 8.536,54</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div></div>
+    <div style="overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#eff6ff;">
+          <th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Abertura</th>
+        </tr></thead>
+        <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114418</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RAPIDONET SISTEMAS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 70.040,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.190,00</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">—</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114516</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUTTAR - GETNET</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 37.475,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 8.536,54</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">—</td></tr></tbody>
+        <tfoot><tr style="background:#eff6ff;border-top:2px solid #bfdbfe;">
+          <td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#2563eb;">Total</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#111827;">R$ 107.515,00</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#7c3aed;">R$ 12.726,54</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
   <!-- FECHADOS 2026 -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">✅ Fechados 2026 — Originados (3) · R$ 28K</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-117191</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SERILON BRASIL</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 2.681,47</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/06/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-116985</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">NETCENTER INFORMATICA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 17.104,38</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/06/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.330,73</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-115261</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LUXCEL MAXLOG</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 8.525,68</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/06/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 914,28</span></div>
-    </div></div></div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#f0fdf4;">
+          <th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Aprovação</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Lead time</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th>
+        </tr></thead>
+        <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117191</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SERILON BRASIL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/06/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.681,47</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116985</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">NETCENTER INFORMATICA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/06/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 17.104,38</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.330,73</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115261</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LUXCEL MAXLOG</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/06/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 8.525,68</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 914,28</td></tr></tbody>
+        <tfoot><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
+          <td colspan="4" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#059669;">Total · 3</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#111827;">R$ 28.311,53</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#7c3aed;">R$ 2.245,01</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
   </div>
 
   <div id="tab-talita" class="tab-panel">
@@ -1952,16 +1234,16 @@ function switchTab(tab, btn) {
   </div>
 
   <!-- KPIs -->
-  <div class="p26-kpi-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;">
+  <div class="p26-kpi-row" style="margin-bottom:40px;">
     <div class="p26-kpi" style="--kpi-accent:#0891b2">
       <div class="p26-kpi-label">Projetos Ativos</div>
       <div class="p26-kpi-number">19</div>
-      <div class="p26-kpi-sub">R$ 224K em carteira · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 224K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#6b7280">
       <div class="p26-kpi-label">Leads</div>
       <div class="p26-kpi-number" style="color:#6b7280">9</div>
-      <div class="p26-kpi-sub">R$ 315K potencial · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 315K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#059669">
       <div class="p26-kpi-label">Fechados 2026</div>
@@ -1971,560 +1253,237 @@ function switchTab(tab, btn) {
     <div class="p26-kpi" style="--kpi-accent:#0891b2">
       <div class="p26-kpi-label">Carteira</div>
       <div class="p26-kpi-number" style="color:#0891b2">19</div>
-      <div class="p26-kpi-sub">MRR R$ 165K · 2 renovados · 0 em risco</div>
+      <div class="p26-kpi-sub">MRR R$ 165K · 2 renov · 0 risco</div>
     </div>
   </div>
-  <!-- KANBAN PROJETOS -->
+
+  <!-- RESUMO CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#0891b2;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">📋 Pipeline Clientes</div>
+      <div style="font-size:26px;font-weight:900;color:#0891b2;line-height:1;margin-bottom:10px;">19</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 224K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em negociação</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#6b7280;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🎯 Leads</div>
+      <div style="font-size:26px;font-weight:900;color:#6b7280;line-height:1;margin-bottom:10px;">9</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT potencial</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 315K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#0891b2;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🔄 Contratos</div>
+      <div style="font-size:26px;font-weight:900;color:#0891b2;line-height:1;margin-bottom:10px;">19</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 165K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em risco</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Cancelados</span><span style="font-size:11px;font-weight:700;color:#374151;">1</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#059669;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">✅ Fechados 2026</div>
+      <div style="font-size:26px;font-weight:900;color:#059669;line-height:1;margin-bottom:10px;">0</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR gerado</span><span style="font-size:11px;font-weight:700;color:#374151;">—</span></div></div>
+  </div>
+  <!-- BLOCOS PROJETOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">📋 Pipeline — Projetos Ativos (19) · R$ 224K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">3 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-116882</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116882</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ENERGY TELECOM</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115993</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Sapore</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115951</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SOLVI PARTICIPAÇÕES</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ENERGY TELECOM</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115993</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Sapore</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115951</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SOLVI PARTICIPAÇÕES</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 160K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-113545</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113545</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUTOGLASS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 70.160,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116826</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RODOBENS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 45.085,68</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113663</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BULLLA SA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 38.400,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-111979</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 6.720,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117297</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUTOGLASS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 160.365,68</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUTOGLASS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 70.160,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-116826</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RODOBENS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 45.085,68</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-113663</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BULLLA SA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 38.400,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-111979</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 6.720,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-117297</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUTOGLASS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">11 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;">R$ 63K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115606</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115606</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BULLLA SA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 30.020,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115724</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BULLLA SA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 16.720,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-112412</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 16.500,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117061</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUTOGLASS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116413</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Sapore</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115271</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ABBC - Associação Brasileira de Bancos</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113967</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BOMBRIL S.A</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113488</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BULLLA SA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113285</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BULLLA SA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115992</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SOLVI PARTICIPAÇÕES</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113665</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LIFE EMPRESARIAL SAÚDE LTDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 63.240,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BULLLA SA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 30.020,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Aprovado</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115724</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BULLLA SA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 16.720,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Aprovado</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-112412</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 16.500,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-117061</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUTOGLASS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-116413</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Sapore</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115271</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ABBC - Associação Brasileira de Bancos</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-113967</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BOMBRIL S.A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-113488</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BULLLA SA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-113285</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BULLLA SA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115992</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SOLVI PARTICIPAÇÕES</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Estimativa de Esforço</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-113665</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LIFE EMPRESARIAL SAÚDE LTDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN LEADS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS LEADS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🎯 Leads em Prospecção (9) · R$ 315K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">1 item</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-114669</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114669</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Associação Educadora e Beneficente</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Associação Educadora e Beneficente</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">3 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 315K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-113970</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113970</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Data Engenharia</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 172.116,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114712</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Associação dos Engenheiros da Sabesp</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 142.404,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116839</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Essencis Soluções Ambientais</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 314.520,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Data Engenharia</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 172.116,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-114712</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Associação dos Engenheiros da Sabesp</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 142.404,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116839</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Essencis Soluções Ambientais</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116838</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116838</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Essencis Soluções Ambientais</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116837</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Essencis Soluções Ambientais</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116833</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Essencis Soluções Ambientais</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116078</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Essencis Soluções Ambientais</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115259</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Packing Group</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Essencis Soluções Ambientais</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116837</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Essencis Soluções Ambientais</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116833</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Essencis Soluções Ambientais</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116078</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Essencis Soluções Ambientais</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-115259</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Packing Group</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN CONTRATOS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS CONTRATOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🔄 Contratos em Renovação (19) · MRR R$ 165K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;">Análise de Requisição</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#7c3aed;">17 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 1,4M</span>
+          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 20K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114797</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ACHE LABORATÓRIOS FARMACÊUTICOS SA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 409.368,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 409.368,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 42.839,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115011</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LIFE EMPRESARIAL SAÚDE LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 178.058,04</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 178.058,04</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 14.838,17</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115053</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SOLVI PARTICIPAÇÕES</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 153.504,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 153.504,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 12.792,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-116088</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BOMBRIL S.A</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 124.764,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 124.764,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.397,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114959</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CENTRO HOSPITALAR DE SETÚBAL, EPE (TCSI)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 83.001,12</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 83.001,12</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114947</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUTOGLASS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 76.183,32</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 76.183,32</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.348,61</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114941</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ANDRADE GUTIERREZ</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 72.866,28</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 72.866,28</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.072,19</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114984</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Gourmet Sports Hospitality Serviços de Alimentação Ltda</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 68.467,68</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 68.467,68</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 5.705,64</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114966</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 50.484,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 50.484,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.207,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115021</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">NISSIN FOODS DO BRASIL LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 44.040,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 44.040,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.670,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114989</span>
-                <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟡 103d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GRUPO THATHI - PANAMBY</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 37.921,92</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 37.921,92</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.160,16</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">103d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115052</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SOLVER</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 37.508,64</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 37.508,64</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.125,72</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115079</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BULLLA SA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 35.647,20</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 35.647,20</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.970,60</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114939</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ADESTE PARTICIPACOES E EMPREENDIMENTOS LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 25.788,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 25.788,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.149,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114961</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Cetrel - Central de Tratamento de Efluentes Líquidos</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.322,37</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.322,37</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114971</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ENERGY TELECOM</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.942,80</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.942,80</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 911,90</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114796</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ABBC - Associação Brasileira de Bancos</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 4.315,67</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.315,67</span></div>
-              
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114797</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ACHE LABORATÓRIOS FARMACÊUTICOS SA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 409.368,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 42.839,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115011</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LIFE EMPRESARIAL SAÚDE LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 178.058,04</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 14.838,17</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115053</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SOLVI PARTICIPAÇÕES</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 153.504,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 12.792,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116088</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BOMBRIL S.A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 124.764,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 10.397,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114959</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CENTRO HOSPITALAR DE SETÚBAL, EPE (TCSI)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 83.001,12</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114947</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUTOGLASS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 76.183,32</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 6.348,61</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114941</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ANDRADE GUTIERREZ</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 72.866,28</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 6.072,19</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114984</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Gourmet Sports Hospitality Serviços de Alimentação Ltda</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 68.467,68</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 5.705,64</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114966</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONSTRUTORA NORBERTO ODEBRECHT S.A.</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 50.484,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.207,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115021</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">NISSIN FOODS DO BRASIL LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 44.040,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.670,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114989</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GRUPO THATHI - PANAMBY</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+103d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 37.921,92</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.160,16</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115052</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SOLVER</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 37.508,64</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.125,72</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115079</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BULLLA SA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 35.647,20</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.970,60</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114939</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ADESTE PARTICIPACOES E EMPREENDIMENTOS LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 25.788,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.149,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114961</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Cetrel - Central de Tratamento de Efluentes Líquidos</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.322,37</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114971</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ENERGY TELECOM</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.942,80</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 911,90</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114796</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ABBC - Associação Brasileira de Bancos</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 4.315,67</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 1.424.183,04</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 119.186,99</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#92400e;">Em análise pelo cliente</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#92400e;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#92400e;"></span>
-        </div>
+        <div style="font-size:11px;color:#92400e;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;">Renovado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#059669;">2 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#059669;">R$ 491K</span>
+          <span style="font-size:11px;font-weight:700;color:#059669;">R$ 5K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-114991</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HOSPITAL CARE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 312.940,69</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jun/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 312.940,69</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 30.705,52</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#0891b2;">NP-115042</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Sapore</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 178.403,92</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 178.403,92</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 14.866,99</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div></div>
-    </div></div></div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114991 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HOSPITAL CARE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jun/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 312.940,69</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 30.705,52</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#0891b2;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115042 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Sapore</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 178.403,92</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 14.866,99</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 491.344,61</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 45.572,51</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef2f2;border-radius:10px 10px 0 0;padding:10px 16px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;">Cancelados</div>
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
+          <span style="font-size:11px;font-weight:800;color:#dc2626;">1 item</span>
+          <span style="font-size:11px;font-weight:700;color:#dc2626;">R$ 2K</span>
+        </div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116807</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RODOBENS NEGÓCIOS IMOBILIÁRIOS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 30.236,58</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.242,10</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 30.236,58</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 2.242,10</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
   </div>
 
   <div id="tab-ines" class="tab-panel">
@@ -2543,16 +1502,16 @@ function switchTab(tab, btn) {
   </div>
 
   <!-- KPIs -->
-  <div class="p26-kpi-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;">
+  <div class="p26-kpi-row" style="margin-bottom:40px;">
     <div class="p26-kpi" style="--kpi-accent:#d97706">
       <div class="p26-kpi-label">Projetos Ativos</div>
       <div class="p26-kpi-number">11</div>
-      <div class="p26-kpi-sub">R$ 5K em carteira · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 5K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#6b7280">
       <div class="p26-kpi-label">Leads</div>
       <div class="p26-kpi-number" style="color:#6b7280">5</div>
-      <div class="p26-kpi-sub">— potencial · 0 parados +90d</div>
+      <div class="p26-kpi-sub">— · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#059669">
       <div class="p26-kpi-label">Fechados 2026</div>
@@ -2562,334 +1521,248 @@ function switchTab(tab, btn) {
     <div class="p26-kpi" style="--kpi-accent:#d97706">
       <div class="p26-kpi-label">Carteira</div>
       <div class="p26-kpi-number" style="color:#d97706">1</div>
-      <div class="p26-kpi-sub">MRR R$ 22K · 0 renovados · 0 em risco</div>
+      <div class="p26-kpi-sub">MRR R$ 22K · 0 renov · 0 risco</div>
     </div>
   </div>
-  <!-- KANBAN PROJETOS -->
+
+  <!-- RESUMO CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#d97706;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">📋 Pipeline Clientes</div>
+      <div style="font-size:26px;font-weight:900;color:#d97706;line-height:1;margin-bottom:10px;">11</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 5K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em negociação</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#6b7280;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🎯 Leads</div>
+      <div style="font-size:26px;font-weight:900;color:#6b7280;line-height:1;margin-bottom:10px;">5</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT potencial</span><span style="font-size:11px;font-weight:700;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#d97706;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🔄 Contratos</div>
+      <div style="font-size:26px;font-weight:900;color:#d97706;line-height:1;margin-bottom:10px;">1</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 22K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em risco</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Cancelados</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#059669;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">✅ Fechados 2026</div>
+      <div style="font-size:26px;font-weight:900;color:#059669;line-height:1;margin-bottom:10px;">1</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 23K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR gerado</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 4K</span></div></div>
+  </div>
+  <!-- BLOCOS PROJETOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">📋 Pipeline — Projetos Ativos (11) · R$ 5K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">2 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117391</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117391</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HOSPITAL MAE DE DEUS (AESC)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115823</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HOSPITAL MAE DE DEUS (AESC)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-115823</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">3 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 5K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117291</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117291</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HOSPITAL MAE DE DEUS (AESC)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 4.560,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117408</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CASTROLANDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117096</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 4.560,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HOSPITAL MAE DE DEUS (AESC)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 4.560,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117408</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CASTROLANDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117096</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">6 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117665</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117665</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117553</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A.</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117472</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CERVEJARIA PETRÓPOLIS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115397</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CASTROLANDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114780</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CASTROLANDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117527</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">INTERCITY</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117553</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A.</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117472</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CERVEJARIA PETRÓPOLIS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-115397</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CASTROLANDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-114780</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CASTROLANDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-117527</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">INTERCITY</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN LEADS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS LEADS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🎯 Leads em Prospecção (5) · —</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">1 item</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-117145</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117145</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GRUPO GR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GRUPO GR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">2 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116738</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116738</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CMTR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116422</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Agrex do Brasil</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CMTR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116422</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Agrex do Brasil</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">2 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-117655</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117655</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Cobra Correntes</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116900</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Assembléia de Deus Ministério</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Cobra Correntes</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116900</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Assembléia de Deus Ministério</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Projeto</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN CONTRATOS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS CONTRATOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🔄 Contratos em Renovação (1) · MRR R$ 22K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;">Análise de Requisição</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#7c3aed;">1 item</span>
-          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 264K</span>
+          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 12K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#d97706;">NP-116091</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CERVEJARIA PETRÓPOLIS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 263.616,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 263.616,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 21.968,61</span></div>
-              
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#d97706;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116091</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CERVEJARIA PETRÓPOLIS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 263.616,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 21.968,61</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 263.616,00</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 21.968,61</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#92400e;">Em análise pelo cliente</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#92400e;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#92400e;"></span>
-        </div>
+        <div style="font-size:11px;color:#92400e;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;">Renovado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#059669;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#059669;"></span>
-        </div>
+        <div style="font-size:11px;color:#059669;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div></div></div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div>
+    </div>
+  </div>
   <!-- PF DENISE -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">💼 Aguardando PF — Denise (2) · R$ 41K</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114520</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Nutrire Indústria de Alimentos</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 23.087,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117285</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 18.240,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 18.240,00</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div></div>
+    <div style="overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#eff6ff;">
+          <th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Abertura</th>
+        </tr></thead>
+        <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114520</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Nutrire Indústria de Alimentos</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 23.087,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">—</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117285</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 18.240,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 18.240,00</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">—</td></tr></tbody>
+        <tfoot><tr style="background:#eff6ff;border-top:2px solid #bfdbfe;">
+          <td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#2563eb;">Total</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#111827;">R$ 41.327,00</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#7c3aed;">R$ 18.240,00</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
   <!-- FECHADOS 2026 -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">✅ Fechados 2026 — Originados (1) · R$ 23K</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-115875</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CASTROLANDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 23.472,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/04/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.912,00</span></div>
-    </div></div></div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#f0fdf4;">
+          <th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Aprovação</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Lead time</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th>
+        </tr></thead>
+        <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115875</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CASTROLANDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/04/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 23.472,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.912,00</td></tr></tbody>
+        <tfoot><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
+          <td colspan="4" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#059669;">Total · 1</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#111827;">R$ 23.472,00</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#7c3aed;">R$ 3.912,00</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
   </div>
 
   <div id="tab-pedro" class="tab-panel">
@@ -2902,22 +1775,22 @@ function switchTab(tab, btn) {
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
         
         <span style="background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">💼 2 aguardando PF</span>
-        <span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">⚡ 9 contratos em risco</span>
+        <span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">⚡ 9 em risco</span>
       </div>
     </div>
   </div>
 
   <!-- KPIs -->
-  <div class="p26-kpi-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;">
+  <div class="p26-kpi-row" style="margin-bottom:40px;">
     <div class="p26-kpi" style="--kpi-accent:#2563eb">
       <div class="p26-kpi-label">Projetos Ativos</div>
       <div class="p26-kpi-number">18</div>
-      <div class="p26-kpi-sub">R$ 437K em carteira · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 437K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#6b7280">
       <div class="p26-kpi-label">Leads</div>
       <div class="p26-kpi-number" style="color:#6b7280">5</div>
-      <div class="p26-kpi-sub">R$ 278K potencial · 0 parados +90d</div>
+      <div class="p26-kpi-sub">R$ 278K · 0 parados +90d</div>
     </div>
     <div class="p26-kpi" style="--kpi-accent:#059669">
       <div class="p26-kpi-label">Fechados 2026</div>
@@ -2927,856 +1800,290 @@ function switchTab(tab, btn) {
     <div class="p26-kpi" style="--kpi-accent:#2563eb">
       <div class="p26-kpi-label">Carteira</div>
       <div class="p26-kpi-number" style="color:#2563eb">51</div>
-      <div class="p26-kpi-sub">MRR R$ 269K · 16 renovados · 9 em risco</div>
+      <div class="p26-kpi-sub">MRR R$ 269K · 16 renov · 9 risco</div>
     </div>
   </div>
-  <!-- KANBAN PROJETOS -->
+
+  <!-- RESUMO CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2563eb;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">📋 Pipeline Clientes</div>
+      <div style="font-size:26px;font-weight:900;color:#2563eb;line-height:1;margin-bottom:10px;">18</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 437K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em negociação</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#6b7280;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🎯 Leads</div>
+      <div style="font-size:26px;font-weight:900;color:#6b7280;line-height:1;margin-bottom:10px;">5</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT potencial</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 278K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Parados +90d</span><span style="font-size:11px;font-weight:700;color:#374151;">0</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2563eb;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">🔄 Contratos</div>
+      <div style="font-size:26px;font-weight:900;color:#2563eb;line-height:1;margin-bottom:10px;">51</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 269K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Em risco</span><span style="font-size:11px;font-weight:700;color:#374151;">9</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">Cancelados</span><span style="font-size:11px;font-weight:700;color:#374151;">5</span></div></div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#059669;border-radius:12px 12px 0 0;"></div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px;">✅ Fechados 2026</div>
+      <div style="font-size:26px;font-weight:900;color:#059669;line-height:1;margin-bottom:10px;">3</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">VT total</span><span style="font-size:11px;font-weight:700;color:#374151;">R$ 18K</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:11px;color:#6b7280;">MRR gerado</span><span style="font-size:11px;font-weight:700;color:#374151;">—</span></div></div>
+  </div>
+  <!-- BLOCOS PROJETOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">📋 Pipeline — Projetos Ativos (18) · R$ 437K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117592</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117592</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117199</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117194</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATRIO HOTÉIS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117024</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116725</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117199</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117194</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATRIO HOTÉIS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117024</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-116725</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IRANI PAPEL E EMBALAGEM S.A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">6 itens</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 393K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-112013</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-112013</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 280.000,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117209</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">STEFANINI</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 76.632,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115314</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 17.670,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116484</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.900,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116880</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Inetum Tecnologia</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.050,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117200</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 393.252,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 280.000,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117209</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">STEFANINI</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 76.632,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115314</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 17.670,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-116484</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.900,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-116880</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Inetum Tecnologia</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.050,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117200</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#2563eb;">2 itens</span>
           <span style="font-size:11px;font-weight:700;color:#2563eb;">R$ 33K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117218</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117218</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">NGAHR</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 19.512,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115363</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SENAC RJ</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 13.680,00</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 33.192,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">NGAHR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 19.512,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Processo Financeiro</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115363</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SENAC RJ</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 13.680,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Processo Financeiro</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">5 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;">R$ 10K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-112683</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-112683</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HOSPITAL MAE DE DEUS (AESC)</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.500,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-110527</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">S3CURITY</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-110525</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">S3CURITY</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117337</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUXILIADORA PREDIAL</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115755</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SAQUE PAGUE</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 10.500,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HOSPITAL MAE DE DEUS (AESC)</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.500,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Caderno Técnico</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-110527</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">S3CURITY</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Caderno Técnico</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-110525</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">S3CURITY</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Elaboração de Caderno Técnico</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-117337</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUXILIADORA PREDIAL</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Estimativa de Esforço</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115755</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SAQUE PAGUE</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Estimativa de Esforço</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN LEADS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS LEADS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🎯 Leads em Prospecção (5) · R$ 278K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Qualificação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#374151;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#374151;"></span>
-        </div>
+        <div style="font-size:11px;color:#374151;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f0f9ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0284c7;">Projeto Enviado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#0284c7;">1 item</span>
           <span style="font-size:11px;font-weight:700;color:#0284c7;">R$ 278K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-117545</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117545</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RedeMob Consórcio</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 277.992,00</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 277.992,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RedeMob Consórcio</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 277.992,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Projeto Enviado</span></div>
-    </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#d97706;">Em Negociação</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#d97706;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#d97706;"></span>
-        </div>
+        <div style="font-size:11px;color:#d97706;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;font-weight:800;color:#2563eb;">0 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;"></span>
-        </div>
+        <div style="font-size:11px;color:#2563eb;margin-top:2px;">0 itens</div>
       </div>
-      <div style="min-height:60px;"><div style="padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;text-align:center;color:#d1d5db;font-size:11px;">—</div>
+    </div><div style="flex:1;min-width:280px;opacity:0.85;">
+      <div style="background:#f3f4f6;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#374151;">Outras</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#374151;">4 itens</span>
           <span style="font-size:11px;font-weight:700;color:#374151;"></span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-117712</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117712</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Sementes Roos</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116258</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Unimed Central de Serviços - RS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116159</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">REDE BRASIL GESTÃO DE ATIVOS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115797</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ALPARGATAS</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 0,00</td></tr></tfoot>
+        </table>
       </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Sementes Roos</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116258</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Unimed Central de Serviços - RS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-116159</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">REDE BRASIL GESTÃO DE ATIVOS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:0.75;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#6b7280;">NP-115797</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ALPARGATAS</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Etapa</span><span style="font-size:10px;font-weight:600;color:#374151;">Qualificação Concluída</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div>
-    </div></div></div>
-  <!-- KANBAN CONTRATOS -->
+    </div>
+    </div>
+  </div>
+  <!-- BLOCOS CONTRATOS -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">🔄 Contratos em Renovação (51) · MRR R$ 269K</div>
-    <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start;"><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+    <div style="display:flex;gap:16px;overflow-x:auto;align-items:flex-start;padding-bottom:8px;">
+      <div style="flex:1;min-width:280px;">
+      <div style="background:#f5f3ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7c3aed;">Análise de Requisição</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#7c3aed;">26 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 2,1M</span>
+          <span style="font-size:11px;font-weight:700;color:#7c3aed;">R$ 18K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115064</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A.</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 292.685,64</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 292.685,64</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 24.390,47</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-116108</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 237.043,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 237.043,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 19.752,92</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114940</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AGIPLAN SERVIÇOS FINANCEIROS (AGIBANK)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 176.970,72</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 176.970,72</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 14.747,56</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115003</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IRANI PAPEL E EMBALAGEM S.A</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 176.916,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 176.916,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 14.743,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115010</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LG SISTEMAS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 162.087,60</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 162.087,60</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 21.863,99</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114979</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 160.646,04</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 160.646,04</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 13.387,17</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114981</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 147.152,06</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 147.152,06</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 9.723,80</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114985</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GOVERNANÇA BRASIL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 121.044,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 121.044,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.087,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114942</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AREZZO INDUSTRIA E COMERCIO LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 80.096,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 80.096,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.210,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114957</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CASTROLANDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 69.931,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 69.931,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.098,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114951</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BIONOVIS S.A. - COMPANHIA BRASILEIRA DE BIOTECNOLOGIA FARMACEUTICA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 69.426,18</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 69.426,18</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.629,78</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115014</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LOJAS LEBES</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 65.047,32</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 65.047,32</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 5.420,61</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114976</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FERBASA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 55.336,87</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 55.336,87</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.011,49</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115045</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SECRETARIA DA FAZENDA DO ESTADO DO ALAGOAS (SEFAZ AL)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 37.234,16</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 37.234,16</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115050</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SERVIÇO SOCIAL DO COMÉRCIO - ADMINISTRAÇÃO REGIONAL NO ESTADO DO RIO DE JANEIRO (SESC/ ARRJ)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 35.128,24</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 35.128,24</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115041</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SAO JOAO FARMACIAS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 34.863,24</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 34.863,24</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.905,27</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114992</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HOSPITAL DE CLINICAS (HCPA)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 30.348,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 30.348,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.529,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114987</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GRUPO MARINGÁ</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 24.792,79</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 24.792,79</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.466,15</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114954</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BRASTORAGE - THINK</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 22.265,76</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 22.265,76</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.855,48</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-116092</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CORTEL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 15.150,30</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Nov/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 15.150,30</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.377,72</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115028</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">QINTESS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 15.000,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 15.000,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.250,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115008</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">KleyHertz Farmacêutica</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 12.823,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 12.823,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115062</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">TRISUL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 12.650,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 12.650,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 450,00</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114964</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">CONSTRUCAP CCPS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 10.966,20</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Set/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 10.966,20</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 913,85</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114946</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ATRIO HOTÉIS</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.184,46</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 7.184,46</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 441,58</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115013</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LOJAS RENNER</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 6.254,40</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.254,40</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 521,20</span></div>
-              
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115064</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">UNIDASUL DISTRIBUIDORA ALIMENTÍCIA S.A.</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 292.685,64</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 24.390,47</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116108</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 237.043,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 19.752,92</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114940</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AGIPLAN SERVIÇOS FINANCEIROS (AGIBANK)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 176.970,72</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 14.747,56</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115003</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 176.916,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 14.743,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115010</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LG SISTEMAS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 162.087,60</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 21.863,99</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114979</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 160.646,04</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 13.387,17</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114981</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FUNDAÇÃO SÃO FRANCISCO XAVIER - FSFX</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 147.152,06</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 9.723,80</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114985</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GOVERNANÇA BRASIL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 121.044,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 10.087,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114942</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AREZZO INDUSTRIA E COMERCIO LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 80.096,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.210,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114957</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CASTROLANDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 69.931,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.098,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114951</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BIONOVIS S.A. - COMPANHIA BRASILEIRA DE BIOTECNOLOGIA FARMACEUTICA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 69.426,18</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.629,78</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115014</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LOJAS LEBES</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 65.047,32</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 5.420,61</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114976</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FERBASA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 55.336,87</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.011,49</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115045</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SECRETARIA DA FAZENDA DO ESTADO DO ALAGOAS (SEFAZ AL)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 37.234,16</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115050</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SERVIÇO SOCIAL DO COMÉRCIO - ADMINISTRAÇÃO REGIONAL NO ESTADO DO RIO DE JANEIRO (SESC/ ARRJ)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 35.128,24</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115041</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SAO JOAO FARMACIAS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 34.863,24</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.905,27</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114992</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HOSPITAL DE CLINICAS (HCPA)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 30.348,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.529,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114987</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GRUPO MARINGÁ</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 24.792,79</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.466,15</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114954</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BRASTORAGE - THINK</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 22.265,76</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.855,48</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116092</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CORTEL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Nov/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 15.150,30</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.377,72</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115028</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">QINTESS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 15.000,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.250,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115008</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">KleyHertz Farmacêutica</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 12.823,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115062</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">TRISUL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 12.650,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 450,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114964</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">CONSTRUCAP CCPS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Set/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 10.966,20</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 913,85</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114946</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ATRIO HOTÉIS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.184,46</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 441,58</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115013</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LOJAS RENNER</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 6.254,40</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 521,20</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 2.079.042,98</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 159.776,04</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef9c3;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#92400e;">Em análise pelo cliente</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#92400e;">6 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#92400e;">R$ 285K</span>
+          <span style="font-size:11px;font-weight:700;color:#92400e;">R$ 2K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114986</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GRPCOM GRUPO PARANAENSE DE COMUNICAÇÃO</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 82.428,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 82.428,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.869,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115063</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Trt Da 4ª Região</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 78.738,72</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Out/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 78.738,72</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 6.561,56</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115055</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">STEFANINI</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 71.022,60</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 71.022,60</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 5.918,55</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115702</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 73d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 47.856,60</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 47.856,60</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.988,05</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">73d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115077</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">NETCENTER INFORMATICA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 2.254,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.254,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115071</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">VERZANI & SANDRINI LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 2.231,60</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Ago/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.231,60</span></div>
-              
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114986</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GRPCOM GRUPO PARANAENSE DE COMUNICAÇÃO</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 82.428,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 6.869,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115063</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Trt Da 4ª Região</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Out/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 78.738,72</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 6.561,56</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115055</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">STEFANINI</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 71.022,60</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 5.918,55</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115702</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+73d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 47.856,60</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.988,05</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115077</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">NETCENTER INFORMATICA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.254,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115071</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">VERZANI & SANDRINI LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.231,60</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 284.531,52</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 23.337,16</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#eff6ff;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2563eb;">Processo Financeiro</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#2563eb;">3 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#2563eb;">R$ 81K</span>
+          <span style="font-size:11px;font-weight:700;color:#2563eb;">R$ 767,12</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114944</span>
-                <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟡 134d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">ASSOCIACAO HOSPITALAR MOINHOS DE VENTO</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 45.084,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 45.084,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 3.757,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">134d</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115047</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SEPHORA DO BRASIL PARTICIPAÇÕES S.A.</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 19.190,76</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Dez/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 19.190,76</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.599,23</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114978</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 12d</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FORSALES MECANET</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 16.797,84</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 16.797,84</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.399,82</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Atraso</span><span style="font-size:10px;font-weight:600;color:#374151;">12d</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div></div>
-    </div><div style="flex:1;min-width:220px;max-width:320px;">
-      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114944</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">ASSOCIACAO HOSPITALAR MOINHOS DE VENTO</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+134d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 45.084,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 3.757,00</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115047 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SEPHORA DO BRASIL PARTICIPAÇÕES S.A.</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 19.190,76</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.599,23</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114978 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FORSALES MECANET</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 16.797,84</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.399,82</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 81.072,60</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 6.756,05</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#f0fdf4;border-radius:10px 10px 0 0;padding:10px 16px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#059669;">Renovado</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
           <span style="font-size:11px;font-weight:800;color:#059669;">16 itens</span>
-          <span style="font-size:11px;font-weight:700;color:#059669;">R$ 1,1M</span>
+          <span style="font-size:11px;font-weight:700;color:#059669;">R$ 4K</span>
         </div>
       </div>
-      <div style="min-height:60px;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114949</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">AUXILIADORA PREDIAL</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 412.288,08</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 412.288,08</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 34.357,34</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115038</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SAFEWEB</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 133.565,79</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 133.565,79</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.130,48</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115065</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">UNIMED PORTO ALEGRE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 132.818,66</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 132.818,66</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.068,22</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114993</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">HOSPITAL MAE DE DEUS (AESC)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 98.947,56</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jul/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 98.947,56</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 8.245,63</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115043</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SAQUE PAGUE</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 60.982,84</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Fev/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 60.982,84</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 5.081,90</span></div>
-              
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114982</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 54.105,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 54.105,00</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114977</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FLOWTI</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 50.601,72</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jun/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 50.601,72</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 4.216,81</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115046</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SENAC RJ</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 46.440,53</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Fev/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 46.440,53</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115066</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">UNIMED VALES DO TAQUARI E RIO PARDO LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 38.120,85</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Fev/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 38.120,85</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-114953</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">BRASKEM</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 32.400,00</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 32.400,00</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 2.700,00</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115033</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">RESERVA BRASILEIRA INDUSTRIA E COMERCIO LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 22.804,08</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Abr/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 22.804,08</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 1.900,34</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115070</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">VANTIX TECNOLOGIA COMÉRCIO E SERVIÇOS DE INFORMÁTICA LTDA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 11.001,77</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 11.001,77</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115022</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">OCYAN</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 9.176,64</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Jan/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 9.176,64</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115012</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">LOJAS COLOMBO S/A</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 8.538,28</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 8.538,28</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 711,52</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115026</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Pestana Leilões</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.692,90</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mai/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 7.692,90</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:box-shadow .15s;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-115044</span>
-                <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">✅ ok</span>
-              </div>
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">SCGAS - COMPANHIA DE GAS DE SANTA CATARINA</div>
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 7.351,36</div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">Vencimento</span><span style="font-size:10px;font-weight:600;color:#374151;">Mar/26</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;"><span style="font-size:10px;color:#9ca3af;">VTC</span><span style="font-size:10px;font-weight:600;color:#374151;">R$ 7.351,36</span></div>
-              <div style="margin-top:6px;"><span style="background:#eff6ff;color:#2563eb;font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;">via Denise</span></div>
-            </div></div>
-    </div></div></div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114949 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">AUXILIADORA PREDIAL</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 412.288,08</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 34.357,34</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115038 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SAFEWEB</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 133.565,79</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 11.130,48</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115065 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">UNIMED PORTO ALEGRE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 132.818,66</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 11.068,22</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114993 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HOSPITAL MAE DE DEUS (AESC)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 98.947,56</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 8.245,63</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115043</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SAQUE PAGUE</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Fev/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 60.982,84</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 5.081,90</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114982 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">GGT SOLUÇÃO TECNOLOGICAS LTDA (ANGOLAPREV)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 54.105,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114977 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FLOWTI</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jun/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 50.601,72</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 4.216,81</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115046 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SENAC RJ</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Fev/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 46.440,53</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115066 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">UNIMED VALES DO TAQUARI E RIO PARDO LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Fev/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 38.120,85</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114953 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">BRASKEM</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 32.400,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.700,00</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115033 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RESERVA BRASILEIRA INDUSTRIA E COMERCIO LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Abr/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 22.804,08</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 1.900,34</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115070 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">VANTIX TECNOLOGIA COMÉRCIO E SERVIÇOS DE INFORMÁTICA LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 11.001,77</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115022 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">OCYAN</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jan/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 9.176,64</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115012 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">LOJAS COLOMBO S/A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 8.538,28</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 711,52</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115026 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Pestana Leilões</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mai/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.692,90</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115044 <span style="background:#eff6ff;color:#2563eb;font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;">D</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">SCGAS - COMPANHIA DE GAS DE SANTA CATARINA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Mar/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 7.351,36</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;"><span style="color:#d1d5db;">—</span></td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 1.126.836,06</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 79.412,24</td></tr></tfoot>
+        </table>
+      </div>
+    </div><div style="flex:1;min-width:280px;">
+      <div style="background:#fef2f2;border-radius:10px 10px 0 0;padding:10px 16px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#dc2626;">Cancelados</div>
+        <div style="display:flex;justify-content:space-between;margin-top:3px;">
+          <span style="font-size:11px;font-weight:800;color:#dc2626;">5 itens</span>
+          <span style="font-size:11px;font-weight:700;color:#dc2626;">R$ 2K</span>
+        </div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="background:#f8fafc;"><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Venc.</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VTC</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th></tr></thead>
+          <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116807</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">RODOBENS NEGÓCIOS IMOBILIÁRIOS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Dez/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 30.236,58</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.242,10</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116076</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">NOURYON PULP AND PERFORMANCE INDUSTRIA QUIMICA LTDA</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jan/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+193d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 30.500,16</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 2.541,68</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115004</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">J&M SOLUÇÕES EM TECNOLOGIA EIRELI (AlliedIT)</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Ago/26</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 3.189,60</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 265,80</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114995</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IGUATEMI EMPRESA DE SHOPPING CENTERS S/A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jul/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+12d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 85.696,80</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 7.141,40</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#dc2626;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-114994</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">HT SOLUTIONS</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">Jun/26 <span style="color:#dc2626;font-size:9px;font-weight:700;">+42d</span></td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 2.220,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">R$ 185,00</td></tr></tbody>
+          <tfoot><tr style="background:#f8fafc;border-top:2px solid #e5e7eb;"><td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#6b7280;">Total</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#111827;">R$ 151.843,14</td><td style="padding:8px 12px;text-align:right;font-size:12px;font-weight:800;color:#7c3aed;">R$ 12.375,98</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
   <!-- PF DENISE -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">💼 Aguardando PF — Denise (2) · R$ 14K</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-113414</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IRANI PAPEL E EMBALAGEM S.A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 9.880,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#2563eb;">NP-116693</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Argenta Participacoes LTDA</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 4.080,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Abertura</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div></div>
+    <div style="overflow-x:auto;border:1px solid #bfdbfe;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#eff6ff;">
+          <th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Age</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Abertura</th>
+        </tr></thead>
+        <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-113414</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 9.880,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">—</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:center;border-bottom:1px solid #f3f4f6;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span></td><td style="padding:8px 12px;text-align:left;font-size:11px;color:#2563eb;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116693</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Argenta Participacoes LTDA</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 4.080,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">—</td></tr></tbody>
+        <tfoot><tr style="background:#eff6ff;border-top:2px solid #bfdbfe;">
+          <td colspan="3" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#2563eb;">Total</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#111827;">R$ 13.960,00</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#7c3aed;">R$ 0,00</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
   <!-- FECHADOS 2026 -->
   <div style="margin-bottom:40px;">
     <div class="p26-section-label" style="margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">✅ Fechados 2026 — Originados (3) · R$ 18K</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;"><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-117439</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">Trt Da 4ª Região</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 1.417,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/07/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-116022</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">IRANI PAPEL E EMBALAGEM S.A</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">R$ 16.720,00</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/04/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div><div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;opacity:1;transition:box-shadow .15s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <span style="font-family:monospace;font-size:10px;font-weight:600;color:#059669;">NP-115653</span>
-        <span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">🟢 0d</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:6px;line-height:1.3;">FRIGELAR</div>
-      <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:4px;">—</div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Aprovação</span><span style="font-size:10px;font-weight:600;color:#374151;">01/02/2026</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">Lead time</span><span style="font-size:10px;font-weight:600;color:#374151;">0d</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:10px;color:#9ca3af;">MRR</span><span style="font-size:10px;font-weight:600;color:#374151;">—</span></div>
-    </div></div></div>
+    <div style="overflow-x:auto;border:1px solid #bbf7d0;border-radius:12px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#f0fdf4;">
+          <th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">NP</th><th style="padding:8px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Cliente</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Aprovação</th><th style="padding:8px 12px;text-align:center;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">Lead time</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">VT</th><th style="padding:8px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;border-bottom:1px solid #e5e7eb;">MRR</th>
+        </tr></thead>
+        <tbody><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-117439</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">Trt Da 4ª Região</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/07/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 1.417,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td></tr><tr style="background:#fafafa;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-116022</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">IRANI PAPEL E EMBALAGEM S.A</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/04/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">R$ 16.720,00</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td></tr><tr style="background:#ffffff;"><td style="padding:8px 12px;text-align:left;font-size:11px;color:#059669;font-family:monospace;border-bottom:1px solid #f3f4f6;">NP-115653</td><td style="padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">FRIGELAR</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#374151;border-bottom:1px solid #f3f4f6;">01/02/2026</td><td style="padding:8px 12px;text-align:center;font-size:11px;color:#6b7280;border-bottom:1px solid #f3f4f6;">0d</td><td style="padding:8px 12px;text-align:right;font-size:11px;font-weight:700;color:#111827;border-bottom:1px solid #f3f4f6;">—</td><td style="padding:8px 12px;text-align:right;font-size:11px;color:#7c3aed;border-bottom:1px solid #f3f4f6;">—</td></tr></tbody>
+        <tfoot><tr style="background:#f0fdf4;border-top:2px solid #bbf7d0;">
+          <td colspan="4" style="padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;color:#059669;">Total · 3</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#111827;">R$ 18.137,00</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:800;color:#7c3aed;">R$ 0,00</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
   </div>
 
 <div id="tab-pipeline" class="tab-panel">
