@@ -888,7 +888,7 @@ function switchTab(tab, btn) {
 
   
   
-                      <div id="tab-anderson" class="tab-panel">
+                        <div id="tab-anderson" class="tab-panel"><div class="page">
 
   <!-- HEADER -->
   <div class="p26-header">
@@ -986,9 +986,10 @@ function switchTab(tab, btn) {
       </tr></tfoot>
     </table>
   </div>
-  </div>
+  
+  </div></div>
 
-  <div id="tab-talita" class="tab-panel">
+  <div id="tab-talita" class="tab-panel"><div class="page">
 
   <!-- HEADER -->
   <div class="p26-header">
@@ -1061,9 +1062,10 @@ function switchTab(tab, btn) {
       </tr></tfoot>
     </table>
   </div>
-  </div>
+  
+  </div></div>
 
-  <div id="tab-ines" class="tab-panel">
+  <div id="tab-ines" class="tab-panel"><div class="page">
 
   <!-- HEADER -->
   <div class="p26-header">
@@ -1161,9 +1163,10 @@ function switchTab(tab, btn) {
       </tr></tfoot>
     </table>
   </div>
-  </div>
+  
+  </div></div>
 
-  <div id="tab-pedro" class="tab-panel">
+  <div id="tab-pedro" class="tab-panel"><div class="page">
 
   <!-- HEADER -->
   <div class="p26-header">
@@ -1261,7 +1264,8 @@ function switchTab(tab, btn) {
       </tr></tfoot>
     </table>
   </div>
-  </div>
+  
+  </div></div>
 
 <div id="tab-pipeline" class="tab-panel">
 
