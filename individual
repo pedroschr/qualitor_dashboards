@@ -1,0 +1,464 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+individual.py — Geração dos painéis "Visão Individual" (Anderson/Talita/Inês/Pedro)
+do Dashboard BI Qualitor.
+
+Importado por atualizar.py. Reproduz exatamente a estrutura que estava deployada
+em S2M7 (14/07/2026), agora de forma parametrizada.
+
+Regras de atribuição (validadas contra o deploy S2M7 — 20/20 tabelas):
+  · Pipeline/Clientes : ativos com col[3] == gestor  E  cliente NA Base de Clientes
+  · Leads             : ativos com col[3] == gestor  E  cliente FORA da Base
+  · Contratos         : carteira ativa; gestor = Base → resp. da aba base → col[3]
+  · Aguardando PF     : etapa 'Processo Financeiro' e col[3] == 'Denise Fagundes',
+                        atribuído por histórico → Base
+  · Fechados 2026     : 'Projeto Faturado' + aprovação >= 2026, histórico → Base
+"""
+
+import re
+from datetime import date, datetime
+
+# ── Configuração ─────────────────────────────────────────────────────────────
+
+GESTORES_PAINEL = [
+    ('anderson', 'Anderson Bamberg',          'Anderson', '#7c3aed'),
+    ('talita',   'Talita Rodrigues',          'Talita',   '#0891b2'),
+    ('ines',     'Ines Cristine Nunes Diogo', 'Inês',     '#d97706'),
+    ('pedro',    'Pedro Schreck',             'Pedro',    '#2563eb'),
+]
+NOMES_GESTORES = {g[1] for g in GESTORES_PAINEL}
+
+# Aliases entre a Base de Clientes e as planilhas de projetos/contratos
+ALIASES_BASE = {
+    'NETCENTER INFORMATICA': 'NET TELECOM',   # mesmo cliente, nomes diferentes
+}
+ATRIBUICAO_FIXA_BASE = {
+    'LOJAS RENNER': 'Pedro Schreck',          # ainda não cadastrado na Base
+}
+# Contratos sem gestor derivável dos dados (cliente fora da Base e resp. = Denise)
+ATRIBUICAO_MANUAL_CONTRATO = {
+    'NP-115076': 'Anderson Bamberg',          # FORNO DE MINAS
+}
+
+EXCLUIR_ETAPA = {
+    'Projeto Reprovado', 'Projeto Cancelado',
+    'Cancelado', 'Desistência', 'Projeto Faturado',
+}
+ETAPAS_RISCO = {'Em análise pelo cliente', 'Processo Financeiro'}
+
+# Ordem do funil comercial — usada para ordenar as tabelas de pipeline/leads.
+# Mais avançado primeiro; dentro da etapa: VT desc, depois abertura desc.
+FUNIL = [
+    'Processo Financeiro', 'Projeto Aprovado', 'Negociação', 'Em Negociação',
+    'Projeto Enviado', 'Elaboração de Projeto', 'Elaboração de Caderno Técnico',
+    'Estimativa de Esforço', 'Qualificação Concluída', 'Qualificação',
+]
+ORDEM_FUNIL = {e: i for i, e in enumerate(FUNIL)}
+
+BG = ['#ffffff', '#fafafa']
+COR_LEAD = '#6b7280'
+COR_FECH = '#059669'
+COR_PF = '#2563eb'
+COR_MRR = '#7c3aed'
+
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+def parse_dt(v):
+    """Aceita date/datetime e strings. A coluna 'Abertura' vem como
+    'DD/MM/AAAA - HH:MM', por isso o corte no ' - ' antes do parse."""
+    if v is None:
+        return None
+    if isinstance(v, (date, datetime)):
+        return v.date() if isinstance(v, datetime) else v
+    s = str(v).strip()
+    if ' - ' in s:
+        s = s.split(' - ')[0].strip()
+    for f in ('%d/%m/%Y', '%Y-%m-%d', '%d-%m-%Y', '%d/%m/%Y %H:%M', '%Y-%m-%d %H:%M:%S'):
+        try:
+            return datetime.strptime(s, f).date()
+        except Exception:
+            pass
+    return None
+
+
+def pv(v):
+    if v is None:
+        return 0.0
+    try:
+        return float(v)
+    except Exception:
+        return 0.0
+
+
+def fmt(v):
+    return 'R$ {:,.2f}'.format(v).replace(',', 'X').replace('.', ',').replace('X', '.')
+
+
+def k(v):
+    """R$ 282K — arredondado para milhar."""
+    if not v:
+        return '—'
+    return 'R$ {:,.0f}K'.format(v / 1000).replace(',', '.')
+
+
+def m(v):
+    """R$ 1,8M — uma casa decimal."""
+    if not v:
+        return '—'
+    return ('R$ %.1fM' % (v / 1_000_000)).replace('.', ',')
+
+
+def brl(v):
+    if not v:
+        return '<span style="color:#d1d5db;">—</span>'
+    return fmt(v)
+
+
+def age_pill(dias):
+    """Semáforo de idade: 🟢 ≤90d · 🟡 91–180d · 🔴 >180d."""
+    if dias is None:
+        return '<span style="color:#d1d5db;">—</span>'
+    if dias <= 90:
+        emoji, bg, fg = '🟢', '#dcfce7', '#166534'
+    elif dias <= 180:
+        emoji, bg, fg = '🟡', '#fef9c3', '#92400e'
+    else:
+        emoji, bg, fg = '🔴', '#fee2e2', '#dc2626'
+    return (f'<span style="background:{bg};color:{fg};font-size:10px;font-weight:700;'
+            f'padding:2px 7px;border-radius:99px;">{emoji} {dias}d</span>')
+
+
+def pill_etapa(etapa):
+    cores = {
+        'Projeto Enviado':          ('#dbeafe', '#1d4ed8'),
+        'Processo Financeiro':      ('#eff6ff', '#2563eb'),
+        'Em análise pelo cliente':  ('#fef9c3', '#92400e'),
+        'Análise de Requisição':    ('#f3f4f6', '#374151'),
+        'Renovado':                 ('#dcfce7', '#166534'),
+        'Negociação':               ('#fef3c7', '#d97706'),
+        'Em Negociação':            ('#fef3c7', '#d97706'),
+    }
+    bg, fg = cores.get(etapa, ('#f3f4f6', '#374151'))
+    return (f'<span style="background:{bg};color:{fg};font-size:10px;font-weight:700;'
+            f'padding:3px 10px;border-radius:99px;white-space:nowrap;">{etapa}</span>')
+
+
+MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+         'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+
+def th(label, align='left'):
+    return (f'<th style="padding:11px 16px;text-align:{align};font-size:10px;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;'
+            f'border-bottom:1px solid #e5e7eb;background:#f8fafc;white-space:nowrap;">{label}</th>')
+
+
+def tabela(cols, tbody):
+    thead = ''.join(th(c, a) for c, a in cols)
+    return ('<div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;'
+            'margin-bottom:40px;"><table style="width:100%;border-collapse:collapse;">'
+            f'<thead><tr>{thead}</tr></thead><tbody>{tbody}</tbody></table></div>')
+
+
+# ── Carga de dados auxiliares ────────────────────────────────────────────────
+
+def carregar_base_clientes(path):
+    """Retorna {NOME_UPPER: gestor} da Base de Clientes, com aliases aplicados."""
+    import openpyxl
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    ws = wb[wb.sheetnames[0]]
+    base = {}
+    for r in ws.iter_rows(min_row=2, values_only=True):
+        if not r[1]:
+            continue
+        base[str(r[1]).strip().upper()] = str(r[8] or '').strip()
+    for alias, real in ALIASES_BASE.items():
+        if real.upper() in base:
+            base[alias] = base[real.upper()]
+    base.update(ATRIBUICAO_FIXA_BASE)
+    return base
+
+
+def carregar_historico(wb_proj):
+    """{NP: primeiro gestor registrado nas abas} — usado p/ fechados e PF Denise."""
+    hist = {}
+    for aba in wb_proj.sheetnames:
+        for r in wb_proj[aba].iter_rows(min_row=2, values_only=True):
+            if not r[0]:
+                continue
+            np = str(r[0])
+            resp = str(r[3] or '').strip()
+            if np not in hist and resp in NOMES_GESTORES:
+                hist[np] = resp
+    return hist
+
+
+def carregar_resp_base_contratos(wb_ren):
+    """{NP: responsável na aba base 'Renovação de Contratos'}."""
+    return {
+        str(r[0]): str(r[3] or '').strip()
+        for r in wb_ren['Renovação de Contratos'].iter_rows(min_row=2, values_only=True)
+        if r[0]
+    }
+
+
+# ── Cálculo por gestor ───────────────────────────────────────────────────────
+
+def calcular_individual(path_proj, path_contratos, path_base, hoje=None):
+    """Monta os dados dos 4 painéis de Visão Individual."""
+    import openpyxl
+    hoje = hoje or date.today()
+
+    base = carregar_base_clientes(path_base)
+    wbp = openpyxl.load_workbook(path_proj, read_only=True, data_only=True)
+    hist = carregar_historico(wbp)
+
+    abas = sorted([a for a in wbp.sheetnames if re.match(r'S\d+M\d+', a, re.I)],
+                  key=lambda n: int(re.match(r'S(\d+)M(\d+)', n, re.I).group(2)) * 10
+                              + int(re.match(r'S(\d+)M(\d+)', n, re.I).group(1)))
+    aba_nova = abas[-1]
+    nova = [r for r in wbp[aba_nova].iter_rows(min_row=2, values_only=True) if r[0]]
+
+    wbr = openpyxl.load_workbook(path_contratos, read_only=True, data_only=True)
+    abas_r = sorted([a for a in wbr.sheetnames if re.match(r'S\d+M\d+', a, re.I)],
+                    key=lambda n: int(re.match(r'S(\d+)M(\d+)', n, re.I).group(2)) * 10
+                                + int(re.match(r'S(\d+)M(\d+)', n, re.I).group(1)))
+    ren = [r for r in wbr[abas_r[-1]].iter_rows(min_row=2, values_only=True) if r[0]]
+    resp_base = carregar_resp_base_contratos(wbr)
+
+    ativos = [r for r in nova
+              if str(r[6] or '') not in EXCLUIR_ETAPA and str(r[5] or '') != 'Cancelado']
+    fechados = [r for r in nova
+                if str(r[6] or '') == 'Projeto Faturado'
+                and parse_dt(r[9]) and parse_dt(r[9]).year >= 2026]
+    pf_denise = [r for r in nova
+                 if str(r[6] or '') == 'Processo Financeiro'
+                 and str(r[3] or '').strip() == 'Denise Fagundes']
+    carteira = [r for r in ren
+                if str(r[5] or '') != 'Cancelado' and str(r[6] or '') != 'Contrato Cancelado']
+
+    def g_hist(r):
+        np = str(r[0])
+        cli = str(r[2] or '').strip().upper()
+        if np in hist:
+            return hist[np]
+        if cli in base and base[cli] in NOMES_GESTORES:
+            return base[cli]
+        return None
+
+    def g_contrato(r):
+        np = str(r[0])
+        cli = str(r[2] or '').strip().upper()
+        if np in ATRIBUICAO_MANUAL_CONTRATO:
+            return ATRIBUICAO_MANUAL_CONTRATO[np]
+        if cli in base and base[cli]:
+            return base[cli]
+        if resp_base.get(np):
+            return resp_base[np]
+        return str(r[3] or '').strip()
+
+    dados = {}
+    for slug, nome, curto, cor in GESTORES_PAINEL:
+        meus = [r for r in ativos if str(r[3] or '').strip() == nome]
+        clientes = [r for r in meus if str(r[2] or '').strip().upper() in base]
+        leads = [r for r in meus if str(r[2] or '').strip().upper() not in base]
+        contratos = [r for r in carteira if g_contrato(r) == nome]
+        agpf = [r for r in pf_denise if g_hist(r) == nome]
+        fech = [r for r in fechados if g_hist(r) == nome]
+
+        def idade(r):
+            d = parse_dt(r[1])
+            return (hoje - d).days if d else None
+
+        def key_funil(r):
+            ab = parse_dt(r[1])
+            return (ORDEM_FUNIL.get(str(r[6] or ''), 99),
+                    -pv(r[12]),
+                    -(ab.toordinal() if ab else 0))
+
+        clientes.sort(key=key_funil)
+        leads.sort(key=key_funil)
+        agpf.sort(key=lambda r: -(idade(r) or 0))
+        contratos.sort(key=lambda r: parse_dt(r[7]) or date.max)
+        fech.sort(key=lambda r: parse_dt(r[9]) or date.min, reverse=True)
+
+        dados[slug] = {
+            'slug': slug, 'nome': nome, 'curto': curto, 'cor': cor,
+            'clientes': clientes, 'leads': leads, 'contratos': contratos,
+            'agpf': agpf, 'fechados': fech,
+            'vt_clientes': sum(pv(r[12]) for r in clientes),
+            'vt_leads': sum(pv(r[12]) for r in leads),
+            'vt_agpf': sum(pv(r[12]) for r in agpf),
+            'vt_fech': sum(pv(r[12]) for r in fech),
+            'mrr_fech': sum(pv(r[13]) for r in fech),
+            'vtc': sum(pv(r[9]) for r in contratos),
+            'mrr_contratos': sum(pv(r[18]) for r in contratos),
+            'parados': sum(1 for r in clientes if (idade(r) or 0) > 90),
+            'n_renov': sum(1 for r in contratos if str(r[6] or '') == 'Renovado'),
+            'n_risco': sum(1 for r in contratos if str(r[6] or '') in ETAPAS_RISCO),
+            'idade': idade,
+        }
+    return dados
+
+
+# ── Geração do HTML ──────────────────────────────────────────────────────────
+
+def _linha_pipeline(r, i, cor_np, idade):
+    bg = BG[i % 2]
+    d = parse_dt(r[1])
+    return (
+        f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
+        f'<td style="padding:11px 16px;text-align:center;">{age_pill(idade(r))}</td>'
+        f'<td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:{cor_np};">{r[0]}</td>'
+        f'<td style="padding:11px 16px;font-size:12px;font-weight:600;color:#111827;">{str(r[2] or "")}</td>'
+        f'<td style="padding:11px 16px;">{pill_etapa(str(r[6] or ""))}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">{brl(pv(r[12]))}</td>'
+        f'<td style="padding:11px 16px;text-align:center;font-size:11px;color:#6b7280;">{d.strftime("%d/%m/%Y") if d else "—"}</td>'
+        f'</tr>'
+    )
+
+
+def _linha_contrato(r, i, cor_np, hoje):
+    bg = BG[i % 2]
+    dt = parse_dt(r[7])
+    venc = (MESES[dt.month - 1] + '/26') if dt else '—'
+    if dt and (hoje - dt).days > 0:
+        atraso = f'<span style=color:#dc2626;font-weight:700;>{(hoje - dt).days}d</span>'
+    else:
+        atraso = '<span style="color:#d1d5db;">—</span>'
+    return (
+        f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
+        f'<td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:{cor_np};">{r[0]}</td>'
+        f'<td style="padding:11px 16px;font-size:12px;font-weight:600;color:#111827;">{str(r[2] or "")}</td>'
+        f'<td style="padding:11px 16px;">{pill_etapa(str(r[6] or ""))}</td>'
+        f'<td style="padding:11px 16px;text-align:center;font-size:11px;color:#374151;">{venc}</td>'
+        f'<td style="padding:11px 16px;text-align:center;">{atraso}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:#111827;">{brl(pv(r[9]))}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-size:12px;font-weight:700;color:{COR_MRR};">{brl(pv(r[18]))}</td>'
+        f'</tr>'
+    )
+
+
+def _linha_agpf(r, i, idade):
+    bg = BG[i % 2]
+    d = parse_dt(r[1])
+    return (
+        f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
+        f'<td style="padding:11px 16px;text-align:center;">{age_pill(idade(r))}</td>'
+        f'<td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:{COR_PF};">{r[0]}</td>'
+        f'<td style="padding:11px 16px;font-size:12px;font-weight:600;color:#111827;">{str(r[2] or "")}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-weight:700;color:#111827;">{brl(pv(r[12]))}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-weight:700;color:{COR_MRR};">{brl(pv(r[13]))}</td>'
+        f'<td style="padding:11px 16px;text-align:center;font-size:11px;color:#6b7280;">{d.strftime("%d/%m/%Y") if d else "—"}</td>'
+        f'</tr>'
+    )
+
+
+def _linha_fechado(r, i):
+    bg = BG[i % 2]
+    ap = parse_dt(r[9])
+    ab = parse_dt(r[1])
+    lead = f'{(ap - ab).days}d' if (ap and ab) else '—'
+    return (
+        f'<tr style="background:{bg};border-bottom:1px solid #f3f4f6;">'
+        f'<td style="padding:11px 16px;font-family:monospace;font-size:11px;font-weight:600;color:{COR_FECH};">{r[0]}</td>'
+        f'<td style="padding:11px 16px;font-size:12px;font-weight:600;color:#111827;">{str(r[2] or "")}</td>'
+        f'<td style="padding:11px 16px;text-align:center;font-size:11px;color:#374151;">{ap.strftime("%d/%m/%Y") if ap else "—"}</td>'
+        f'<td style="padding:11px 16px;text-align:center;font-size:11px;color:#6b7280;">{lead}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-weight:700;color:#111827;">{brl(pv(r[12]))}</td>'
+        f'<td style="padding:11px 16px;text-align:right;font-weight:700;color:{COR_MRR};">{brl(pv(r[13]))}</td>'
+        f'</tr>'
+    )
+
+
+def _vazio(colspan, msg):
+    return (f'<tr style="background:#f9fafb;"><td colspan="{colspan}" style="padding:16px 14px;'
+            f'text-align:center;font-size:12px;color:#9ca3af;">{msg}</td></tr>')
+
+
+def gerar_painel(d, data_str, hoje):
+    """HTML completo de um painel de gestor."""
+    cor = d['cor']
+    idade = d['idade']
+
+    badges = ''
+    if d['parados']:
+        badges += ('<span style="background:#fee2e2;color:#dc2626;font-size:12px;font-weight:700;'
+                   f'padding:4px 14px;border-radius:99px;">⚠️ {d["parados"]} parados +90d</span>')
+    if d['agpf']:
+        badges += ('<span style="background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;'
+                   f'padding:4px 14px;border-radius:99px;">💼 {len(d["agpf"])} aguardando PF</span>')
+    if d['n_risco']:
+        badges += ('<span style="background:#fef9c3;color:#92400e;font-size:12px;font-weight:700;'
+                   f'padding:4px 14px;border-radius:99px;">⚡ {d["n_risco"]} em risco</span>')
+
+    kpis = (
+        f'<div class="p26-kpi" style="--kpi-accent:{cor}"><div class="p26-kpi-label">Clientes Ativos</div>'
+        f'<div class="p26-kpi-number">{len(d["clientes"])}</div>'
+        f'<div class="p26-kpi-sub">{k(d["vt_clientes"])} · {d["parados"]} parados +90d</div></div>'
+        f'<div class="p26-kpi" style="--kpi-accent:{COR_LEAD}"><div class="p26-kpi-label">Leads</div>'
+        f'<div class="p26-kpi-number" style="color:{COR_LEAD}">{len(d["leads"])}</div>'
+        f'<div class="p26-kpi-sub">{k(d["vt_leads"])} potencial</div></div>'
+        f'<div class="p26-kpi" style="--kpi-accent:{cor}"><div class="p26-kpi-label">Contratos</div>'
+        f'<div class="p26-kpi-number" style="color:{cor}">{len(d["contratos"])}</div>'
+        f'<div class="p26-kpi-sub">MRR {k(d["mrr_contratos"])} · {d["n_renov"]} renov · {d["n_risco"]} risco</div></div>'
+        f'<div class="p26-kpi" style="--kpi-accent:{COR_FECH}"><div class="p26-kpi-label">Fechados 2026</div>'
+        f'<div class="p26-kpi-number" style="color:{COR_FECH}">{len(d["fechados"])}</div>'
+        f'<div class="p26-kpi-sub">{k(d["vt_fech"])} · MRR {k(d["mrr_fech"])}</div></div>'
+    )
+
+    tb_cli = ''.join(_linha_pipeline(r, i, cor, idade) for i, r in enumerate(d['clientes'])) \
+        or _vazio(6, 'Nenhum projeto ativo de cliente')
+    tb_lead = ''.join(_linha_pipeline(r, i, COR_LEAD, idade) for i, r in enumerate(d['leads'])) \
+        or _vazio(6, 'Nenhum lead ativo')
+    tb_con = ''.join(_linha_contrato(r, i, cor, hoje) for i, r in enumerate(d['contratos'])) \
+        or _vazio(7, 'Nenhum contrato na carteira')
+    tb_pf = ''.join(_linha_agpf(r, i, idade) for i, r in enumerate(d['agpf'])) \
+        or _vazio(6, 'Nenhum projeto aguardando Processo Financeiro')
+    tb_fe = ''.join(_linha_fechado(r, i) for i, r in enumerate(d['fechados'])) \
+        or _vazio(6, 'Nenhum projeto fechado em 2026')
+
+    cols_pipe = [('Age', 'center'), ('NP', 'left'), ('Cliente', 'left'),
+                 ('Etapa', 'left'), ('VT', 'right'), ('Abertura', 'center')]
+    cols_lead = [('Age', 'center'), ('NP', 'left'), ('Lead', 'left'),
+                 ('Etapa', 'left'), ('VT', 'right'), ('Abertura', 'center')]
+    cols_con = [('NP', 'left'), ('Cliente', 'left'), ('Etapa', 'left'),
+                ('Vencimento', 'center'), ('Atraso', 'center'), ('VTC', 'right'), ('MRR', 'right')]
+    cols_pf = [('Age', 'center'), ('NP', 'left'), ('Cliente', 'left'),
+               ('VT', 'right'), ('MRR', 'right'), ('Abertura', 'center')]
+    cols_fe = [('NP', 'left'), ('Cliente', 'left'), ('Aprovação', 'center'),
+               ('Lead time', 'center'), ('VT', 'right'), ('MRR', 'right')]
+
+    return (
+        f'<!--T:{d["slug"]}--><div id="tab-{d["slug"]}" class="tab-panel"><div class="page">'
+        f'<div class="p26-header"><div><div class="p26-eyebrow">Visão Individual · {data_str}</div></div>'
+        f'<div class="p26-meta" style="display:flex;gap:8px;flex-wrap:wrap;">{badges}</div></div>'
+        f'<div class="p26-kpi-row">{kpis}</div>'
+        f'<div class="p26-section-label">📋 Pipeline — Clientes ({len(d["clientes"])}) · {k(d["vt_clientes"])}</div>'
+        + tabela(cols_pipe, tb_cli) +
+        f'<div class="p26-section-label">🎯 Leads ({len(d["leads"])}) · {k(d["vt_leads"])}</div>'
+        + tabela(cols_lead, tb_lead) +
+        f'<div class="p26-section-label">🔄 Contratos ({len(d["contratos"])}) · MRR {k(d["mrr_contratos"])} · VTC {m(d["vtc"])}</div>'
+        + tabela(cols_con, tb_con) +
+        f'<div class="p26-section-label">💼 Aguardando PF — Denise ({len(d["agpf"])}) · {k(d["vt_agpf"])}</div>'
+        + tabela(cols_pf, tb_pf) +
+        f'<div class="p26-section-label">✅ Fechados 2026 ({len(d["fechados"])}) · {k(d["vt_fech"])}</div>'
+        + tabela(cols_fe, tb_fe) +
+        '</div></div>'
+    )
+
+
+def gerar_botoes(dados):
+    """Botões de gestor. Nascem visíveis: o worker remove server-side os que
+    o papel do usuário não pode ver (ver filtro <!--B:slug--> no template)."""
+    return ''.join(
+        f'<!--B:{s}--><button class="tab-btn" id="btn-{s}" '
+        f'onclick="switchTab(\'{s}\',this)">👤 {dados[s]["curto"]}</button><!--/B-->'
+        for s, _, _, _ in GESTORES_PAINEL
+    )
+
+
+def gerar_paineis(dados, data_str, hoje):
+    return ''.join(gerar_painel(dados[s], data_str, hoje) for s, _, _, _ in GESTORES_PAINEL)
