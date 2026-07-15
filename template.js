@@ -1,7 +1,7 @@
 export default {
   async fetch(request, env) {
     const url=new URL(request.url),path=url.pathname,ck=request.headers.get("Cookie")||"";
-    const USERS={"Qualitor!@#25":{tab:"pipeline",label:"Pedro"},"Anderson@Qlt25":{tab:"anderson",label:"Anderson"},"Talita@Qlt25":{tab:"talita",label:"Talita"},"Ines@Qlt25":{tab:"ines",label:"Inês"},"QltAdmin!2026":{tab:"pipeline",label:"Admin"}};
+    const USERS={"Qualitor!@#25":{tab:"pipeline",label:"Pedro",role:"gerente"},"Anderson@Qlt25":{tab:"anderson",label:"Anderson",role:"gestor"},"Talita@Qlt25":{tab:"talita",label:"Talita",role:"gestor"},"Ines@Qlt25":{tab:"ines",label:"Inês",role:"gestor"},"QltAdmin!2026":{tab:"pipeline",label:"Admin",role:"gerente"}};
     const C_AUTH="qlt_auth",T_AUTH="qualitor2026ok",C_ADMIN="qlt_admin",T_ADMIN="qualitor_admin_ok",S_ADMIN="QltAdmin!2026",S_USER="Qualitor!@#25";
     const isAuth=ck.includes(C_AUTH+"="+T_AUTH),isAdmin=ck.includes(C_ADMIN+"="+T_ADMIN);
     if(request.method==="POST"&&path==="/login"){
@@ -12,10 +12,11 @@ export default {
       h.append("Location","/");
       h.append("Set-Cookie",C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
       h.append("Set-Cookie","qlt_tab="+user.tab+"; Path=/; SameSite=Strict; Max-Age=28800");
+      h.append("Set-Cookie","qlt_role="+user.role+"; Path=/; SameSite=Strict; Max-Age=28800");
       if(senha===S_ADMIN) h.append("Set-Cookie",C_ADMIN+"="+T_ADMIN+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
       return new Response("",{status:302,headers:h});
     }
-    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");h.append("Set-Cookie","qlt_tab=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
+    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");h.append("Set-Cookie","qlt_tab=; Path=/; Max-Age=0");h.append("Set-Cookie","qlt_role=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
     if(request.method==="POST"&&path==="/send-resumo"){
       if(!isAdmin) return new Response(JSON.stringify({ok:false,error:"Acesso negado"}),{status:403,headers:{"Content-Type":"application/json"}});
       const destinatarios=["pedro@qualitor.com.br"];
@@ -30,6 +31,9 @@ export default {
     }
     if(!isAuth) return new Response(loginPage(""),{status:200,headers:{"Content-Type":"text/html; charset=utf-8"}});
     const _tabCk=ck.match(/qlt_tab=([a-z]+)/),initialTab=_tabCk?_tabCk[1]:"pipeline";
+    const _roleCk=ck.match(/qlt_role=([a-z]+)/),role=_roleCk?_roleCk[1]:"gerente";
+    const TABS_GERENTE=["resumo","pipeline","gestao","wtp","cx","changelog","anderson","talita","ines","pedro"];
+    const permitidas = role==="gestor" ? [initialTab] : TABS_GERENTE;
     let html=`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -716,12 +720,12 @@ function checkPwd() {
 
 <!-- ── Navegação de Abas ── -->
 <nav class="tab-nav">
-  <button class="tab-btn" onclick="switchTab('resumo', this)">📋 Resumo Executivo</button>
-        <button class="tab-btn active" onclick="switchTab('pipeline', this)">📊 Pipeline de Projetos</button>
-  <button class="tab-btn" onclick="switchTab('gestao', this)">📁 Gestão de Contratos</button>
-  <button class="tab-btn" onclick="switchTab('wtp', this)">🎯 Where to Play</button>
-  <button class="tab-btn" onclick="switchTab('cx', this)">👥 Experiência do Cliente</button>
-  <button class="tab-btn" onclick="switchTab('changelog', this)" style="margin-left:auto;font-size:11px;opacity:0.75;">📋 Histórico de Alterações</button>
+  <!--B:resumo--><button class="tab-btn" onclick="switchTab('resumo', this)">📋 Resumo Executivo</button><!--/B-->
+        <!--B:pipeline--><button class="tab-btn active" onclick="switchTab('pipeline', this)">📊 Pipeline de Projetos</button><!--/B-->
+  <!--B:gestao--><button class="tab-btn" onclick="switchTab('gestao', this)">📁 Gestão de Contratos</button><!--/B-->
+  <!--B:wtp--><button class="tab-btn" onclick="switchTab('wtp', this)">🎯 Where to Play</button><!--/B-->
+  <!--B:cx--><button class="tab-btn" onclick="switchTab('cx', this)">👥 Experiência do Cliente</button><!--/B-->
+  <!--B:changelog--><button class="tab-btn" onclick="switchTab('changelog', this)" style="margin-left:auto;font-size:11px;opacity:0.75;">📋 Histórico de Alterações</button><!--/B-->
 {{IND_BOTOES}}
 </nav>
 <script>
@@ -734,7 +738,7 @@ function switchTab(tab, btn) {
 </script>
 
 <!-- ══ ABA 1: PIPELINE ══ -->
-<div id="tab-resumo" class="tab-panel">
+<!--T:resumo--><div id="tab-resumo" class="tab-panel">
 <div class="page">
 
   <header>
@@ -883,7 +887,7 @@ function switchTab(tab, btn) {
 
 {{IND_PAINEIS}}
 
-<div id="tab-pipeline" class="tab-panel active">
+<!--T:pipeline--><div id="tab-pipeline" class="tab-panel active">
 
 <style>
   /* ── Header ─────────────────────────────── */
@@ -1464,7 +1468,7 @@ function switchTab(tab, btn) {
 
   </div>
 </div> <!-- fim tab-pipeline -->
-<div id="tab-gestao" class="tab-panel">
+<!--T:gestao--><div id="tab-gestao" class="tab-panel">
 <div class="page">
 
   <header>
@@ -1600,7 +1604,7 @@ function switchTab(tab, btn) {
 
 
 
-<div id="tab-wtp" class="tab-panel">
+<!--T:wtp--><div id="tab-wtp" class="tab-panel">
 <div class="page">
 
   <header>
@@ -1785,7 +1789,7 @@ window.wtpClose=function(){document.getElementById("wtp-drilldown").style.displa
 
 
 <!-- ══ ABA 5: EXPERIÊNCIA DO CLIENTE ══ -->
-<div id="tab-cx" class="tab-panel">
+<!--T:cx--><div id="tab-cx" class="tab-panel">
 <div class="page">
 
 <header><div class="header-left"><div class="header-eyebrow">Experiência do Cliente · S3M4 · 2025–2026</div><h1 class="header-title">Análise de<br><span style="color:#dc2626;">Perfil de Uso</span></h1></div><div class="header-right"><div class="header-badge"><span class="dot" style="background:#dc2626;"></span>123 clientes · 39 Power Users · S3M4</div></div></header>
@@ -2065,7 +2069,7 @@ window.cxSort=function(th){
 
 <!-- fim tab-cx -->
 
-<div id="tab-changelog" class="tab-panel">
+<!--T:changelog--><div id="tab-changelog" class="tab-panel">
 <div class="page">
   <header>
     <div class="header-left">
@@ -2076,6 +2080,7 @@ window.cxSort=function(th){
   <div class="card"><div class="card-header"><div><div class="card-title">Registro de Atualizações</div></div></div><p style="padding:20px;color:var(--muted);font-size:13px;">Histórico de snapshots e correções aplicadas ao dashboard.</p></div>
 </div>
 </div> <!-- fim tab-changelog -->
+<!--T:END-->
 
 </div><!-- fecha mainContent -->
 
@@ -2136,13 +2141,18 @@ window.addEventListener("load", function(){
 </body>
 </html>
 `;
-    if(isAdmin){html=html.replace("window.__ADMIN__ !== 'undefined'","true !== 'undefined'");}
-    return new Response(html,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
-  }
-};
-function loginPage(erro){return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style></head><body><div class="c"><div style="font-size:40px;margin-bottom:18px">🔒</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus><div class="er">${erro}</div><button>Entrar</button></form></div></body>
-</html>
-`;
+    // ── Controle de acesso: remove do HTML o que o papel não pode ver ──
+    html = html.replace(/<!--B:([a-z]+)-->[\s\S]*?<!--\/B-->/g, function(bloco, slug){
+      return permitidas.indexOf(slug) !== -1 ? bloco : "";
+    });
+    const _p = html.split(/<!--T:([a-zA-Z]+)-->/);
+    let _out = _p[0];
+    for(let i=1; i<_p.length; i+=2){
+      const slug = _p[i], corpo = _p[i+1] || "";
+      if(slug === "END"){ _out += corpo; break; }
+      if(permitidas.indexOf(slug) !== -1) _out += corpo;
+    }
+    html = _out.replace(/<!--\/?[BT]:?[a-zA-Z]*-->/g, "");
     if(isAdmin){html=html.replace("window.__ADMIN__ !== 'undefined'","true !== 'undefined'");}
     return new Response(html,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
   }
