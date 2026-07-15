@@ -1,15 +1,21 @@
 export default {
   async fetch(request, env) {
     const url=new URL(request.url),path=url.pathname,ck=request.headers.get("Cookie")||"";
-    const S_USER="Qualitor!@#25",S_ADMIN="QltAdmin!2026",C_AUTH="qlt_auth",C_ADMIN="qlt_admin",T_AUTH="qualitor2026ok",T_ADMIN="qualitor_admin_ok";
+    const USERS={"Qualitor!@#25":{tab:"pipeline",label:"Pedro"},"Anderson@Qlt25":{tab:"anderson",label:"Anderson"},"Talita@Qlt25":{tab:"talita",label:"Talita"},"Ines@Qlt25":{tab:"ines",label:"Inês"},"QltAdmin!2026":{tab:"pipeline",label:"Admin"}};
+    const C_AUTH="qlt_auth",T_AUTH="qualitor2026ok",C_ADMIN="qlt_admin",T_ADMIN="qualitor_admin_ok",S_ADMIN="QltAdmin!2026",S_USER="Qualitor!@#25";
     const isAuth=ck.includes(C_AUTH+"="+T_AUTH),isAdmin=ck.includes(C_ADMIN+"="+T_ADMIN);
     if(request.method==="POST"&&path==="/login"){
       const body=await request.formData(),senha=body.get("senha")||"";
-      if(senha===S_ADMIN){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");h.append("Set-Cookie",C_ADMIN+"="+T_ADMIN+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");return new Response("",{status:302,headers:h});}
-      if(senha===S_USER) return new Response("",{status:302,headers:{"Location":"/","Set-Cookie":C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800"}});
-      return new Response(loginPage("Senha incorreta."),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
+      const user=USERS[senha];
+      if(!user) return new Response(loginPage("Senha incorreta."),{status:401,headers:{"Content-Type":"text/html; charset=utf-8"}});
+      const h=new Headers();
+      h.append("Location","/");
+      h.append("Set-Cookie",C_AUTH+"="+T_AUTH+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
+      h.append("Set-Cookie","qlt_tab="+user.tab+"; Path=/; SameSite=Strict; Max-Age=28800");
+      if(senha===S_ADMIN) h.append("Set-Cookie",C_ADMIN+"="+T_ADMIN+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800");
+      return new Response("",{status:302,headers:h});
     }
-    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
+    if(path==="/logout"){const h=new Headers();h.append("Location","/");h.append("Set-Cookie",C_AUTH+"=; Path=/; Max-Age=0");h.append("Set-Cookie",C_ADMIN+"=; Path=/; Max-Age=0");h.append("Set-Cookie","qlt_tab=; Path=/; Max-Age=0");return new Response("",{status:302,headers:h});}
     if(request.method==="POST"&&path==="/send-resumo"){
       if(!isAdmin) return new Response(JSON.stringify({ok:false,error:"Acesso negado"}),{status:403,headers:{"Content-Type":"application/json"}});
       const destinatarios=["pedro@qualitor.com.br"];
@@ -23,6 +29,7 @@ export default {
       }catch(err){return new Response(JSON.stringify({ok:false,error:err.message}),{status:500,headers:{"Content-Type":"application/json"}});}
     }
     if(!isAuth) return new Response(loginPage(""),{status:200,headers:{"Content-Type":"text/html; charset=utf-8"}});
+    const _tabCk=ck.match(/qlt_tab=([a-z]+)/),initialTab=_tabCk?_tabCk[1]:"pipeline";
     let html=`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -648,6 +655,7 @@ export default {
 </style>
 </head>
 <body>
+<input type="hidden" id="initial-tab" value="${initialTab}">
 
 <!-- ── Tela de senha ── -->
 <div id="passwordScreen" style="
@@ -714,6 +722,7 @@ function checkPwd() {
   <button class="tab-btn" onclick="switchTab('wtp', this)">🎯 Where to Play</button>
   <button class="tab-btn" onclick="switchTab('cx', this)">👥 Experiência do Cliente</button>
   <button class="tab-btn" onclick="switchTab('changelog', this)" style="margin-left:auto;font-size:11px;opacity:0.75;">📋 Histórico de Alterações</button>
+{{IND_BOTOES}}
 </nav>
 <script>
 function switchTab(tab, btn) {
@@ -871,6 +880,8 @@ function switchTab(tab, btn) {
 
 </div><!-- .page -->
 </div><!-- fim tab-resumo -->
+
+{{IND_PAINEIS}}
 
 <div id="tab-pipeline" class="tab-panel active">
 
@@ -2104,7 +2115,32 @@ function enviarResumo(){
     });
 }
 </script>
+<script>
+window.addEventListener("load", function(){
+  var it = (document.getElementById("initial-tab") || {}).value || "pipeline";
+  if(!it) it = "pipeline";
+  var btns = document.querySelectorAll(".tab-btn");
+  var found = null;
+  for(var i = 0; i < btns.length; i++){
+    if((btns[i].getAttribute("onclick") || "").indexOf(it) !== -1){ found = btns[i]; break; }
+  }
+  if(found){
+    btns.forEach(function(b){ b.classList.remove("active"); });
+    found.classList.add("active");
+    if(typeof switchTab === "function") switchTab(it, found);
+  }
+  var ib = document.getElementById("btn-" + it);
+  if(ib) ib.style.display = "";
+});
+</script>
 </body>
+</html>
+`;
+    if(isAdmin){html=html.replace("window.__ADMIN__ !== 'undefined'","true !== 'undefined'");}
+    return new Response(html,{headers:{"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store","X-Frame-Options":"DENY"}});
+  }
+};
+function loginPage(erro){return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Acesso Restrito</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Nunito,sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}.c{background:#fff;border-radius:18px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 8px 48px rgba(0,0,0,.10);text-align:center}h1{font-size:22px;font-weight:800;color:#111827;margin:12px 0 6px}p{font-size:13px;color:#6b7280;margin-bottom:28px}input{width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:15px;outline:none;margin-bottom:12px}input:focus{border-color:#2563eb}.er{font-size:12px;color:#dc2626;margin-bottom:12px;min-height:18px}button{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}button:hover{background:#1d4ed8}</style></head><body><div class="c"><div style="font-size:40px;margin-bottom:18px">🔒</div><h1>Acesso Restrito</h1><p>Digite a senha para acessar o dashboard</p><form method="POST" action="/login"><input type="password" name="senha" placeholder="Senha" autofocus><div class="er">${erro}</div><button>Entrar</button></form></div></body>
 </html>
 `;
     if(isAdmin){html=html.replace("window.__ADMIN__ !== 'undefined'","true !== 'undefined'");}
