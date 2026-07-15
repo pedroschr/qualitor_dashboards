@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+"""Constrói template.js (v3) = template base + abas de gestor + auth por papel."""
+import re, subprocess, sys
+
+def check(js, etapa):
+    p = subprocess.run(['node','--input-type=module','--check'], input=js,
+                       capture_output=True, text=True)
+    if p.returncode != 0:
+        print(f'  ✘ {etapa} — SINTAXE INVÁLIDA')
+        print('   ', p.stderr.strip().split('\n')[0][:120]); sys.exit(1)
+    print(f'  ✔ {etapa}')
+
+dep = open('/mnt/user-data/uploads/worker.js', encoding='utf-8').read()
+t   = open('template.js', encoding='utf-8').read()
+check(t, 'template base')
+
+# Recorta o corpo do HTML do dashboard: do 1º `let html=\`` até o 1º `</body>`.
+# (rfind pegaria o </body> da loginPage — foi exatamente esse o bug anterior.)
+def corpo_dashboard(js):
+    ini = js.find('let html=`')
+    fim = js.find('</body>', ini)
+    assert ini > 0 and fim > ini
+    return ini, fim
+
+# ── A. auth multi-usuário, com papel ────────────────────────────────────────
+a1d, a2d = dep.find('const url=new URL'), dep.find('let html=`')
+a1t, a2t = t.find('const url=new URL'),   t.find('let html=`')
+t = t[:a1t] + dep[a1d:a2d] + t[a2t:]
+check(t, 'A · auth multi-usuário')
+
+USERS = ('const USERS={'
+  '"Qualitor!@#25":{tab:"pipeline",label:"Pedro",role:"gerente"},'
+  '"Anderson@Qlt25":{tab:"anderson",label:"Anderson",role:"gestor"},'
+  '"Talita@Qlt25":{tab:"talita",label:"Talita",role:"gestor"},'
+  '"Ines@Qlt25":{tab:"ines",label:"Inês",role:"gestor"},'
+  '"QltAdmin!2026":{tab:"pipeline",label:"Admin",role:"gerente"}};')
+t = t.replace(re.search(r'const USERS=\{.*?\};', t, re.S).group(0), USERS, 1)
+check(t, 'A2 · USERS com role')
+
+# ── B. cookies de papel ─────────────────────────────────────────────────────
+o = 'h.append("Set-Cookie","qlt_tab="+user.tab+"; Path=/; SameSite=Strict; Max-Age=28800");'
+assert t.count(o)==1
+t = t.replace(o, o+'\n      h.append("Set-Cookie","qlt_role="+user.role+"; Path=/; SameSite=Strict; Max-Age=28800");',1)
+o = 'h.append("Set-Cookie","qlt_tab=; Path=/; Max-Age=0");'
+assert t.count(o)==1
+t = t.replace(o, o+'h.append("Set-Cookie","qlt_role=; Path=/; Max-Age=0");',1)
+check(t, 'B · cookie qlt_role')
+
+# ── C. initialTab + papel + lista de abas permitidas ────────────────────────
+o = 'const _tabCk=ck.match(/qlt_tab=([a-z]+)/),initialTab=_tabCk?_tabCk[1]:"pipeline";'
+assert t.count(o)==1
+t = t.replace(o, o + '''
+    const _roleCk=ck.match(/qlt_role=([a-z]+)/),role=_roleCk?_roleCk[1]:"gerente";
+    const TABS_GERENTE=["resumo","pipeline","gestao","wtp","cx","changelog","anderson","talita","ines","pedro"];
+    const permitidas = role==="gestor" ? [initialTab] : TABS_GERENTE;''', 1)
+check(t, 'C · papel + abas permitidas')
+
+# ── D. input#initial-tab ────────────────────────────────────────────────────
+o = '<body>\n\n<!-- ── Tela de senha ── -->'
+assert t.count(o)==1
+t = t.replace(o, '<body>\n<input type="hidden" id="initial-tab" value="${initialTab}">\n\n<!-- ── Tela de senha ── -->',1)
+check(t, 'D · input#initial-tab')
+
+# ── E. marcar botões e inserir placeholder dos botões de gestor ─────────────
+ni, nf = t.find('<nav class="tab-nav">'), t.find('</nav>')+6
+nav = t[ni:nf]
+nav = re.sub(r'<button class="tab-btn[^>]*>.*?</button>',
+             lambda m: '<!--B:%s-->%s<!--/B-->' % (re.search(r"switchTab\('([a-z]+)'", m.group(0)).group(1), m.group(0)),
+             nav, flags=re.S)
+assert nav.count('<!--B:')==6
+nav = nav.replace('</nav>', '{{IND_BOTOES}}\n</nav>')
+t = t[:ni] + nav + t[nf:]
+check(t, 'E · 6 botões marcados + {{IND_BOTOES}}')
+
+# ── F. marcar painéis comuns e inserir placeholder dos painéis de gestor ────
+for slug in ['resumo','pipeline','gestao','wtp','cx','changelog']:
+    mm = re.search(r'<div id="tab-%s" class="tab-panel[^"]*">' % slug, t)
+    assert mm, slug
+    t = t[:mm.start()] + ('<!--T:%s-->' % slug) + t[mm.start():]
+o = '<!--T:pipeline--><div id="tab-pipeline" class="tab-panel active">'
+assert t.count(o)==1
+t = t.replace(o, '{{IND_PAINEIS}}\n\n'+o, 1)
+o = '</div> <!-- fim tab-changelog -->'
+assert t.count(o)==1
+t = t.replace(o, o+'\n<!--T:END-->', 1)
+check(t, 'F · 6 painéis marcados + {{IND_PAINEIS}}')
+
+# ── G. script de aba inicial — ancorado no </body> do DASHBOARD ─────────────
+d_ini, d_fim = corpo_dashboard(dep)
+j = dep.rfind('<script>', d_ini, d_fim)          # último <script> ANTES do </body> do dashboard
+script = dep[j:d_fim]
+assert 'loginPage' not in script and script.count('</html>')==0, 'script contaminado'
+t_ini, t_fim = corpo_dashboard(t)
+t = t[:t_fim] + script + t[t_fim:]
+check(t, 'G · script window.load (sem contaminação)')
+
+# ── H. filtro server-side de permissões ────────────────────────────────────
+o = "    if(isAdmin){html=html.replace(\"window.__ADMIN__ !== 'undefined'\",\"true !== 'undefined'\");}"
+assert t.count(o)==1, 'esperado 1 bloco isAdmin, achei %d' % t.count(o)
+t = t.replace(o, '''    // ── Controle de acesso: remove do HTML o que o papel não pode ver ──
+    html = html.replace(/<!--B:([a-z]+)-->[\\s\\S]*?<!--\\/B-->/g, function(bloco, slug){
+      return permitidas.indexOf(slug) !== -1 ? bloco : "";
+    });
+    const _p = html.split(/<!--T:([a-zA-Z]+)-->/);
+    let _out = _p[0];
+    for(let i=1; i<_p.length; i+=2){
+      const slug = _p[i], corpo = _p[i+1] || "";
+      if(slug === "END"){ _out += corpo; break; }
+      if(permitidas.indexOf(slug) !== -1) _out += corpo;
+    }
+    html = _out.replace(/<!--\\/?[BT]:?[a-zA-Z]*-->/g, "");
+''' + o, 1)
+check(t, 'H · filtro server-side')
+
+open('template_v3.js','w',encoding='utf-8').write(t)
+print(f'\ntemplate_v3.js: {len(t):,} bytes')
+print('loginPage ×', t.count('function loginPage'), '| isAdmin ×', t.count('if(isAdmin){html'))
