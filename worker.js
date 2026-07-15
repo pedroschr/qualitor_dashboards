@@ -657,6 +657,214 @@ export default {
     .tab-btn { padding: 14px 16px; font-size: 12px; }
   }
 </style>
+<style>
+  /* ── Header ─────────────────────────────── */
+  .p26-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 52px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .p26-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 8px;
+  }
+  .p26-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .p26-title span { color: var(--accent1); }
+  .p26-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .p26-meta strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ── Section label ─────────────────────── */
+  .p26-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* ── KPI grid — top row (4 cards) ───────── */
+  .p26-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .p26-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .p26-kpi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.07);
+  }
+  .p26-kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--kpi-accent, var(--accent1));
+    border-radius: 16px 16px 0 0;
+  }
+  .p26-kpi-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .p26-kpi-number {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+  .p26-kpi-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .p26-kpi-sub strong {
+    color: var(--kpi-accent, var(--accent1));
+    font-weight: 700;
+  }
+
+  /* ── Fechados card (full width) ─────────── */
+  .p26-fech-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+  }
+  .p26-fech-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent3);
+    border-radius: 16px 16px 0 0;
+  }
+  .p26-fech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .p26-fech-item {
+    padding: 8px 20px 8px 0;
+  }
+  .p26-fech-item + .p26-fech-item {
+    padding-left: 20px;
+    border-left: 1px solid var(--border);
+  }
+  .p26-fech-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .p26-fech-number {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent3);
+    line-height: 1;
+    letter-spacing: -1.5px;
+    margin-bottom: 6px;
+  }
+  .p26-fech-number.large { font-size: 28px; }
+  .p26-fech-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .p26-fech-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .p26-fech-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .p26-fech-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: #d1fae5;
+    color: #065f46;
+    padding: 4px 12px;
+    border-radius: 99px;
+  }
+
+  /* ── Animations ──────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .p26-kpi    { animation: fadeUp .4s ease both; }
+  .p26-kpi:nth-child(1) { animation-delay: .05s; }
+  .p26-kpi:nth-child(2) { animation-delay: .10s; }
+  .p26-kpi:nth-child(3) { animation-delay: .15s; }
+  .p26-kpi:nth-child(4) { animation-delay: .20s; }
+  .p26-fech-card { animation: fadeUp .4s .25s ease both; }
+
+  @media (max-width: 768px) {
+    .p26-kpi-row    { grid-template-columns: 1fr 1fr; }
+    .p26-fech-grid  { grid-template-columns: 1fr 1fr; }
+    .p26-fech-item + .p26-fech-item { border-left: none; padding-left: 0; }
+    .p26-fech-item:nth-child(3),
+    .p26-fech-item:nth-child(4) { padding-top: 16px; border-top: 1px solid var(--border); }
+    .p26-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .p26-meta { text-align: left; }
+  }
+  @media (max-width: 480px) {
+    .p26-kpi-row   { grid-template-columns: 1fr; }
+    .p26-fech-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
 <input type="hidden" id="initial-tab" value="${initialTab}">
@@ -895,214 +1103,7 @@ Fechados em 2026: **39 projetos**, **R$ 681.983,06** de valor total, com MRR de 
 
 <!--T:pipeline--><div id="tab-pipeline" class="tab-panel active">
 
-<style>
-  /* ── Header ─────────────────────────────── */
-  .p26-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 52px;
-    padding-bottom: 28px;
-    border-bottom: 1px solid var(--border);
-  }
-  .p26-eyebrow {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--accent1);
-    margin-bottom: 8px;
-  }
-  .p26-title {
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1.1;
-    letter-spacing: -1px;
-  }
-  .p26-title span { color: var(--accent1); }
-  .p26-meta {
-    text-align: right;
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-  .p26-meta strong {
-    display: block;
-    font-size: 13px;
-    color: var(--text);
-    font-weight: 700;
-    margin-top: 2px;
-  }
 
-  /* ── Section label ─────────────────────── */
-  .p26-section-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  /* ── KPI grid — top row (4 cards) ───────── */
-  .p26-kpi-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-  .p26-kpi {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-    transition: transform .15s ease, box-shadow .15s ease;
-  }
-  .p26-kpi:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,.07);
-  }
-  .p26-kpi::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--kpi-accent, var(--accent1));
-    border-radius: 16px 16px 0 0;
-  }
-  .p26-kpi-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.8px;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-  .p26-kpi-number {
-    font-size: 42px;
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1;
-    letter-spacing: -2px;
-    margin-bottom: 8px;
-  }
-  .p26-kpi-sub {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 500;
-  }
-  .p26-kpi-sub strong {
-    color: var(--kpi-accent, var(--accent1));
-    font-weight: 700;
-  }
-
-  /* ── Fechados card (full width) ─────────── */
-  .p26-fech-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px 28px 24px;
-    position: relative;
-    overflow: hidden;
-    margin-top: 0;
-  }
-  .p26-fech-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--accent3);
-    border-radius: 16px 16px 0 0;
-  }
-  .p26-fech-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 0;
-  }
-  .p26-fech-item {
-    padding: 8px 20px 8px 0;
-  }
-  .p26-fech-item + .p26-fech-item {
-    padding-left: 20px;
-    border-left: 1px solid var(--border);
-  }
-  .p26-fech-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.8px;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-  .p26-fech-number {
-    font-size: 36px;
-    font-weight: 800;
-    color: var(--accent3);
-    line-height: 1;
-    letter-spacing: -1.5px;
-    margin-bottom: 6px;
-  }
-  .p26-fech-number.large { font-size: 28px; }
-  .p26-fech-sub {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 500;
-  }
-  .p26-fech-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .p26-fech-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.2px;
-  }
-  .p26-fech-badge {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: #d1fae5;
-    color: #065f46;
-    padding: 4px 12px;
-    border-radius: 99px;
-  }
-
-  /* ── Animations ──────────────────────────── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .p26-kpi    { animation: fadeUp .4s ease both; }
-  .p26-kpi:nth-child(1) { animation-delay: .05s; }
-  .p26-kpi:nth-child(2) { animation-delay: .10s; }
-  .p26-kpi:nth-child(3) { animation-delay: .15s; }
-  .p26-kpi:nth-child(4) { animation-delay: .20s; }
-  .p26-fech-card { animation: fadeUp .4s .25s ease both; }
-
-  @media (max-width: 768px) {
-    .p26-kpi-row    { grid-template-columns: 1fr 1fr; }
-    .p26-fech-grid  { grid-template-columns: 1fr 1fr; }
-    .p26-fech-item + .p26-fech-item { border-left: none; padding-left: 0; }
-    .p26-fech-item:nth-child(3),
-    .p26-fech-item:nth-child(4) { padding-top: 16px; border-top: 1px solid var(--border); }
-    .p26-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .p26-meta { text-align: left; }
-  }
-  @media (max-width: 480px) {
-    .p26-kpi-row   { grid-template-columns: 1fr; }
-    .p26-fech-grid { grid-template-columns: 1fr; }
-  }
-</style>
 
 <div class="page">
 
