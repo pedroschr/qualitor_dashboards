@@ -323,8 +323,11 @@ def _linha_pipeline(r, i, cor_np, idade):
 def _linha_contrato(r, i, cor_np, hoje):
     bg = BG[i % 2]
     dt = parse_dt(r[7])
-    venc = (MESES[dt.month - 1] + '/26') if dt else '—'
-    if dt and (hoje - dt).days > 0:
+    venc = (MESES[dt.month - 1] + '/' + str(dt.year)[2:]) if dt else '—'
+    # A Data Base é a do ciclo vigente e NÃO é reescrita quando o contrato é
+    # renovado — 36 dos 37 renovados da carteira ficariam "vencidos". Para
+    # etapa 'Renovado' o atraso é ruído e não é exibido (igual ao deploy).
+    if dt and str(r[6] or '') != 'Renovado' and (hoje - dt).days > 0:
         atraso = f'<span style=color:#dc2626;font-weight:700;>{(hoje - dt).days}d</span>'
     else:
         atraso = '<span style="color:#d1d5db;">—</span>'
